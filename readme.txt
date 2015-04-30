@@ -1,4 +1,4 @@
-Proyecto para prueba de selección de Destinia
+﻿Framework de prueba Antonella Framework
 Se ha seguido el sistema de trabajo PRS-4
 Más información sobre psr-4 (http://www.php-fig.org/psr/psr-4/)
 Realizado por Carlos Herrera.
