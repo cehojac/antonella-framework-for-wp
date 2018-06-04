@@ -3,7 +3,7 @@
     "version":"1.1",
     "keywords": ["framework", "wordpress", "plugins"],
     "prefer-stable": true,
-    "minimum-stability": "dev",
+    "minimum-stability": "stable",
     "description":"make easy a WordPress Plugin whit a team. Use this framework for simplycity the work in develop a plugin",
     "type":"project",
     "authors": [
