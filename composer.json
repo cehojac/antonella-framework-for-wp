@@ -12,10 +12,12 @@
         }
     ],
      "support": {
-        "email": "antonella.framework@carlos-herrera.com"
+        "email": "antonella.framework@carlos-herrera.com",
+        "docs" : "https://antonellaframework.com/en/documentacion"
     },
     "license": "MIT",
     "require": {
+        "php" : "^5.5 || ^7.0"
     },
     "autoload": {
         "psr-4": {"CH\\": "src/"}
