@@ -1,1 +1,0 @@
-<div class="text-center"><h1>404 Not found</h1></div>
