@@ -1,6 +1,7 @@
 {
     "name":"cehojac/antonella-framework-for-wp",
     "version":"1.1.1",
+    "prefer-stable": true,
     "description":"make easy a WordPress Plugin whit a team. Use this framework for simplycity the work in develop a plugin",
     "type":"wordpress-plugin",
     "authors": [
@@ -17,7 +18,7 @@
     },
     "license": "MIT",
     "require": {
-        "php" : "^5.5 || ^7.0"
+        "php" : "^5.6 || ^7.0"
     },
     "autoload": {
         "psr-4": {"CH\\": "src/"}
