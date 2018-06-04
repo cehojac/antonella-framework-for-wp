@@ -1,0 +1,229 @@
+#!/usr/bin/env php
+<?php
+
+class Antonella
+{  
+    public $dir=__DIR__;
+   
+    public function process($data)
+    {
+        switch ($data[1])
+        {
+            case 'makeup':
+                return $this->makeup();
+                break;
+            case 'namespace':
+                return $this->newname($data);
+                break;
+            case 'make':
+                return $this->makeController($data);
+                break;
+            default:
+                echo("Antonella no understand you. please read the manual in https://antonellaframework.com");
+                exit();
+        }
+    }
+    public function read_namespace()
+    {
+        $composer= file_get_contents($this->dir."/composer.json");
+        $composer_json=json_decode($composer);
+        $psr=$composer_json->autoload->{"psr-4"};
+        $namespace=substr(key($psr),0,-1);
+        return $namespace;
+    }
+    public function makeup()
+    {
+        echo("Antonella is packing the plugin \n");
+        $SO=strtoupper(substr(PHP_OS, 0, 3));
+        if($SO==='WIN')
+        {
+            $this->makeup_win();
+        }
+        else
+        {
+            $this->makeup_linux();
+        }
+        echo("The plugin's zip file is OK!"); 
+    }
+
+    public function makeup_win()
+    {
+
+        file_exists($this->dir.'/'.basename($this->dir).'.zip')?unlink($this->dir.'/'.basename($this->dir).'.zip'):false;
+        $zip = new ZipArchive(); 
+        $zip->open(basename($this->dir).'.zip', ZipArchive::CREATE); 
+
+        $dirName =$this->dir; 
+
+        if (!is_dir($dirName)) { 
+            throw new Exception('Directory ' . $dirName . ' does not exist'); 
+        } 
+
+        $dirName = realpath($dirName); 
+        if (substr($dirName, -1) != '/') { 
+            $dirName.= '/'; 
+        } 
+
+        /* 
+        * NOTE BY danbrown AT php DOT net: A good method of making 
+        * portable code in this case would be usage of the PHP constant 
+        * DIRECTORY_SEPARATOR in place of the '/' (forward slash) above. 
+        */ 
+
+        $dirStack = array($dirName); 
+        //Find the index where the last dir starts 
+        $cutFrom = strrpos(substr($dirName, 0, -1), '/')+strlen($this->dir)+1; 
+
+        while (!empty($dirStack)) { 
+            $currentDir = array_pop($dirStack); 
+            $filesToAdd = array(); 
+
+            $dir = dir($currentDir); 
+           
+            while (false !== ($node = $dir->read())) { 
+                if (($node == '..') || ($node == '.') || ($node=='.git')  || ($node=='composer.json') || ($node=='.gitignore') || ($node =='antonella') || ($node=='readme.md') || ($node=='bitbucket-pipelines.yml') || ($node=='.gitmodules') ) { 
+                    continue; 
+                } 
+                if (is_dir($currentDir . $node)) { 
+                    //$currentDir=str_replace(__DIR__,"",$currentDir);
+                   // echo($currentDir);
+                    array_push($dirStack, $currentDir . $node . '/'); 
+                } 
+                if (is_file($currentDir . $node)) { 
+                    $filesToAdd[] = $node; 
+                } 
+            } 
+
+            $localDir = substr($currentDir, $cutFrom);
+            
+            //echo($localDir)."\n";
+            $zip->addEmptyDir($localDir); 
+            foreach ($filesToAdd as $file) { 
+                $zip->addFile($currentDir . $file, $localDir . $file);
+                echo("Added $localDir$file into plugin  \n"); 
+            } 
+        } 
+
+        $zip->close();
+        
+    }
+
+    public function makeup_linux()
+    {
+
+
+        file_exists($this->dir.'/'.basename($this->dir).'.zip')?unlink($this->dir.'/'.basename($this->dir).'.zip'):false;
+
+        $zip = new ZipArchive(); 
+        $zip->open(basename($this->dir).'.zip', ZipArchive::CREATE); 
+
+        $dirName = $this->dir; 
+
+        if (!is_dir($dirName)) { 
+            throw new Exception('Directory ' . $dirName . ' does not exist'); 
+        } 
+
+        $dirName = realpath($dirName); 
+        
+        $filesToExclude = array('composer.json','.gitignore','antonella','readme.md', 'bitbucket-pipelines.yml', '.gitmodules');
+        $dirToExclude = array('.git');
+
+        $files = new RecursiveIteratorIterator(
+            new RecursiveDirectoryIterator($dirName),
+            RecursiveIteratorIterator::LEAVES_ONLY
+        );
+
+        foreach($files as $name => $file )
+        {
+            
+            if (!$file->isDir() && !in_array($file->getFilename(), $filesToExclude)){
+                    $filePath = $file->getRealPath();
+                    $relativePath = substr($filePath, strlen($dirName) + 1);
+                    // Add current file to archive
+                    $zip->addFile($filePath, $relativePath);  
+            }
+
+        }       
+
+        for($i=0;$i<$zip->numFiles;$i++){
+            $entry_info = $zip->statIndex($i);
+            foreach($dirToExclude as $dirExclude) {
+                $pos = strpos($entry_info["name"], $dirExclude);
+                if($pos !== false) {
+                    $zip->deleteIndex($i);
+                }    
+            }
+            
+            
+        }
+
+        $zip->close();
+           
+    }
+
+    public function newname($data)
+    {
+        echo("Renaming the namespace... \n");
+        $slash=DIRECTORY_SEPARATOR;
+        $composer= file_get_contents($this->dir.$slash."composer.json");
+        $namespace=$this->read_namespace();
+        $core=file_get_contents($this->dir.$slash."antonella-framework.php");
+        $core=str_replace($namespace,$data[2],$core);
+        $composer=str_replace($namespace,$data[2],$composer);
+        file_put_contents($this->dir.$slash."antonella-framework.php",$core);
+        file_put_contents($this->dir.$slash."composer.json",$composer);
+        $dirName=$this->dir.$slash."src";
+        $dirName = realpath($dirName); 
+        if (substr($dirName, -1) != '/') { 
+            $dirName.= $slash; 
+        }
+        $dirStack = array($dirName);
+        while (!empty($dirStack)) { 
+            $currentDir = array_pop($dirStack); 
+            $filesToAdd = array(); 
+            $dir = dir($currentDir);
+            while (false !== ($node = $dir->read())) { 
+                if (($node == '..') || ($node == '.')) 
+                { 
+                    continue; 
+                } 
+                if (is_dir($currentDir . $node)) { 
+                    array_push($dirStack, $currentDir . $node . $slash); 
+                } 
+                if (is_file($currentDir . $node)) { 
+                    //echo($currentDir."$node  \n");
+                    $file=file_get_contents($currentDir.$node);
+                    $file= str_replace($namespace,$data[2],$file);
+                    file_put_contents($currentDir.$node,$file);
+
+                   // echo($file." \n");
+                } 
+            } 
+        }
+        exec("composer dump-autoload");
+        exit ("The new namespace is $data[2] ");
+    }
+
+    public function makecontroller($data)
+    {
+        $namespace=$this->read_namespace();
+        $input=
+"<?php
+    namespace $namespace;
+          
+    class $data[2]
+    {
+    
+        public function __construct()
+        {
+    
+        }
+    }";
+        file_put_contents(__DIR__."/src/$data[2].php", $input);
+        exit("Controller $data[2].php created info src folder");
+    }
+
+}
+
+$antonella=new Antonella();
+exit($antonella->process($argv));

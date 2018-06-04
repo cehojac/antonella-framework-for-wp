@@ -1,0 +1,6 @@
+[submodule "customizer-library"]
+	path = customizer-library
+	url = git@github.com:devinsays/customizer-library
+[submodule "admin/customizer-library"]
+	path = admin/customizer-library
+	url = git@github.com:devinsays/customizer-library

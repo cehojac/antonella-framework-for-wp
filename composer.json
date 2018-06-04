@@ -1,32 +1,23 @@
 {
-    "name":         "destinia",
-    "description":  "Solución de prueba para trabajo en destinia",
-    "type":         "proyect",
-    "authors":      
-    [
+    "name":"cehojac/antonella-framework-for-wp",
+    "version":"1.1.1",
+    "description":"make easy a WordPress Plugin whit a team. Use this framework for simplycity the work in develop a plugin",
+    "type":"wordpress-plugin",
+    "authors": [
         {
-            "name":"Carlos Herrera",
-            "email":"hola@carlos-herrera.com",
-            "homepage":"http://carlos-herrera.com",
-            "role":"web developer"
+            "name": "Carlos Herrera",
+            "email": "hi@carlos-herrera.com",
+            "homepage": "https://carlos-herrera.com",
+            "role": "Developer"
         }
     ],
-    "require":
-    {
-        "php":">=5.4.0"
+     "support": {
+        "email": "antonella.framework@carlos-herrera.com"
     },
-    "require-dev": {
-		"phpunit/phpunit": "~4.0",
-		"codeception/codeception":"*"
-		
-	},
-    "autoload":
-    {
-       
-        "psr-4":
-        {
-            "App\\":"solucion/"
-        }
+    "license": "MIT",
+    "require": {
+    },
+    "autoload": {
+        "psr-4": {"CH\\": "src/"}
     }
-    
 }
