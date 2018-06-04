@@ -1,6 +1,6 @@
 {
     "name":"cehojac/antonella-framework-for-wp",
-    "version":"1.1.1",
+    "version":"1.1",
     "prefer-stable": true,
     "minimum-stability": "stable",
     "description":"make easy a WordPress Plugin whit a team. Use this framework for simplycity the work in develop a plugin",
