@@ -6,6 +6,15 @@
 Antonella Framework for WordPress
 ================================
 
+A T E N T I O N
+===============
+
+THE REPOSITORY IS MOVED TO BITBUCKET!!!
+
+https://bitbucket.org/cehojac/antonella-framework-for-wp
+========================================================
+
+
 Framework for develop WordPress plugins based on Model View Controller
 You can read the full documentation in https://antonellaframework.com/documentacion
 
