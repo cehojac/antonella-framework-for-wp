@@ -8,7 +8,7 @@ class Init
 
     }
 
-    public function index()
+    public static function index()
     {
 
     }

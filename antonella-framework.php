@@ -4,7 +4,7 @@ namespace CH;
 Plugin Name: Antonella Framework
 Plugin URI:
 Description:Another plugin developed on Antonella Framework for WP
-Version: 1.0
+Version: 1.7
 Author: Carlos Herrera
 Author URI:
 Framework: Antonella Framework for WP

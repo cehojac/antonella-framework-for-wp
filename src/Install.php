@@ -1,7 +1,7 @@
 <?php
 
 namespace CH;
-
+use CH\Config;
 class Install
 {
     /*
@@ -16,7 +16,7 @@ class Install
     * initial function. you can call your functions here
     * @return void
     */
-    public function index()
+    public static function index()
     {
         $config = new Config;
         $install= new Install;

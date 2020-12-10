@@ -10,11 +10,11 @@ class Dashboard
     public function __construct()
     {
         $config= new Config();
-        $this->array_dashboard= $config->dashborad;
+        $this->array_dashboard= $config->dashboard;
         $this->files_dashboard= $config->files_dashboard;
     }
 
-    public function index()
+    public static function index()
     {
         $dashboard= new Dashboard;
         $datas=$dashboard->array_dashboard;
@@ -30,7 +30,7 @@ class Dashboard
     public function scripts($hook)
     {
         
-            if( 'index.php' != $hook ) {
+        if( 'index.php' != $hook ) {
             return;
         }
         $datas=$this->files_dashboard;

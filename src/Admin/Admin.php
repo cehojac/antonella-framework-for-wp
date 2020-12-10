@@ -18,7 +18,7 @@ class Admin
     * Admin Menu Page
     *
     */
-    public function menu()
+    public static function menu()
     {
         $admin = new Admin;
         $admin->menu_generator($admin->plugin_menu);

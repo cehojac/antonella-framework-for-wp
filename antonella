@@ -4,7 +4,46 @@
 class Antonella
 {  
     public $dir=__DIR__;
-   
+    protected $files_to_exclude=[
+        '.gitignore',
+        '.gitmodules',
+        '.gitattributes',
+        '.travis.yml',
+        'composer.json',
+        'composer.lock',
+        'package.json',
+        'package-lock.json',
+        'antonella',
+        'readme.md', 
+        'bitbucket-pipelines.yml', 
+        'CHANGELOG.md',
+        'CONTRIBUTING.md',
+        'Gruntfile.js',
+        'LICENSE',
+        'readme.md',
+        'README.md',
+        'readme.txt',
+        'bitbucket-pipelines.yml',
+        'wp-cli.phar',
+        '.env',
+        '.env-example'
+    ];
+    protected $dirs_to_exclude_win=[
+        '.',
+        '..',
+        '.git',
+        '.github',
+        'wp-test',
+        'vendor'.DIRECTORY_SEPARATOR.'vlucas',
+    ];
+    protected $dirs_to_exclude_linux=[
+        '.git',
+        '.github',
+        'wp-test',
+        'vendor'.DIRECTORY_SEPARATOR.'vlucas',
+    ];
+    protected $testdir='wp-test';
+    protected $understant="Antonella no understand you. please read the manual in https://antonellaframework.com";
     public function process($data)
     {
         switch ($data[1])
@@ -18,8 +57,34 @@ class Antonella
             case 'make':
                 return $this->makeController($data);
                 break;
+            case 'helper':
+                return $this->makeHelper($data);
+                break;
+            case 'widget':
+                return $this->MakeWidget($data);
+                break;
+            case 'remove':
+                return $this->Remove($data);
+                break;
+            case 'add':
+                return $this->Add($data);
+                break;
+            case 'help':
+                return $this->Help();
+                break;
+            case 'serve':
+                return $this->Serve($data);
+                break;
+            case 'test':
+                return $this->Test($data);
+                break;
+            case 'cpt':
+                return $this->CustomPost($data);
+                break;
+            case 'block':
+                return $this->makeGutenbergBlock($data);
             default:
-                echo("Antonella no understand you. please read the manual in https://antonellaframework.com");
+                echo($this->understant);
                 exit();
         }
     }
@@ -81,12 +146,12 @@ class Antonella
             $dir = dir($currentDir); 
            
             while (false !== ($node = $dir->read())) { 
-                if (($node == '..') || ($node == '.') || ($node=='.git')  || ($node=='composer.json') || ($node=='.gitignore') || ($node =='antonella') || ($node=='readme.md') || ($node=='bitbucket-pipelines.yml') || ($node=='.gitmodules') ) { 
+             
+                if(in_array($node,$this->files_to_exclude)||in_array($node,$this->dirs_to_exclude_win)){
                     continue; 
                 } 
                 if (is_dir($currentDir . $node)) { 
-                    //$currentDir=str_replace(__DIR__,"",$currentDir);
-                   // echo($currentDir);
+                   
                     array_push($dirStack, $currentDir . $node . '/'); 
                 } 
                 if (is_file($currentDir . $node)) { 
@@ -96,11 +161,11 @@ class Antonella
 
             $localDir = substr($currentDir, $cutFrom);
             
-            //echo($localDir)."\n";
+           
             $zip->addEmptyDir($localDir); 
             foreach ($filesToAdd as $file) { 
                 $zip->addFile($currentDir . $file, $localDir . $file);
-                echo("Added $localDir$file into plugin  \n"); 
+               // echo("Added $localDir$file into plugin  \n"); 
             } 
         } 
 
@@ -124,9 +189,8 @@ class Antonella
         } 
 
         $dirName = realpath($dirName); 
-        
-        $filesToExclude = array('composer.json','.gitignore','antonella','readme.md', 'bitbucket-pipelines.yml', '.gitmodules');
-        $dirToExclude = array('.git');
+        $filesToExclude = $this->files_to_exclude;
+        $dirToExclude = $this->dirs_to_exclude_linux;
 
         $files = new RecursiveIteratorIterator(
             new RecursiveDirectoryIterator($dirName),
@@ -164,20 +228,21 @@ class Antonella
     public function newname($data)
     {
         echo("Renaming the namespace... \n");
-        $slash=DIRECTORY_SEPARATOR;
-        $composer= file_get_contents($this->dir.$slash."composer.json");
-        $namespace=$this->read_namespace();
-        $core=file_get_contents($this->dir.$slash."antonella-framework.php");
-        $core=str_replace($namespace,$data[2],$core);
-        $composer=str_replace($namespace,$data[2],$composer);
+        $newname = (isset($data[2])&&trim($data[2])<>'')?strtoupper($data[2]):$this->get_rand_letters(6);
+        $slash      = DIRECTORY_SEPARATOR;
+        $composer   = file_get_contents($this->dir.$slash."composer.json");
+        $namespace  = $this->read_namespace();
+        $core       = file_get_contents($this->dir.$slash."antonella-framework.php");
+        $core       = str_replace($namespace,$newname,$core);
+        $composer   = str_replace($namespace,$newname,$composer);
         file_put_contents($this->dir.$slash."antonella-framework.php",$core);
         file_put_contents($this->dir.$slash."composer.json",$composer);
-        $dirName=$this->dir.$slash."src";
-        $dirName = realpath($dirName); 
+        $dirName    = $this->dir.$slash."src";
+        $dirName    = realpath($dirName); 
         if (substr($dirName, -1) != '/') { 
             $dirName.= $slash; 
         }
-        $dirStack = array($dirName);
+        $dirStack   = array($dirName);
         while (!empty($dirStack)) { 
             $currentDir = array_pop($dirStack); 
             $filesToAdd = array(); 
@@ -191,17 +256,14 @@ class Antonella
                     array_push($dirStack, $currentDir . $node . $slash); 
                 } 
                 if (is_file($currentDir . $node)) { 
-                    //echo($currentDir."$node  \n");
                     $file=file_get_contents($currentDir.$node);
-                    $file= str_replace($namespace,$data[2],$file);
+                    $file= str_replace($namespace,$newname,$file);
                     file_put_contents($currentDir.$node,$file);
-
-                   // echo($file." \n");
                 } 
             } 
         }
         exec("composer dump-autoload");
-        exit ("The new namespace is $data[2] ");
+        exit ("The new namespace is $newname ");
     }
 
     public function makecontroller($data)
@@ -220,7 +282,502 @@ class Antonella
         }
     }";
         file_put_contents(__DIR__."/src/$data[2].php", $input);
-        exit("Controller $data[2].php created info src folder");
+        exit("\033[01;33m  Controller $data[2].php created into src folder \033[0m  \n");
+    }
+
+    public function MakeWidget($data)
+    {
+        $namespace=$this->read_namespace();
+        $input=
+"<?php
+namespace $namespace;
+      
+class $data[2] extends \WP_Widget
+{
+    /**
+     * Please complete the public variables
+    */
+    public \$name_widget=''; // <--complete this
+
+    public \$options=
+    [
+        'classname'=>'', // <-- complete this
+        'description'=>'' // <-- complete this
+    ];
+
+    public \$form_values=
+    [
+        //Example: 'title'=>'the best plugin', 'url'=>'https://antonellaframework.com'
+    ];
+   
+    
+    public function __construct()
+    {
+        parent::__construct('$data[2]', \$this->name_widget, \$this->options);
+    }
+
+    function form(\$instance) {
+        // Build the Admin's Widget form
+        \$instance = wp_parse_args((array)\$instance, \$this->form_values);
+        \$html=\"\";
+        foreach (\$instance as \$key=>\$inst)
+        {
+            \$html.=\"<p>\$key<input class='widefat' type='text' name='{\$this->get_field_name(\$key)}' value='\".esc_attr(\$inst).\"'/></p>\";
+        }
+        echo \$html;
+    }
+    function update(\$new_instance, \$old_instance) {
+        // Save the Widget Options
+        \$instances = \$old_instance;
+        foreach(\$new_instance as \$key => \$value)
+        {
+            \$instances[\$key]= sanitize_text_field(\$new_instance[\$key]);
+        }
+        return \$instances;
+    }
+    function widget(\$args, \$instance) {
+        //Build the code for show the widget in plubic zone.
+        extract(\$args);
+        \$html=\"\";
+        // you can edit this function for make the html//
+        //
+        ////////////////////////////////////////////////
+        echo \$html;
+    }
+
+}";
+    file_put_contents(__DIR__."/src/$data[2].php", $input);
+    exit("\033[01;33m The Widget $data[2].php created info src folder \033[0m  \n");
+    }
+
+    public function makeHelper($data)
+    {
+        $input =
+"<?php
+if (!function_exists('{$data[2]}')) {
+    /**
+     * Make your Helper
+     * not use exist helpers
+     * for call this function globally:
+     * {$data[2]}();
+     */
+    function {$data[2]}(){
+    } 
+}
+?>";
+    file_put_contents(__DIR__."/src/Helpers/$data[2].php", $input);
+    exit("\033[01;33m The Helper $data[2].php created info Helper folder \033[0m  \n");
+    }
+
+    public function Remove($data)
+    {
+        switch ($data[2])
+        {
+            case 'blade':
+                return $this->RemoveBlade();
+                break;
+            
+            default:
+                echo($this->understant);
+                exit();
+        }
+    }
+    public function Add($data)
+    {
+        switch ($data[2])
+        {
+            case 'blade':
+                return $this->AddBlade();
+                break;
+            case 'action':
+                return $this->AddAction($data);
+            default:
+                echo($this->understant);
+                exit();
+        }
+    }
+    public function RemoveBlade()
+    {
+        echo("Removing Blade... \n");
+        exec('composer remove jenssegers/blade');
+        echo("Blade Removed! \n");
+    }
+    public function AddBlade()
+    {
+        echo "You need add blade? (Template system)  Type 'yes' or 'y' to continue: ";
+        $handle = fopen ("php://stdin","r");
+        $line = fgets($handle);
+        echo $line;
+        fclose($handle);
+        if(trim($line) === 'yes' || trim($line ==='y')){
+            echo "\n"; 
+            echo("Adding Blade... \n");
+            exec('composer require jenssegers/blade');
+            echo("Blade Added! \n");
+        }
+        else{
+        echo "ABORTING!\n";
+            echo "Remember: if you need add blade only  type 'php antonella add blade' ";
+            exit;
+        }
+    }
+    public function AddCMB2()
+    {}
+    public function RemoveCMB2()
+    {
+        
+    }
+
+    public function AddAction($data)
+    {
+        $slash      = DIRECTORY_SEPARATOR;
+        if(isset($data[3]))
+        {
+           
+           // echo(" data = {$data[3]}");
+            include($this->dir.$slash."src".$slash."Config.php");
+            $namespace=$this->read_namespace();
+            $class = $namespace."\Config";
+          //  echo $class;
+            $config =new $class;
+            print_r( $config->add_action);
+          //  print_r($config->shortcodes);
+        }
+        else
+        {
+            echo("Is necessary more data");
+        }
+    }
+    public function Test($data)
+    {
+        switch ($data[2])
+        {
+            case'refresh':
+                $this->Refresh();
+            break;
+        }
+    }
+    public function Refresh($data=false)
+    {
+        $loader = require __DIR__ . '/vendor/autoload.php';
+        $dotenv = Dotenv\Dotenv::create(__DIR__);
+        $dotenv->load();
+        $dbname     = getenv('DBNAME');
+        $dbuser     = getenv('DBUSER');
+        $dbpass     = getenv('DBPASS');
+        $testDIR    = getenv('TEST_DIR')?getenv('TEST_DIR'):$this->testdir;
+        $slash      = DIRECTORY_SEPARATOR;
+        $pluginname = basename($this->dir);
+        $filename   = basename($this->dir).'.zip';
+        $origen     = $this->dir.$slash.$filename;
+        $destiny    = $this->dir.$slash.basename($testDIR).$slash.'wp-content'.$slash.'plugins'.$slash.$filename;
+        $plugindir  = $this->dir.$slash.basename($testDIR).$slash.'wp-content'.$slash.'plugins'.$slash.basename($this->dir);
+        $force      = $data =='force'?true:false;
+        $extra_php  = $force?" --force ":"";
+        $this->InstallWPCLI();
+        echo(" \n");
+        if ( !file_exists( $testDIR ) && !is_dir(  $testDIR ) ) {
+            echo("\033[01;33mFolder Test not exist!!! create the folder...  \033[0m \n");
+            mkdir(  $testDIR );       
+        } 
+        echo(" \n");
+        if(!file_exists($testDIR.$slash.'index.php'))
+        {
+            echo("\033[01;32mDownloading WordPress...  \033[0m \n");
+            exec("php wp-cli.phar core download --path=$testDIR");
+        }
+        echo(" \n");
+        exec("php wp-cli.phar config create --dbname=$dbname --dbuser=$dbuser --dbpass=$dbpass --path=$testDIR  --extra-php=\" define( 'WP_DEBUG', true ); define( 'WP_DEBUG_LOG', true );  \" $extra_php");
+        exec("php wp-cli.phar core install --url=localhost:8010 --title=\"Antonella Framework Test\" --path=$testDIR --admin_user=test --admin_password=test --admin_email=test@test.com --skip-email");
+        $this->makeup();
+        echo(" \n");
+        if ( file_exists($plugindir ) && is_dir(  $plugindir ) ) 
+        {
+            $it = new RecursiveDirectoryIterator($plugindir, RecursiveDirectoryIterator::SKIP_DOTS);
+            $files = new RecursiveIteratorIterator($it,
+                        RecursiveIteratorIterator::CHILD_FIRST);
+            foreach($files as $file) {
+                if ($file->isDir()){
+                    rmdir($file->getRealPath());
+                } else {
+                    unlink($file->getRealPath());
+                }
+            }
+            // rmdir($plugindir);
+        }
+        file_exists($destiny)?unlink($destiny):false;
+        copy($origen,$destiny);
+        $zip = new ZipArchive;
+        $res = $zip->open($destiny);
+        $zip->extractTo($plugindir);
+        $zip->close();
+        file_exists($destiny)?unlink($destiny):false;
+        exec("php wp-cli.phar plugin activate $pluginname --path=$testDIR");
+        echo("\033[01;33mRemember: adminuser:test | password: test  \033[0m \n");
+        echo("\033[01;33mYour plugin has been refreshed in test.  \033[0m \n");
+        
+    }
+    public function InstallWPCLI()
+    {
+        if(!file_exists('wp-cli.phar'))
+        {
+            exec("curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar");
+        }
+    }
+
+    public function Serve($data)
+    {   
+        if(!file_exists('.env')){
+            echo("\033[01;33m Antonella response: You need create and config the .env file. you have a .env-example file reference \033[0m ");
+            die();
+        }
+        $loader = require __DIR__ . '/vendor/autoload.php';
+        $dotenv = Dotenv\Dotenv::create(__DIR__);
+        $dotenv->load(); 
+        if(!getenv('DBNAME')){
+            echo("\033[01;33m Antonella response: You need config the DBNAME into .env file \033[0m ");
+            die();
+        }
+        $testDIR    = getenv('TEST_DIR')?getenv('TEST_DIR'):$this->testdir;  
+        $this->Refresh();
+
+        echo(" \n");
+        exec("php -S localhost:8010 --docroot=$testDIR");
+    }
+
+    function makeGutenbergBlock($data){
+        if(isset($data[2]) and $data[2]<>''){
+            $jsFile     ="/* This section of the code registers a new block, sets an icon and a category, and indicates what type of fields it'll include. */
+  
+            wp.blocks.registerBlockType('antonella/".$data[2]."', {
+              title: '".$data[2]."',
+              icon: 'smiley',
+              category: 'common',
+              attributes: {
+                content: {type: 'string'},
+                color: {type: 'string'}
+              },
+              
+            /* This configures how the content and color fields will work, and sets up the necessary elements */
+            
+              
+              edit: function(props) {
+                  /* This is a example, you can edit whit freedoom*/
+                function updateContent(event) {
+                  props.setAttributes({content: event.target.value})
+                }
+                function updateColor(value) {
+                  props.setAttributes({color: value.hex})
+                }
+                return React.createElement(
+                  \"div\",
+                  null,
+                  React.createElement(
+                    \"h3\",
+                    null,
+                    \"Simple Box\"
+                  ),
+                  React.createElement(\"input\", { type: \"text\", value: props.attributes.content, onChange: updateContent }),
+                  React.createElement(wp.components.ColorPicker, { color: props.attributes.color, onChangeComplete: updateColor })
+                );
+              },
+              save: function(props) {
+                /* This is a example, you can edit whit freedoom*/
+                return wp.element.createElement(
+                  \"h3\",
+                  { style: { border: \"3px solid \" + props.attributes.color } },
+                  props.attributes.content
+                );
+              }
+            })";
+            $cssFile="/*CSS to  {$data[2]} - You can add your custom CSS data */ ";
+            file_put_contents(__DIR__."/assets/js/$data[2].js", $jsFile);
+            file_put_contents(__DIR__."/assets/css/$data[2].css", $cssFile);
+            $slash      = DIRECTORY_SEPARATOR;
+            $archivo    = $this->dir.$slash.'src'.$slash.'Config.php';
+            $abrir      = fopen($archivo,'r+');
+            $contenido  = fread($abrir,filesize($archivo));
+            fclose($abrir);
+            //Separar linea por linea
+            $contenido  = explode("\n",$contenido);
+            for ($i=0; $i < sizeof($contenido); $i++){
+                if (strpos($contenido[$i], 'public $gutenberg_blocks =[') !== false) {            
+                    $contenido[$i] ='    public $gutenberg_blocks =[
+        "'.$data[2].'",';
+                }
+            }
+            $contenido = implode("\n",$contenido);
+            file_put_contents($archivo, $contenido);
+            echo("\033[01;33m Add new Gutenberg Block {$data[2]} in config.php file \033[0m ");
+            //modificar la linea deseada
+        }
+    }
+
+    function assign_rand_value($num) {
+
+        // accepts 1 - 36
+        switch($num) {
+            case "1"  : $rand_value = "A"; break;
+            case "2"  : $rand_value = "B"; break;
+            case "3"  : $rand_value = "C"; break;
+            case "4"  : $rand_value = "D"; break;
+            case "5"  : $rand_value = "E"; break;
+            case "6"  : $rand_value = "F"; break;
+            case "7"  : $rand_value = "G"; break;
+            case "8"  : $rand_value = "H"; break;
+            case "9"  : $rand_value = "I"; break;
+            case "10" : $rand_value = "J"; break;
+            case "11" : $rand_value = "K"; break;
+            case "12" : $rand_value = "L"; break;
+            case "13" : $rand_value = "M"; break;
+            case "14" : $rand_value = "N"; break;
+            case "15" : $rand_value = "O"; break;
+            case "16" : $rand_value = "P"; break;
+            case "17" : $rand_value = "Q"; break;
+            case "18" : $rand_value = "R"; break;
+            case "19" : $rand_value = "S"; break;
+            case "20" : $rand_value = "T"; break;
+            case "21" : $rand_value = "U"; break;
+            case "22" : $rand_value = "V"; break;
+            case "23" : $rand_value = "W"; break;
+            case "24" : $rand_value = "X"; break;
+            case "25" : $rand_value = "Y"; break;
+            case "26" : $rand_value = "Z"; break;
+        }
+        return $rand_value;
+    }
+    
+    function get_rand_letters($length) {
+        if ($length>0) {
+            $rand_id="";
+            for($i=1; $i<=$length; $i++) {
+                mt_srand((double)microtime() * 1000000);
+                $num = mt_rand(1,26);
+                $rand_id .= $this->assign_rand_value($num);
+            }
+        }
+        return $rand_id;
+    }
+
+    public function Help()
+    {
+        $this->AntonellaLogo();
+        echo(" \n");
+        echo("\033[01;33m Usage:  \033[0m \n");
+        echo("\033[01;37m php antonella [option] [name or value] \033[0m \n");
+        echo(" \n");
+        echo("\033[00;33m Options: \033[0m \n");
+        echo("\033[00;32m    namespace: \033[0m");
+        echo("\033[00;37m                     Generate or regenerate a new namespace for your plugin project. \033[0m \n");
+        echo("\033[00;32m    makeup: \033[0m");
+        echo("\033[00;37m                        Compress and generate a .zip plugin's file for upload to WordPress. \033[0m \n");
+        echo("\033[00;32m    make: \033[0m");
+        echo("\033[00;37m                          Generate a new php Controller's file. \033[0m \n");
+        echo("\033[00;32m    helper: \033[0m");
+        echo("\033[00;37m                        Generate a new php Helper's file. \033[0m \n");
+        echo("\033[00;32m    remove: \033[0m");
+        echo("\033[00;37m                        Remove Antonella's Modules. Now only is possible remove blade \033[0m \n");
+        echo("\033[00;32m    add: \033[0m");
+        echo("\033[00;37m                           Add Antonella's Modules. Now only is possible add blade \033[0m \n");
+        echo("\033[00;32m    widget: \033[0m");
+        echo("\033[00;37m                        Generate a new php file's Class for use Widget \033[0m \n");
+        echo("\033[00;32m    serve: \033[0m");
+        echo("\033[00;37m                         Generate enviroment for test in a local WordPress \033[0m \n");
+        echo("\033[00;32m    test: [refresh] \033[0m");
+        echo("\033[00;37m                Regenerate the plugin's files in local server WordPress \033[0m \n");
+        echo(" \n");
+        echo(" \n");
+        echo("\033[01;37m All Documentation: \033[0m \033[01;33m  https://antonellaframework.com \033[0m \n");
+        echo("\033[01;37m See Video Tutorial: \033[0m \033[01;33m https://tipeos.com/anto \033[0m \n");
+       // $this->AntonellaIcon();
+    }
+
+    public function AntonellaIcon()
+    {
+        echo("\033[01;33m MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM  \033[0m \n");
+        echo("\033[01;33m MMMMMMMMMMMMMMMMMMMMMMMMMMMmymMMMMMMMMMMNhmMMMMMMMMMMMMMMMMMMMMMMMMMMM  \033[0m \n");
+        echo("\033[01;33m MMMMMMMMMMMMMMMMMMMMMMMMh+.``.:omMMMMmy+/:::ohMMMMMMMMMMMMMMMMMMMMMMMM  \033[0m \n"); 
+        echo("\033[01;33m MMMMMMMMMMMMMMMMMMMMms:.`````..-:NMMN:///::::::+smMMMMMMMMMMMMMMMMMMMM  \033[0m \n");
+        echo("\033[01;33m MMMMMMMMMMMMMMMMMdo:.`````.-:://:NMMN:///:::::::::+shNMMMMMMMMMMMMMMMM  \033[0m \n");
+        echo("\033[01;33m MMMMMMMMMMMMMNy+.``````.-://////:NMMN:///:::::::::::::ohNMMMMMMMMMMMMM  \033[0m \n");
+        echo("\033[01;33m MMMMMMMMMMms:``````..-:////////ydMMMN:::-..--::::::::::::/smMMMMMMMMMM  \033[0m \n");
+        echo("\033[01;33m MMMMMMNy/-``````.-:////////+ydMMMMMMM+.``````.--:::::::::::::ohNMMMMMM  \033[0m \n");
+        echo("\033[01;33m MMMMh/.``````.-:////////+ymMMMMMMMMMMMMdo-.`````..-:::::::::::::+hMMMM  \033[0m \n");
+        echo("\033[01;33m MMMM+:-..`````..-:///ohNMMMMMMMMMMMMMMMMMMms/.``````.--::::::::::+MMMM  \033[0m \n");
+        echo("\033[01;33m MMMM+::::--.``````.-smMMMMMMMMMMMMMMMMMMMMMMMNh+-``````..-:::::::+MMMM  \033[0m \n");
+        echo("\033[01;33m MMMM+::::::::-..``````-odMMMMMMMMMMMMMMMMMMMMMMMMy:-.`````..--:::+MMMM  \033[0m \n");
+        echo("\033[01;33m MMMM+:::::::::::--.``````./yNMMMMMMMMMMMMMMMMMhs+////:-.``````.--+MMMM  \033[0m \n");
+        echo("\033[01;33m MMMMmy+::::::::::::--..``````:sdMMMMMMMMMMMdo////////::-.``````:omMMMM  \033[0m \n");
+        echo("\033[01;33m MMMMMMMmh+/::::::::::::-..`````./MMMMMMmho////////:-.``````./smMMMMMMM  \033[0m \n");
+        echo("\033[01;33m MMMMMMMMMMMdo/::::::::::::---::/:NMMMy+///////::-.``````-+dMMMMMMMMMMM  \033[0m \n");
+        echo("\033[01;33m MMMMMMMMMMMMMMmy/::::::::::::///:NMMN://///:-..`````.:sdMMMMMMMMMMMMMM  \033[0m \n");
+        echo("\033[01;33m MMMMMMMMMMMMMMMMMNho:::::::::///:NMMN:/::-.``````-+hNMMMMMMMMMMMMMMMMM  \033[0m \n");
+        echo("\033[01;33m MMMMMMMMMMMMMMMMMMMMNmy/:::::////NMMN:-.`````.:sdNMMMMMMMMMMMMMMMMMMMM  \033[0m \n");
+        echo("\033[01;33m MMMMMMMMMMMMMMMMMMMMMMMMmyo::+sdMMMMMMd+-`./ymMMMMMMMMMMMMMMMMMMMMMMMM  \033[0m \n");
+        echo("\033[01;33m MMMMMMMMMMMMMMMMMMMMMMMMMMMMNMMMMMMMMMMMMNMMMMMMMMMMMMMMMMMMMMMMMMMMMM  \033[0m \n");
+    }
+    public function AntonellaLogo()
+    {
+        echo("\033[01;33m *******************************************************************  \033[0m \n");
+        echo("\033[01;33m *******************************************************************  \033[0m \n");
+        echo("\033[01;33m ***                    _                   _ _                  ***  \033[0m \n");
+        echo("\033[01;33m ***       /\         | |                 | | |                  ***  \033[0m \n");
+        echo("\033[01;33m ***      /  \   _ __ | |_ ___  _ __   ___| | | __ _             ***  \033[0m \n");
+        echo("\033[01;33m ***     / /\ \ | '_ \| __/ _ \| '_ \ / _ \ | |/ _` |            ***  \033[0m \n");
+        echo("\033[01;33m ***    / ____ \| | | | || (_) | | | |  __/ | | (_| |            ***  \033[0m \n");
+        echo("\033[01;33m ***   /_/____\_\_| |_|\__\___/|_| |_|\___|_|_|\__,_|    _       ***  \033[0m \n");
+        echo("\033[01;33m ***   |  ____|                                         | |      ***  \033[0m \n");
+        echo("\033[01;33m ***   | |__ _ __ __ _ _ __ ___   _____      _____  _ __| | __   ***  \033[0m \n");
+        echo("\033[01;33m ***   |  __| '__/ _` | '_ ` _ \ / _ \ \ /\ / / _ \| '__| |/ /   ***  \033[0m \n");
+        echo("\033[01;33m ***   | |  | | | (_| | | | | | |  __/\ V  V / (_) | |  |   <    ***  \033[0m \n");
+        echo("\033[01;33m ***   |_|  |_|  \__,_|_| |_| |_|\___| \_/\_/ \___/|_|  |_|\_\   ***  \033[0m \n");
+        echo("\033[01;33m ***                                                             ***  \033[0m \n");
+        echo("\033[01;33m *******************************************************************  \033[0m \n");
+        echo("\033[01;33m *******************************************************************  \033[0m \n");
+    }
+    /**
+     * CustomPost function
+     * crea dentro del array post_types en config.php un nuevo custom
+     * 
+     * @author Alberto Leon <email@email.com>
+     * @version 1.0.0
+     * @param array $data el dato que viene desde la consola
+     * @return void
+     */
+    public function CustomPost($data)
+    {
+        if(isset($data[2]) and $data[2]<>''){
+            // Abrir el archivo
+            $slash      = DIRECTORY_SEPARATOR;
+            $archivo    = $this->dir.$slash.'src'.$slash.'Config.php';
+            $abrir      = fopen($archivo,'r+');
+            $contenido  = fread($abrir,filesize($archivo));
+            fclose($abrir);
+            //Separar linea por linea
+            $contenido  = explode("\n",$contenido);
+            //Modificar linea deseada
+            for ($i=0; $i < sizeof($contenido); $i++){
+                if (strpos($contenido[$i], 'public $post_types =[') !== false) {            
+                    $contenido[$i] = '    public $post_types =[
+        [
+            "singular"      => "'.$data[2].'",
+            "plural"        => "'.$data[2].'s",
+            "slug"          => "'.$data[2].'",
+            "position"      => 99,
+            "taxonomy"      => [],
+            "image"         => "antonella-icon.png",
+            "gutemberg"     => true
+        ],
+';
+                }
+            }
+            $contenido = implode("\n",$contenido);
+            file_put_contents($archivo, $contenido);
+            echo("\033[01;33m Add new Custom PostType {$data[2]} in config.php file \033[0m ");
+        }
+        else{
+            echo("\033[01;33m Antonella reponse: need a custom PostType's Name \033[0m ");
+        }
     }
 
 }

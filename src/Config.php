@@ -28,27 +28,31 @@ class Config
     * get the post data and execute the function
     * @example ['post_data'=>'CH::function']
     */
-    public $post=[];
+    public $post=[
+    ];
     /**
     * GET data process
     * get the get data and execute the function
     * @example ['get_data'=>'CH::function']
     */
-    public $get=[];
+    public $get=[
+    ];
     /**
     * add_filter data functions
     * @input array
     * @example ['body_class','CH::function',10,2]
     * @example ['body_class',['CH','function'],10,2]
     */
-    public $add_filter=[];
+    public $add_filter=[
+    ];
     /**
     * add_action data functions
     * @input array
     * @example ['body_class','CH::function',10,2]
     * @example ['body_class',['CH','function'],10,2]
     */
-    public $add_action=[];
+    public $add_action=[
+    ];
     /**
     * add custom shortcodes
     * @input array
@@ -58,14 +62,20 @@ class Config
         ['example','CH\ExampleController::example_shortcode']
     ];
     /**
+     * add Gutenberg's blocks
+     */
+    public $gutenberg_blocks =[
+    ];
+    /**
     * Dashboard
+
     * @reference: https://codex.wordpress.org/Function_Reference/wp_add_dashboard_widget
     */
     public $dashboard=[
         [
         'slug'      => '',
         'name'      => '',
-        'function'  => '',
+        'function'  => '', // example: __NAMESPACE__.'\Admin\PageAdmin::DashboardExample',
         'callback'  => '',
         'args'      => '',
         ]
@@ -81,7 +91,15 @@ class Config
     * set your menu option here
     */
     public $plugin_menu=[
-        /*
+    /*
+        [
+            "path"      => ["page"],
+            "name"      => "My Custom Page",
+            "function"  => __NAMESPACE__."\Admin\PageAdmin::index",
+            "icon"      => "antonella-icon.png",
+            "slug"      => "my-custom-page",
+        ]
+        
             [
                 "path"      => ["page"],
                 "name"      => "My Custom Page",
@@ -137,17 +155,63 @@ class Config
         */
         ];
 
+    /**
+     * Custom Post Type
+     * for make simple Custom PostType
+     * for simple add fill the 7 frist elements
+     * for avanced fill
+     * https://codex.wordpress.org/Function_Reference/register_post_type
+     */
+
     public $post_types =[
         [
-            'singular'      => '',
-            'plural'        => '',
-            'slug'          => '',
-            'translate'     => false,
-            'position'      => 4,
-            'taxonomy'      =>['category'],
-            'image'         =>'',
+            "singular"      => "",
+            "plural"        => "",
+            "slug"          => "",
+            "position"      => 12,
+            "taxonomy"      => [], //['category','category2','category3'],
+            "image"         => "antonella-icon.png",
+            "gutemberg"     => true,
+            //advanced
+            /*
+            'labels'        => [],
+            'args'          => [],
+            'rewrite'       => []
+            */
         ],
-
     ];
     
-    }
+    /**
+     * Taxonomies
+     * for make taxonomies
+     * for easy add only fill the 5 first elements
+     * for avanced methods
+     * https://codex.wordpress.org/Function_Reference/register_taxonomy
+     */
+    public $taxonomies = [
+        [
+            "post_type"     => "",
+            "singular"      => "",
+            "plural"        => "",
+            "slug"          => "",
+            "gutemberg"     => true,
+            //advanced
+            /*
+            "labels"        =>[],
+            "args"          =>[],
+            "rewrite"       =>[],
+            "capabilities"  =>[]
+            */
+        ] 
+    ];
+    
+    /**
+     * Widget
+     * For register a Widget please:
+     * Console: php antonella Widget "NAME_OF_WIDGET"
+     * @input array
+     * @example public $widget = [__NAMESPACE__.'\YouClassWidget']  //only the class
+     */
+    public $widgets=[];
+    
+}
