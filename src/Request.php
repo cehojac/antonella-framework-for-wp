@@ -20,17 +20,10 @@ class Request
         $this->process($config->post,'post');
         $this->process($config->get,'get');
     }
-    /*
-    public static function index(){
-        $config=new Config();
-        $request = new Request();
-        $request->process($config->post);
-        $request->process($config->get);
-    }*/
     /**
      * process function
      * process the request input (POST and GET)
-     * @param [type] $datas the config array (post and get)
+     * @param array $datas the config array (post and get)
      * @return void
      */
     public function  process($datas){

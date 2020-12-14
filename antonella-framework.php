@@ -14,7 +14,7 @@ Text Domain: Carlos Herrera
 Domain Path: /languages
 */
 
-defined( 'ABSPATH' ) or die( __('Lo siento por aqui no puedes pasar :)') );
+defined( 'ABSPATH' ) or die( __("I'm sorry, you can't go through here :)") );
 
 /*
 * Class Caller.

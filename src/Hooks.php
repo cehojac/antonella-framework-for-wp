@@ -57,10 +57,6 @@ class Hooks
         \add_action( 'admin_init', array(__NAMESPACE__.'\Admin\PageAdmin','index') );
         //INIT SECTION
         \add_action( 'init', array(__NAMESPACE__.'\Init','index'), 0 );
-        //REQUEST SECTION ON FRONT
-       // \add_action('parse_request', array(__NAMESPACE__.'\Request','index'),1);
-        //REQUEST SECTION ON WP-ADMIN (aun por hacer)
-       // add_action('parse_request', array(__NAMESPACE__.'\Request','index'),1);
         //SHORTCODES
         \add_action( 'init', array(__NAMESPACE__.'\Shortcodes','index'),1 );
         //POST-TYPES
