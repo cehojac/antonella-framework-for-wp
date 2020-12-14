@@ -1,5 +1,7 @@
 <?php
+
 namespace CH;
+
 /*
 Plugin Name: Antonella Framework
 Plugin URI:
@@ -14,7 +16,7 @@ Text Domain: Carlos Herrera
 Domain Path: /languages
 */
 
-defined( 'ABSPATH' ) or die( __("I'm sorry, you can't go through here :)") );
+defined('ABSPATH') or die(__("I'm sorry, you can't go through here :)"));
 
 /*
 * Class Caller.
@@ -24,9 +26,6 @@ defined( 'ABSPATH' ) or die( __("I'm sorry, you can't go through here :)") );
 *
 * @return null
 */
-define('NELLA_URL',__FILE__);
-$loader = require __DIR__ . '/vendor/autoload.php';
-$antonella= new Start;
-
-
-?>
+define('NELLA_URL', __FILE__);
+$loader = require __DIR__.'/vendor/autoload.php';
+$antonella = new Start();
