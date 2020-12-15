@@ -27,7 +27,7 @@ class Dashboard
         }
     }
 
-    public function scripts($hook)
+    public function scripts(string $hook)
     {
         if ('index.php' != $hook) {
             return;

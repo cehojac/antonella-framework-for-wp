@@ -15,7 +15,7 @@ class Unistall
         $unistall->delete_options($config->plugin_options);
     }
 
-    public function delete_options($options)
+    public function delete_options($options = [])
     {
         foreach ($options as $key => $option) {
             if (get_option($key) != false) {

@@ -64,7 +64,7 @@ class Install
     * @description: no modify
     * @return void
     */
-    public function pluginOptions($options)
+    public function pluginOptions($options = [])
     {
         foreach ($options as $key => $option) {
             add_option($key, $option);

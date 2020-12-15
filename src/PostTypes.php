@@ -36,7 +36,7 @@ class PostTypes
      *
      * @return void
      */
-    public function registrerPostType($pt)
+    public function registrerPostType($pt = [])
     {
         $config = new Config();
         $img = explode('.', $pt['image']);
@@ -119,7 +119,7 @@ class PostTypes
      *
      * @return void
      */
-    public function addTaxonomy($tx)
+    public function addTaxonomy($tx = [])
     {
         $config = new Config();
         $labels = [];

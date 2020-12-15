@@ -32,7 +32,7 @@ class Admin
      * @params Config::config_menu
      * @ver 1.0
      */
-    public function menu_generator($params)
+    public function menu_generator($params = [])
     {
         foreach ($params as $param) {
             if ($param['path'][0] == 'page') {

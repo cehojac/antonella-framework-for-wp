@@ -32,9 +32,9 @@ class Hooks
     * filter call
     * @info: https://codex.wordpress.org/Plugin_API/Filter_Reference
     */
-    public function filter($filter)
+    public function filter($filter = [])
     {
-        if (isset($filter)) {
+        if (isset($filter) && count($filter) > 0) {
             foreach ($filter as $data) {
                 call_user_func_array('add_filter', [
                     isset($data[0]) ? $data[0] : null,

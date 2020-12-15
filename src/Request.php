@@ -31,7 +31,7 @@ class Request
      *
      * @return void
      */
-    public function process($datas)
+    public function process($datas = [])
     {
         require_once ABSPATH.'wp-includes/pluggable.php';
         foreach ($datas as $key => $data) {
