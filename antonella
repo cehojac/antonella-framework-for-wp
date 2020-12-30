@@ -37,12 +37,17 @@ class Antonella
         '.github',
         'wp-test',
         'node_modules',
+        'resources'.DIRECTORY_SEPARATOR.'js',
+        'resources'.DIRECTORY_SEPARATOR.'css',
         'vendor'.DIRECTORY_SEPARATOR.'vlucas',
     ];
     protected $dirs_to_exclude_linux = [
         '.git',
         '.github',
         'wp-test',
+        'node_modules',
+        'resources'.DIRECTORY_SEPARATOR.'js',
+        'resources'.DIRECTORY_SEPARATOR.'css',
         'vendor'.DIRECTORY_SEPARATOR.'vlucas',
     ];
     protected $testdir = 'wp-test';
