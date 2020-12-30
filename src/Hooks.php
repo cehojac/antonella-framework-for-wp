@@ -70,6 +70,9 @@ class Hooks
         \add_action('wp_dashboard_setup', [__NAMESPACE__.'\Admin\Dashboard', 'index']);
         // add_action( 'admin_enqueue_scripts', array(__NAMESPACE__.'\Admin\Dashboard','scripts') );
 
+        //add defaults scripts and js
+        \add_action('wp_enqueue_scripts', [__NAMESPACE__.'\Init', 'addStylesAndScripts']);
+
         if ($action) {
             foreach ($action as $data) {
                 if (isset($data)) {

@@ -19,6 +19,8 @@ class Antonella
         'CHANGELOG.md',
         'CONTRIBUTING.md',
         'Gruntfile.js',
+        'mix-manifest.json',
+        'webpack.mix.js',
         'LICENSE',
         'readme.md',
         'README.md',
@@ -34,6 +36,7 @@ class Antonella
         '.git',
         '.github',
         'wp-test',
+        'node_modules',
         'vendor'.DIRECTORY_SEPARATOR.'vlucas',
     ];
     protected $dirs_to_exclude_linux = [
