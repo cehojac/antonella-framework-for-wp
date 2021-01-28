@@ -94,4 +94,4 @@ public $widgets = [
 ];
 ```
 
-[Volver al índice](https://github.com/d3turnes/antonella-framework-for-wp/tree/2.0/docs/readme.md)
+[Volver al índice](https://github.com/d3turnes/antonella-framework-for-wp/tree/1.8/docs/readme.md)

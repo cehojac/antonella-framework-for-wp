@@ -12,7 +12,7 @@ php antonella shortcode tag:MyController@method [--enque]
 tag: Nombre del ShortCode
 MyController: Nombre del Controlador si no existe, éste es creado
 method: Method static del Controlador (sino existe será creado) 	 	
---enque: Encola el shortcode en la sección $shortcodes[] del fichero config.php
+--enque: Registra el shortcode en la sección $shortcodes[] del fichero Config.php
 ```
 
 Si el method es omitido se creará el method static short_code() dentro de la clase MyController.php
@@ -64,4 +64,4 @@ public $shortcodes = [
 ...
 ```
 
-[Volver al índice](https://github.com/d3turnes/antonella-framework-for-wp/tree/2.0/docs/readme.md)
+[Volver al índice](https://github.com/d3turnes/antonella-framework-for-wp/tree/1.8/docs/readme.md)
