@@ -1,0 +1,12 @@
+# https://git-scm.com/docs/gitignore
+# https://help.github.com/articles/ignoring-files
+# Example .gitignore files: https://github.com/github/gitignore
+/bower_components/
+/node_modules/
+vendor/*
+composer.lock
+package-lock.json
+.env
+wp-test/*
+wp-cli.phar
+antonella-framework-for-wp.zip

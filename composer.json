@@ -1,0 +1,51 @@
+{
+    "name":"cehojac/antonella-framework-for-wp",
+    "version":"1.7.3",
+    "keywords": ["framework", "wordpress", "plugins"],
+    "prefer-stable": true,
+    "minimum-stability": "dev",
+    "description":"make easy a WordPress Plugin whit a team. Use this framework for simplycity the work in develop a plugin",
+    "type":"project",
+    "authors": [
+        {
+            "name": "Carlos Herrera",
+            "email": "hi@carlos-herrera.com",
+            "homepage": "https://carlos-herrera.com",
+            "role": "Developer"
+        }
+    ],
+      "support": {
+        "email": "antonella.framework@carlos-herrera.com",
+        "docs" : "https://antonellaframework.com/en/documentacion"
+    },
+    "repositories":[
+        {
+            "type":"composer",
+            "url":"https://wpackagist.org"
+        }
+    ],
+    "license": "MIT",
+    "require": {
+    },
+    "require-dev":{
+        "vlucas/phpdotenv":"^3.5"
+    },
+    "autoload": {
+        "psr-4": {"CH\\": "src/"},
+        "files": [
+            "src/helpers.php"
+        ]
+    },
+    "extra": {
+        "installer-paths": {
+            "vendor/{$name}/": ["type:wordpress-plugin","wordpress-muplugin"]
+        }
+    },
+    "scripts":{
+        "post-create-project-cmd": [
+            "php antonella namespace",
+            "php -r \"copy('.env-example', '.env');\"",
+            "php antonella add blade"
+        ]
+    }
+}

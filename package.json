@@ -1,0 +1,27 @@
+{
+  "name": "blocks",
+  "version": "1.0.0",
+  "description": "Crea bloques de Gutenberg Personalizados",
+  "main": "index.js",
+  "scripts": {
+    "start": "wp-scripts start",
+    "build": "wp-scripts build",
+    "rebuild": "wp-scripts build && php antonella test refresh"
+  },
+  "keywords": [
+    "blocks",
+    "gutenberg"
+  ],
+  "author": "Carlos Herrera",
+  "license": "ISC",
+  "devDependencies": {
+    "@svgr/webpack": "^5.5.0",
+    "@wordpress/scripts": "^12.5.0",
+    "copy-webpack-plugin": "^6.3.2",
+    "post-compile-webpack-plugin": "^0.1.2",
+    "url-loader": "^4.1.1"
+  },
+  "dependencies": {
+    "bootstrap": "^4.5.3"
+  }
+}

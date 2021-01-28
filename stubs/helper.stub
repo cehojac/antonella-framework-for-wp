@@ -1,0 +1,12 @@
+<?php
+if (!function_exists('%NAME%')) {
+    /**
+     * Make your Helper
+     * not use exist helpers
+     * for call this function globally:
+     * %NAME%();
+     */
+    function %NAME%(){
+    } 
+}
+?>

@@ -1,0 +1,24 @@
+/** estilos para block/hero */
+.hero-section {
+	background-image: url("https://static.pexels.com/photos/248064/pexels-photo-248064.jpeg");
+	background-repeat: no-repeat;
+	background-position: 50%;
+	background-size: cover;
+	background-color: #333;
+	height: 60vh;
+	text-align: center;
+	display: -webkit-flex;
+	display: -ms-flexbox;
+	display: flex;
+	-webkit-align-items: center;
+	-ms-flex-align: center;
+	align-items: center;
+	-webkit-justify-content: center;
+	-ms-flex-pack: center;
+	justify-content: center;
+  }
+  
+  .hero-section .hero-section-text {
+	color: #fefefe;
+	text-shadow: 1px 1px 2px #0a0a0a;
+  }

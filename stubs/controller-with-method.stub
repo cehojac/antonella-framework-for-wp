@@ -1,0 +1,17 @@
+<?php
+    
+namespace %NAMESPACE%;
+          
+class %CLASSNAME%
+{
+    
+    public function __construct()
+    {
+  
+    }
+	
+	public static function %METHOD%(%PARAMS%) {
+		// TODO
+	}
+	
+} /* generated with antollena framework */
