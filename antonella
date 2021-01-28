@@ -747,6 +747,8 @@ class Antonella
         $zip->close();
         file_exists($destiny)?unlink($destiny):false;
         exec("php wp-cli.phar plugin activate $pluginname --path=$testDIR");
+		// add Show Current Template
+		exec("php wp-cli.phar plugin install show-current-template --path=$testDIR --activate");
         echo("\033[01;33mRemember: adminuser:test | password: test  \033[0m \n");
         echo("\033[01;33mYour plugin has been refreshed in test.  \033[0m \n");
         
