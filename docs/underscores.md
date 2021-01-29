@@ -12,6 +12,7 @@ php antonella theme <slug> [--activate] [--enable-network] [--theme_name=<title>
 
 ## Argumentos
 
+```bash
 1 <slug> : El slug para el nuevo tema, y usado para prefijar funciones ( para evitar conflictos ).
 2 [--activate] : Activar el tema recién descargado.
 3 [--theme_name=<title>] : Establece el Nombre del Theme dentro del style.css
@@ -20,6 +21,7 @@ php antonella theme <slug> [--activate] [--enable-network] [--theme_name=<title>
 6 [--sassify] : Incluye los style como sass
 7 [--woocommerce] : Si queremos que nuestro theme sea compatible con woocommerce
 8 [--force] : Sobreescribe los ficheros existentes.
+```
 
 ### Ejemplo
 
