@@ -139,4 +139,11 @@ Depués ejecute el siguiente comando
 
 `php antonella serve`
 
+## Theme
 
+```bash
+php antonella theme sample-theme --theme_name=\"Sample Theme\" --author=\"Carlos Herrera\"
+```
+Generates starter code for a theme based on _s.
+
+[See more](https://github.com/d3turnes/antonella-framework-for-wp/blob/1.8/docs/underscores.md)
