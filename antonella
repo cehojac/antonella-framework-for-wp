@@ -113,6 +113,9 @@ class Antonella
             case 'block':
                 return $this->makeGutenbergBlock($data);
 				break;
+			case 'theme':
+				return $this->makeTheme($data);
+				break;
             default:
                 echo($this->understant);
                 exit();
@@ -1046,6 +1049,19 @@ class Antonella
             echo("\033[01;33m Antonella reponse: need a custom PostType's Name \033[0m ");
         }
     }
+	
+	/**
+	 *	Generates starter code for a theme based on _s.
+	 *	@see See the Underscores website for more details
+	 *	Example php antonella theme <slug> [--activate] [--theme_name=<title>] [--author=<full-name>] [--author_uri=<uri>] [--sassify] [--woocommerce] [--force]
+	 */
+	public function makeTheme($data) {
+		$testDIR    = getenv('TEST_DIR')?getenv('TEST_DIR'):$this->testdir;
+		
+		$diff = array_diff( $data, array('antonella', 'theme', '--force', '_s') );
+		$scaffold = 'scaffold _s ' . implode(" ", $diff);
+		exec("php wp-cli.phar $scaffold --path=$testDIR --force");		
+	}
 	
 	/**
 	 *	PRIVATE FUNTIONS
