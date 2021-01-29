@@ -3,7 +3,7 @@
 El primer paso será clonar nuestro repositorio en nuestro disco duro local, para ello ejecute el siguiente comando.
 
 ```bash
-git clone --branch 2.0 https://github.com/d3turnes/antonella-framework-for-wp my-awesome-plugin
+git clone --branch 1.8 https://github.com/d3turnes/antonella-framework-for-wp my-awesome-plugin
 ```
 Donde `my-awesome-plugin` es el nombre de nuestro plugin
 
