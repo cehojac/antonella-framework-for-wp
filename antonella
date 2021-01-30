@@ -69,6 +69,7 @@ class Antonella
         'vendor'.DIRECTORY_SEPARATOR.'symfony'.DIRECTORY_SEPARATOR.'var-dumper'
     ];
     protected $testdir='wp-test';
+	protected $port = '8010';
     protected $understant="Antonella no understand you. please read the manual in https://antonellaframework.com";
     public function process($data)
     {
@@ -702,8 +703,9 @@ class Antonella
         $dbname     = getenv('DBNAME');
         $dbuser     = getenv('DBUSER');
         $dbpass     = getenv('DBPASS');
+        $port		= getenv('PORT') ? getenv('PORT') : $this->port;
         $testDIR    = getenv('TEST_DIR')?getenv('TEST_DIR'):$this->testdir;
-        $slash      = DIRECTORY_SEPARATOR;
+		$slash      = DIRECTORY_SEPARATOR;
         $pluginname = basename($this->dir);
         $filename   = basename($this->dir).'.zip';
         $origen     = $this->dir.$slash.$filename;
@@ -725,7 +727,7 @@ class Antonella
         }
         echo(" \n");
         exec("php wp-cli.phar config create --dbname=$dbname --dbuser=$dbuser --dbpass=$dbpass --path=$testDIR  --extra-php=\" define( 'WP_DEBUG', true ); define( 'WP_DEBUG_LOG', true );  \" $extra_php");
-        exec("php wp-cli.phar core install --url=localhost:8010 --title=\"Antonella Framework Test\" --path=$testDIR --admin_user=test --admin_password=test --admin_email=test@test.com --skip-email");
+        exec("php wp-cli.phar core install --url=localhost:$port --title=\"Antonella Framework Test\" --path=$testDIR --admin_user=test --admin_password=test --admin_email=test@test.com --skip-email");
         $this->makeup();
         echo(" \n");
         if ( file_exists($plugindir ) && is_dir(  $plugindir ) ) 
@@ -749,13 +751,14 @@ class Antonella
         $zip->extractTo($plugindir);
         $zip->close();
         file_exists($destiny)?unlink($destiny):false;
-        exec("php wp-cli.phar plugin activate $pluginname --path=$testDIR");
+        system("php wp-cli.phar plugin activate $pluginname --path=$testDIR");
 		// add Show Current Template
-		exec("php wp-cli.phar plugin install show-current-template --path=$testDIR --activate");
+		system("php wp-cli.phar plugin install show-current-template --path=$testDIR --activate");
         echo("\033[01;33mRemember: adminuser:test | password: test  \033[0m \n");
         echo("\033[01;33mYour plugin has been refreshed in test.  \033[0m \n");
-        
-    }
+        echo("\033[01;33mhttp:\\\\localhost:$port \033[0m \n");
+    
+	}
     public function InstallWPCLI()
     {
         if(!file_exists('wp-cli.phar'))
@@ -777,11 +780,12 @@ class Antonella
             echo("\033[01;33m Antonella response: You need config the DBNAME into .env file \033[0m ");
             die();
         }
-        $testDIR    = getenv('TEST_DIR')?getenv('TEST_DIR'):$this->testdir;  
+        $testDIR    = getenv('TEST_DIR')?getenv('TEST_DIR'):$this->testdir;
+		$port		= getenv('PORT') ? getenv('PORT') : $this->port;		
         $this->Refresh();
 
         echo(" \n");
-        exec("php -S localhost:8010 --docroot=$testDIR");
+		exec("php -S localhost:$port --docroot=$testDIR");
     }
 	
 	/** 
@@ -1053,14 +1057,21 @@ class Antonella
 	/**
 	 *	Generates starter code for a theme based on _s.
 	 *	@see See the Underscores website for more details
-	 *	Example php antonella theme <slug> [--activate] [--theme_name=<title>] [--author=<full-name>] [--author_uri=<uri>] [--sassify] [--woocommerce] [--force]
+	 *	Example php antonella maketheme <slug> [--activate] [--theme_name=<title>] [--author=<full-name>] [--author_uri=<uri>] [--sassify] [--woocommerce] [--force]
 	 */
 	public function makeTheme($data) {
+
 		$testDIR    = getenv('TEST_DIR')?getenv('TEST_DIR'):$this->testdir;
+		$diff = array_values(array_diff( $data, array('antonella', 'maketheme', '_s', '--force')));
 		
-		$diff = array_diff( $data, array('antonella', 'theme', '--force', '_s') );
+		
+		$editor = str_replace('\\', '/', realpath(sprintf('%s/wp-content/themes/%s/.editorconfig', $testDIR, $diff[0])));
+		if ( file_exists($editor) ) @unlink($editor);
+		
 		$scaffold = 'scaffold _s ' . implode(" ", $diff);
-		exec("php wp-cli.phar $scaffold --path=$testDIR --force");		
+		//exec("php wp-cli.phar $scaffold --path=$testDIR --force"); // no muestra los avisos en consola
+		system("php wp-cli.phar $scaffold --path=$testDIR --force"); // muestra los avisos en consola
+		
 	}
 	
 	/**

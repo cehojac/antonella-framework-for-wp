@@ -7,26 +7,43 @@ Para más información visite el [repositorio oficial en git](https://github.com
 ## Ejemplo de uso
 
 ```bash
-php antonella theme <slug> [--activate] [--enable-network] [--theme_name=<title>] [--author=<full-name>] [--author_uri=<uri>] [--sassify] [--woocommerce] [--force]
+php antonella maketheme <slug> [--activate] [--enable-network] [--theme_name=<title>] [--author=<full-name>] [--author_uri=<uri>] [--sassify] [--woocommerce] [--force]
 ```
 
-## Argumentos
+Este comando no es más que un wrapper de `wp scaffold <comand>`, eres libre de usar uno u otro.
+
+Nota. Si optas por esta segunda manera asegurate de pasar el argumento --path=wp-test para indicar donde se encuentra la instalación 
+de wordpress
 
 ```bash
-1 <slug> : El slug para el nuevo tema, y usado para prefijar funciones ( para evitar conflictos ).
-2 [--activate] : Activar el tema recién descargado.
-3 [--theme_name=<title>] : Establece el Nombre del Theme dentro del style.css
-4 [--author=<full-name>] : Estable el Author del Theme dentro del style.css
-5 [--author_uri=<uri>] : Estable el Author Uri dentro del style.css
-6 [--sassify] : Incluye los style como sass
-7 [--woocommerce] : Si queremos que nuestro theme sea compatible con woocommerce
-8 [--force] : Sobreescribe los ficheros existentes.
+php wp-cli.phar scaffold _s sample --theme_name=\"Sample Theme\" --path=wp-test --force` 
+```
+
+## Opciones
+
+```bash
+<slug> 
+	El slug para el nuevo tema, y usado para prefijar funciones ( para evitar conflictos ) y como clave del textdomain (traducciones).
+[--activate] 
+	Activar el tema recién descargado.
+[--theme_name=<title>]
+	Establece el Nombre del Theme dentro del style.css
+[--author=<full-name>]
+	Estable el Author del Theme dentro del style.css
+[--author_uri=<uri>]
+	Estable el Author Uri dentro del style.css
+[--sassify]
+	Incluye los style como sass
+[--woocommerce]
+	Si queremos que nuestro theme sea compatible con woocommerce
+[--force]
+	Sobreescribe los ficheros existentes. En éste caso no es necesario ya que está aplicado por default.
 ```
 
 ### Ejemplo
 
 ```bash
-php antonella theme sample-theme --theme_name=\"Sample Theme\" --author=\"Carlos Herrera\" 
+php antonella maketheme sample-theme --theme_name=\"Sample Theme\" --author=\"Carlos Herrera\" 
 ```
 
 Genera el theme de nombre "Sample Theme" y author "Carlos Herrera"

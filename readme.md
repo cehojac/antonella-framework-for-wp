@@ -142,7 +142,7 @@ Depués ejecute el siguiente comando
 ## Theme
 
 ```bash
-php antonella theme sample-theme --theme_name=\"Sample Theme\" --author=\"Carlos Herrera\"
+php antonella maketheme sample-theme --theme_name=\"Sample Theme\" --author=\"Carlos Herrera\"
 ```
 Generates starter code for a theme based on _s.
 

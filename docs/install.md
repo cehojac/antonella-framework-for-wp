@@ -50,13 +50,23 @@ DBNAME=
 DBPASS=
 ```
 
-Por último ejecute
+El port por default es el 8010 si deas cambiarlo edite el fichero `.env` y agregre al final del fichero PORT=xxxx
+
+```test
+DBUSER=root
+DBNAME=
+DBPASS=
+PORT=8080
+```
+
+Luego ejecute
 
 ```bash
 php antonella serve
 ```
 
-Éste comando creará un servidor local dentro de la carpeta wp-test accesible desde el puerto 8010 (por default)
+Éste comando creará un servidor local dentro de la carpeta wp-test accesible desde el puerto 8010 (por default) o el 
+que haya configurado en su fichero .env (si es el caso).
 
 ```bash
 php antonella test refresh
