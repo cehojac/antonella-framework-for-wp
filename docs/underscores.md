@@ -1,6 +1,6 @@
 # Creación de Theme
 
-Ahora es posible crear un theme basado en _s ([undercores](https://developer.wordpress.org/cli/commands/scaffold/_s/))
+Ahora es posible crear un theme basado en _s ([underscores](https://developer.wordpress.org/cli/commands/scaffold/_s/))
 
 Para más información visite el [repositorio oficial en git](https://github.com/automattic/_s)
 
