@@ -15,4 +15,4 @@ extensión php del controlador.
 
 Out: src/Controllers/Admin/DashboardController.php
 
-[Volver al índice](https://github.com/d3turnes/antonella-framework-for-wp/tree/1.8/docs/readme.md)
+[Volver al índice](https://github.com/cehojac/antonella-framework-for-wp/tree/1.8/docs/readme.md)
