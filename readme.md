@@ -47,7 +47,7 @@ Instala dependencias para poder trabajar con gutenberg
 
 this is all!!- start your marvelous plugin in wordpress
 
-[See more](https://github.com/cehojac/antonella-framework-for-wp/blob/1.8/docs/install.md)
+[See more](https://github.com/cehojac/antonella-framework-for-wp/blob/1.8/docs/1.8/install.md)
 
 ## Basics
 
@@ -61,32 +61,32 @@ rename the namespace in all files
 
 create MyClassController.php file in src\Controllers folder with pre-data
 
-[See more](https://github.com/cehojac/antonella-framework-for-wp/blob/1.8/docs/controllers.md)
+[See more](https://github.com/cehojac/antonella-framework-for-wp/blob/1.8/docs/1.8/controllers.md)
 
 `php antonella widget MyWidget [--enque]`
 
 create a Class for Widget Function in src\Widgets, si --enque es proporcionado éste será añadido al array $widgets[] de fichero config.php
 
-[See more](https://github.com/cehojac/antonella-framework-for-wp/blob/1.8/docs/widgets.md)
+[See more](https://github.com/cehojac/antonella-framework-for-wp/blob/1.8/docs/1.8/widgets.md)
 
 `php antonella shortcode name:Controller@method [--enque]`
 
 Crea un controlador para un shortcode junto a su method, si el controlador no existe éste es creado junto a su method, si --enque es proporcionado será añadido a su array
 correspondiente.
 
-[See more](https://github.com/cehojac/antonella-framework-for-wp/blob/1.8/docs/shortcode.md)
+[See more](https://github.com/cehojac/antonella-framework-for-wp/blob/1.8/docs/1.8/shortcode.md)
 
 `php antonella helper miclass`
 
 Crea un fichero auxiliar para albergar funciones auxiliares.
 
-[See more](https://github.com/cehojac/antonella-framework-for-wp/blob/1.8/docs/helper.md)
+[See more](https://github.com/cehojac/antonella-framework-for-wp/blob/1.8/docs/1.8/helper.md)
 
 `php antonella cpt car`
 
 Crea el custom post type car
 
-[See more](https://github.com/cehojac/antonella-framework-for-wp/blob/1.8/docs/cpt.md)
+[See more](https://github.com/cehojac/antonella-framework-for-wp/blob/1.8/docs/1.8/cpt.md)
 
 `php antonella add blade`
 
@@ -102,13 +102,13 @@ al method proporcionado.
 Crea un hook de tipo filter y lo encola en el array $add_filter[] del fichero config.php, si el controlador no existe éste es creado junto
 al method proporcionado.
 
-[See more](https://github.com/cehojac/antonella-framework-for-wp/blob/1.8/docs/add.md)
+[See more](https://github.com/cehojac/antonella-framework-for-wp/blob/1.8/docs/1.8/add.md)
 
 `php antonella block namespace/your-block [--callable] [--enque]`
 
 Crea un block de gutenberg compatible con js moderno, haciendo uso de @wordpress/script. El argumento optional --callable indica que haremos uso de un block dinamico que será renderizado desde php. Con el argumento --enque tambien optional nos permite encolarlo al array correspondiente dentro del fichero config.php
 
-[See more](https://github.com/cehojac/antonella-framework-for-wp/blob/1.8/docs/gutenberg.md)
+[See more](https://github.com/cehojac/antonella-framework-for-wp/blob/1.8/docs/1.8/gutenberg.md)
 
 ### Example
 
@@ -146,4 +146,4 @@ php antonella maketheme sample-theme --theme_name=\"Sample Theme\" --author=\"Ca
 ```
 Generates starter code for a theme based on _s.
 
-[See more](https://github.com/cehojac/antonella-framework-for-wp/blob/1.8/docs/underscores.md)
+[See more](https://github.com/cehojac/antonella-framework-for-wp/blob/1.8/docs/1.8/underscores.md)

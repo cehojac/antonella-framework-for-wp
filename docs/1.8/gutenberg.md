@@ -151,10 +151,10 @@ nuestro entorno local )
 
 `php antonella test refresh` 
 
-[Ver más](https://github.com/cehojac/antonella-framework-for-wp/tree/1.8/docs/install.md)
+[Ver más](https://github.com/cehojac/antonella-framework-for-wp/tree/1.8/docs/1.8/install.md)
 
 # Links consultados
 1 [Transpilando JavaScript fácilmente con wp-scripts](https://neliosoftware.com/es/blog/transpilando-javascript-facilmente-con-wp-scripts/)
 2 [CREANDO TU PRIMER BLOQUE DE GUTENBERG CON WP-SCRIPTS, JAVASCRIPT Y REACT](https://codigoconjuan.com/creando-tu-primer-bloque-de-gutenberg-con-wp-scripts-javascript-y-react/)
 
-[Volver al índice](https://github.com/cehojac/antonella-framework-for-wp/tree/1.8/docs/readme.md)
+[Volver al índice](https://github.com/cehojac/antonella-framework-for-wp/tree/1.8/docs/1.8/readme.md)
