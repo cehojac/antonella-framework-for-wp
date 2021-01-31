@@ -1,9 +1,22 @@
+# Requerimientos
+
+PHP 7 o superior
+Composer
+PHPZip en el caso de Linux
+
+Para trabajar en entorno de test local
+MySQL o MariaDB
+node
+npm
+
+En el caso de Windows php node y (MySQL/MariaDB) deben poder ejecutarse desde consola desde cualquier ubicación. 
+
 # Instalación
 
 El primer paso será clonar nuestro repositorio en nuestro disco duro local, para ello ejecute el siguiente comando.
 
 ```bash
-git clone --branch 1.8 https://github.com/d3turnes/antonella-framework-for-wp my-awesome-plugin
+composer create-project --prefer-dist cehojac/antonella-framework-for-wp:dev-master my-awesome-plugin
 ```
 Donde `my-awesome-plugin` es el nombre de nuestro plugin
 
@@ -12,15 +25,6 @@ El siguiente paso será acceder al directorio de nuestro proyecto recien creado.
 ```bash
 cd my-awesome-plugin
 ```
-
-Una vez dentro del directorio, instalaremos las dependencias de php y posteriormente las dependencias para
-trabajar desde el front-end para js (en nuestro caso para gutenberg).
-
-```bash
-composer update
-```
-
-Éste comando instala y actualiza todas las dependencias php
 
 Si nuestro plugin va hacer uso de gutenberg es necesario instalar las dependencias mediante node, para ello asegurate
 de tener instalado node y npm.
@@ -89,5 +93,10 @@ Para evitar conflictos con otros plugin asegurese de cambiar el namespace CH (po
 ```bash
 php antonella namespace FOO
 ```
+Donde FOO es el nuevo nombre del namespace ó
+```bash
+php antonella namespace
+```
+Donde antonella seignará automáticamente un namespace
 
 [Volver al índice](https://github.com/d3turnes/antonella-framework-for-wp/tree/1.8/docs/readme.md)
