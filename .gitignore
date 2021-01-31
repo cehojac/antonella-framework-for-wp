@@ -10,3 +10,6 @@ package-lock.json
 wp-test/*
 wp-cli.phar
 antonella-framework-for-wp.zip
+*.zip
+/cypress/
+cypress.json
