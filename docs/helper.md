@@ -9,6 +9,19 @@ view() para trabajar con plantillas blade en caso de haber sido instalado
 d() para el manejo de funciones de debug (Dump)
 dd() para el mandejo de funciones de debug (Dump and Die)
 ```
+```text
+Para que funcionen estos helpers preinstalados se debe instalar sus módulos. 
+en el caso de view()
+```
+```bash
+php antonella add blade
+```
+```text
+En el caso de d() y dd()
+```
+```bash
+php antonella add dd
+```
 
 ## Como registrar mis propios helpers
 
