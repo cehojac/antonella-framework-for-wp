@@ -70,7 +70,7 @@ class Antonella
     ];
     protected $testdir='wp-test';
 	protected $port = '8010';
-	protected $locale = 'en_EN';
+	protected $locale = 'en_US';
     protected $understant="Antonella no understand you. please read the manual in https://antonellaframework.com";
     public function process($data)
     {
