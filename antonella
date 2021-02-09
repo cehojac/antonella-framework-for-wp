@@ -70,6 +70,7 @@ class Antonella
     ];
     protected $testdir='wp-test';
 	protected $port = '8010';
+	protected $locale = 'en_US';
     protected $understant="Antonella no understand you. please read the manual in https://antonellaframework.com";
     public function process($data)
     {
@@ -114,7 +115,7 @@ class Antonella
             case 'block':
                 return $this->makeGutenbergBlock($data);
 				break;
-			case 'theme':
+			case 'maketheme':
 				return $this->makeTheme($data);
 				break;
             default:
@@ -703,8 +704,9 @@ class Antonella
         $dbname     = getenv('DBNAME');
         $dbuser     = getenv('DBUSER');
         $dbpass     = getenv('DBPASS');
-        $port		= getenv('PORT') ? getenv('PORT') : $this->port;
         $testDIR    = getenv('TEST_DIR')?getenv('TEST_DIR'):$this->testdir;
+		$port		= getenv('PORT') ? getenv('PORT') : $this->port;
+        $locale		= getenv('LOCALE') ? getenv('LOCALE') : $this->locale;
 		$slash      = DIRECTORY_SEPARATOR;
         $pluginname = basename($this->dir);
         $filename   = basename($this->dir).'.zip';
@@ -722,8 +724,8 @@ class Antonella
         echo(" \n");
         if(!file_exists($testDIR.$slash.'index.php'))
         {
-            echo("\033[01;32mDownloading WordPress...  \033[0m \n");
-            exec("php wp-cli.phar core download --path=$testDIR");
+            echo("\033[01;32mDownloading WordPress [$locale]...  \033[0m \n");
+            exec("php wp-cli.phar core download --locale=$locale --path=$testDIR");
         }
         echo(" \n");
         exec("php wp-cli.phar config create --dbname=$dbname --dbuser=$dbuser --dbpass=$dbpass --path=$testDIR  --extra-php=\" define( 'WP_DEBUG', true ); define( 'WP_DEBUG_LOG', true );  \" $extra_php");

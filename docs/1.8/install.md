@@ -52,15 +52,22 @@ Edite el fichero .env y rellene con sus credenciales
 DBUSER=root
 DBNAME=
 DBPASS=
+
+TESTDIR=wp-test
+PORT=8010
+LOCALE=en_US
 ```
 
-El port por default es el 8010 si deas cambiarlo edite el fichero `.env` y agregre al final del fichero PORT=xxxx
+Ahora es posible cambiar, tanto el port(8010) como el locale(en_US) por cualquier otro
 
 ```test
 DBUSER=root
 DBNAME=
 DBPASS=
+
+TESTDIR=wp-test
 PORT=8080
+LOCALE=es_ES
 ```
 
 Luego ejecute
