@@ -2,6 +2,7 @@
 /**
 * No modify this file !!!
 */
+
 namespace CH;
 
 /*
@@ -16,8 +17,8 @@ class Start
     */
     public function __construct()
     {
-        $language   = new Language();
-        $hooks      = new Hooks();
-        $request    = new Request();
+        $language = new Language();
+        $hooks = new Hooks();
+        $request = new Request();
     }
 }
