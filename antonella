@@ -41,6 +41,10 @@ class Antonella
         'wp-cli.phar',
         '.env',
         '.env-example',
+        'package.json',
+        'mix-manifest.json',
+        'webpack.mix.js',
+        'webpack.config.js'
     ];
     protected $dirs_to_exclude_win = [
         '.',
