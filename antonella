@@ -71,7 +71,7 @@ class Antonella
         'docu',
         'docs',
         'wp-test',
-        'framework',
+        // 'framework',
         'resources'.DIRECTORY_SEPARATOR.'css',
         'resources'.DIRECTORY_SEPARATOR.'js',
         'cypress',
