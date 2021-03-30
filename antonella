@@ -241,9 +241,12 @@ class Antonella
         $zip->close();
     }
 
-    /** comprime para linux */
-    public function makeup_linux()
+    /** comprime para linux modificado a las 0:34 by david 
+     * Source: https://stackoverflow.com/questions/20264737/php-list-directory-structure-and-exclude-some-directories
+    */
+    public function makeup_linux() 
     {
+    
         file_exists($this->dir.'/'.basename($this->dir).'.zip') ? unlink($this->dir.'/'.basename($this->dir).'.zip') : false;
 
         $zip = new ZipArchive();
@@ -254,37 +257,46 @@ class Antonella
         if (!is_dir($dirName)) {
             throw new Exception('Directory '.$dirName.' does not exist');
         }
-
+        
+        /** esto es lo unico nuevo exclude de antemano node_modules */
+        $dirToExclude = $this->dirs_to_exclude_linux;
+        $files = new RecursiveIteratorIterator(
+            new RecursiveCallbackFilterIterator(
+                new RecursiveDirectoryIterator(
+                    $this->dir,
+                    RecursiveDirectoryIterator::SKIP_DOTS
+                ),
+                function ($fileInfo, $key, $iterator) use ($dirToExclude) {
+                    return $fileInfo->isFile() || !in_array($fileInfo->getBaseName(), $dirToExclude);
+                }
+            )
+        );
+        
         $dirName = realpath($dirName);
         $filesToExclude = $this->files_to_exclude;
-        $dirToExclude = $this->dirs_to_exclude_linux;
-
-        $files = new RecursiveIteratorIterator(
-            new RecursiveDirectoryIterator($dirName),
-            RecursiveIteratorIterator::LEAVES_ONLY
-        );
-
+        
         foreach ($files as $name => $file) {
             if (!$file->isDir() && !in_array($file->getFilename(), $filesToExclude)) {
                 $filePath = $file->getRealPath();
                 $relativePath = substr($filePath, strlen($dirName) + 1);
-                // Add current file to archive
-                $zip->addFile($filePath, $relativePath);
+                $zip->addFile($filePath, $relativePath);			
             }
         }
 
+        // remove dir/path
         for ($i = 0; $i < $zip->numFiles; ++$i) {
             $entry_info = $zip->statIndex($i);
             foreach ($dirToExclude as $dirExclude) {
                 $pos = strpos($entry_info['name'], $dirExclude);
                 if ($pos !== false) {
                     $zip->deleteIndex($i);
+                    //echo "Remove: " . $entry_info['name'] . " : dirExclude: " . $dirExclude . "\r\n";
                 }
             }
         }
-
+        
         $zip->close();
-    }
+    }	
 
     /** estable un nuevo namespace */
     public function newname($data)
