@@ -1048,8 +1048,8 @@ class Antonella
             $contenido = explode("\n", $contenido);
             //Modificar linea deseada
             for ($i = 0; $i < sizeof($contenido); ++$i) {
-                if (strpos($contenido[$i], 'public $post_types =[') !== false) {
-                    $contenido[$i] = '    public $post_types =[
+                if (strpos($contenido[$i], 'public $post_types = [') !== false) {
+                    $contenido[$i] = '    public $post_types = [
         [
             "singular"      => "'.$data[2].'",
             "plural"        => "'.$data[2].'s",
