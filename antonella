@@ -28,6 +28,7 @@ class Antonella
         'composer.lock',
         'package-lock.json',
         'antonella',
+		'console',
         'readme.md',
         'bitbucket-pipelines.yml',
         'CHANGELOG.md',
@@ -54,7 +55,7 @@ class Antonella
         'docu',
         'docs',
         'wp-test',
-        'framework',
+        //'framework',
         'resources'.DIRECTORY_SEPARATOR.'css',
         'resources'.DIRECTORY_SEPARATOR.'js',
 		'src'.DIRECTORY_SEPARATOR.'Commands',
@@ -65,7 +66,8 @@ class Antonella
         'vendor'.DIRECTORY_SEPARATOR.'vlucas',
         'vendor'.DIRECTORY_SEPARATOR.'symfony'.DIRECTORY_SEPARATOR.'polyfill-php80',
         'vendor'.DIRECTORY_SEPARATOR.'symfony'.DIRECTORY_SEPARATOR.'polyfill-mbstring',
-        'vendor'.DIRECTORY_SEPARATOR.'symfony'.DIRECTORY_SEPARATOR.'var-dumper',
+		'vendor'.DIRECTORY_SEPARATOR.'symfony'.DIRECTORY_SEPARATOR.'console',
+		'vendor'.DIRECTORY_SEPARATOR.'symfony'.DIRECTORY_SEPARATOR.'var-dumper',
     ];
     protected $dirs_to_exclude_linux = [
         '.git',
@@ -84,6 +86,7 @@ class Antonella
         'vendor'.DIRECTORY_SEPARATOR.'vlucas',
         'vendor'.DIRECTORY_SEPARATOR.'symfony'.DIRECTORY_SEPARATOR.'polyfill-php80',
         'vendor'.DIRECTORY_SEPARATOR.'symfony'.DIRECTORY_SEPARATOR.'polyfill-mbstring',
+		'vendor'.DIRECTORY_SEPARATOR.'symfony'.DIRECTORY_SEPARATOR.'console',		
         'vendor'.DIRECTORY_SEPARATOR.'symfony'.DIRECTORY_SEPARATOR.'var-dumper',
     ];
     protected $testdir = 'wp-test';
