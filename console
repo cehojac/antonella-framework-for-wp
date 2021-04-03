@@ -1,10 +1,49 @@
 #!/usr/bin/env php
 <?php
+
 require_once __DIR__ . '/vendor/autoload.php';
  
 use Symfony\Component\Console\Application;
-use CH\Commands\HelloWorld;
 
-$app = new Application();
-$app->add(new HelloWorld());
+class Console extends Application  {
+	
+	public $dir = __DIR__;
+	
+	private $namespace = 'CH';
+	
+	private $path = 'src/Commands/';
+	
+	function __construct() {
+		// llama al constructor padre
+		parent::__construct();
+		
+		$this->namespace = $this->readNamespace();
+		
+		// cargamos todos los commandos
+		$this->loadCommands();
+	}
+	
+	public function loadCommands() {
+		$pattern = sprintf('%s/*.php', $this->path);
+		
+		foreach (glob($pattern) as $file) {
+			// devuelve el nombre de la clase sin .php
+			$name = explode('.', array_reverse(explode('/', str_replace('\\', '/', $file)))[0])[0];
+			$className = sprintf('%s\\Commands\\%s', $this->namespace, $name);
+			parent::add( new  $className());
+		}
+	}
+	
+	/** functiones privadas */
+	private function readNamespace() {
+		$composer = file_get_contents($this->dir.'/composer.json');
+        $composer_json = json_decode($composer);
+        $psr = $composer_json->autoload->{'psr-4'};
+        $namespace = substr(key($psr), 0, -1);
+
+        return $namespace;
+	}	
+}
+
+$app = new Console();
 $app->run();
