@@ -43,12 +43,12 @@ use Symfony\Component\Console\Input\InputOption;
 	}
     protected function AddBlade()
     {
-        echo "You need add blade? (Template system)  Type 'yes' to continue: ";
+        echo "You need add blade? (Template system)  Type 'yes' or 'y' to continue: ";
         $handle = fopen('php://stdin', 'r');
         $line = fgets($handle);
         echo $line;
         fclose($handle);
-        if (trim($line) === 'yes' || trim($line === 'y')) {
+        if (trim($line) === 'yes' || trim($line) === 'y') {
             echo "\n";
             echo "Adding Blade... \n";
             exec('composer require jenssegers/blade');
