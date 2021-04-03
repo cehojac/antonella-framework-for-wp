@@ -15,7 +15,8 @@ class Console extends Application  {
 	
 	function __construct() {
 		// llama al constructor padre
-		parent::__construct();
+		parent::__construct('Antonella', '2.0');
+		
 		
 		$this->namespace = $this->readNamespace();
 		
