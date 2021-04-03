@@ -82,6 +82,7 @@ class Makeup extends Command
     ];
     protected $dir;
 
+
     protected function configure()
     {
         $this->setName('makeup')
@@ -91,7 +92,8 @@ class Makeup extends Command
  
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $this->dir = realpath(dirname(__FILE__) . '/../..');
+        $console = new \Console;
+        $this->dir = $console->dir;
         $output->writeln("<comment>Antonella is packing the plugin</comment>");
         $SO = strtoupper(substr(PHP_OS, 0, 3));
         
@@ -101,6 +103,7 @@ class Makeup extends Command
             $this->makeup_linux();
         }
         $output->writeln("<info>The plugin's zip file is OK!</info>");
+        
 	}
    
     public function makeup_win()
