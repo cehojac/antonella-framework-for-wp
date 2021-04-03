@@ -57,7 +57,9 @@ class Antonella
         'framework',
         'resources'.DIRECTORY_SEPARATOR.'css',
         'resources'.DIRECTORY_SEPARATOR.'js',
-        'cypress',
+		'src'.DIRECTORY_SEPARATOR.'Commands',
+        'stubs',
+		'cypress',
         'node_modules',
         'components',
         'vendor'.DIRECTORY_SEPARATOR.'vlucas',
@@ -74,6 +76,8 @@ class Antonella
         // 'framework',
         'resources'.DIRECTORY_SEPARATOR.'css',
         'resources'.DIRECTORY_SEPARATOR.'js',
+		'src'.DIRECTORY_SEPARATOR.'Commands',
+		'stubs',
         'cypress',
         'node_modules',
         'components',
@@ -241,9 +245,9 @@ class Antonella
         $zip->close();
     }
 
-    /** comprime para linux modificado a las 0:34 by david 
-     * Source: https://stackoverflow.com/questions/20264737/php-list-directory-structure-and-exclude-some-directories
-    */
+    /** 
+      * Source: https://stackoverflow.com/questions/20264737/php-list-directory-structure-and-exclude-some-directories
+     */
     public function makeup_linux() 
     {
     
