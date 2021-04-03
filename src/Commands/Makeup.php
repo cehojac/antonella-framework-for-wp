@@ -8,13 +8,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
  
-/**
-  * @see https://code.tutsplus.com/es/tutorials/how-to-create-custom-cli-commands-using-the-symfony-console-component--cms-31274
-  *		 https://symfony.com/doc/current/console
-  *		 https://symfony.com/doc/current/console/input.html
-  *		 https://symfony.com/doc/current/console/input.html#using-command-options		
-  */
- class Makeup extends Command
+class Makeup extends Command
 {
     
     protected $files_to_exclude = [
@@ -88,13 +82,11 @@ use Symfony\Component\Console\Input\InputOption;
     ];
     protected $dir;
 
-    
     protected function configure()
     {
         $this->setName('makeup')
             ->setDescription('Compress and generate a .zip plugin`s file for upload to WordPress.')
-            ->setHelp('Demonstration of custom commands created by Symfony Console component.');														// OPTIONAL [--color=your-color] --or
-																							//			[--color your-color]
+            ->setHelp('Demonstration of custom commands created by Symfony Console component.');
     }
  
     protected function execute(InputInterface $input, OutputInterface $output)
@@ -110,7 +102,7 @@ use Symfony\Component\Console\Input\InputOption;
         }
         $output->writeln("<info>The plugin's zip file is OK!</info>");
 	}
-    /** comprime para windows */
+   
     public function makeup_win()
     {
        
@@ -163,9 +155,7 @@ use Symfony\Component\Console\Input\InputOption;
         $zip->close();
     }
 
-    /** 
-    * Source: https://stackoverflow.com/questions/20264737/php-list-directory-structure-and-exclude-some-directories
-    */
+    
     public function makeup_linux() 
     {
     
@@ -180,9 +170,8 @@ use Symfony\Component\Console\Input\InputOption;
             throw new Exception('Directory '.$dirName.' does not exist');
         }
         
-        /** esto es lo unico nuevo exclude de antemano node_modules */
         $dirToExclude = $this->dirs_to_exclude_linux;
-        $files = new \RecursiveIteratorIterator(
+        $files = new \RecursiveIteratorIterator( 
             new \RecursiveCallbackFilterIterator(
                 new \RecursiveDirectoryIterator(
                     $this->dir,
@@ -205,14 +194,12 @@ use Symfony\Component\Console\Input\InputOption;
             }
         }
 
-        // remove dir/path
         for ($i = 0; $i < $zip->numFiles; ++$i) {
             $entry_info = $zip->statIndex($i);
             foreach ($dirToExclude as $dirExclude) {
                 $pos = strpos($entry_info['name'], $dirExclude);
                 if ($pos !== false) {
                     $zip->deleteIndex($i);
-                    //echo "Remove: " . $entry_info['name'] . " : dirExclude: " . $dirExclude . "\r\n";
                 }
             }
         }
