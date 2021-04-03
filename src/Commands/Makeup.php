@@ -102,7 +102,9 @@ class Makeup extends Command
         } else {
             $this->makeup_linux();
         }
+        $output->writeln("<info>============================</info>");
         $output->writeln("<info>The plugin's zip file is OK!</info>");
+        $output->writeln("<info>============================</info>");
         
 	}
    

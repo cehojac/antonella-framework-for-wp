@@ -34,7 +34,10 @@ use Symfony\Component\Console\Input\InputOption;
         
         $name = $input->getArgument('nameHelper');
         $this->makeHelper($name);
+		$output->writeln("<info>======================================================</info>");
 		$output->writeln("<info>The Helper $name.php created into src/Helper folder</info>");
+        $output->writeln("<info>======================================================</info>");
+
         
 	}
     /**

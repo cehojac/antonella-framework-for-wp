@@ -34,7 +34,9 @@ use Symfony\Component\Console\Input\InputOption;
 
         $name = $input->getArgument('nameController');
         $this->makeController($name);
+        $output->writeln("<info>===================================================================</info>");
 		$output->writeln("<info>Controller $name.php created into src\Controllers folder</info>");
+        $output->writeln("<info>===================================================================</info>");
 	}
     /**
      * Crea un controllador dentro de la carpeta src/Controllers.
