@@ -2,7 +2,6 @@
 
 namespace CH\Commands;
  
-use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Input\InputArgument;
@@ -14,12 +13,11 @@ use Symfony\Component\Console\Input\InputOption;
   *		 https://symfony.com/doc/current/console/input.html
   *		 https://symfony.com/doc/current/console/input.html#using-command-options		
   */
- class MakeController extends Command
-{
+
+class MakeController extends BaseCommand {
+
     protected $namespace;
 
-    protected $paths;
-    
     protected function configure()
     {
         $this->setName('make:controller')
@@ -41,26 +39,26 @@ use Symfony\Component\Console\Input\InputOption;
     /**
      * Crea un controllador dentro de la carpeta src/Controllers.
      *
-     * @param array $data datos de la linea de comandos donde $data[2] contiene el nombre del controlador
-     *                    Example:
-     *                    php antonella make ExampleController	out: src/Controllers/ExampleController.php
-     *                    php antonella make Admin/AdminController	out: src/Controllers/Admin/AdminController.php
+     * @param array $data datos de la linea de comandos donde $data contiene el nombre del controlador
+     * Example:
+     * 		php antonella make:controller ExampleController	out: src/Controllers/ExampleController.php
+     *      php antonella make:controller Admin/AdminController	out: src/Controllers/Admin/AdminController.php
      */
     protected function makeController($data)
     {
-        $c = new \Console;
-        $this->namespace = $c->namespace;
-        $this->paths = $c->paths;
         
+		$this->namespace = $this->getNamespace();
+		$target = $this->getPath('controllers', $data); 	// devuelve el paths para los controllers, src/Controllers
 
-        $target = $c->getPath('controllers', $data);
-        if (!file_exists(dirname($target))) {
+		// si la ruta no existe la crea
+		if (!file_exists(dirname($target))) {
             mkdir(dirname($target), 0755, true);
         }
+		
         // Crea una clase a partir de una fichero plantilla (stubs/controller.stub)
         $StubGenerator = $this->namespace.'\Classes\StubGenerator';
         $stub = new $StubGenerator(
-            $c->getPath('stubs', 'controller'),	// __DIR__ . '/stubs/controller.stub',
+            $this->getPath('stubs', 'controller'),				// 'stubs/controller.stub',
             $target
         );
 
@@ -69,6 +67,6 @@ use Symfony\Component\Console\Input\InputOption;
             '%NAMESPACE%' => $this->namespace.'\\Controllers'.($folder == 'src' ? '' : '\\'.str_replace('/', '\\', dirname($data))),
             '%CLASSNAME%' => array_reverse(explode('/', $data))[0],
         ]);
-
+		
     }
 }

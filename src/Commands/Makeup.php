@@ -92,9 +92,8 @@ class Makeup extends Command
  
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $console = new \Console;
-        $this->dir = $console->dir;
-        $output->writeln("<comment>Antonella is packing the plugin</comment>");
+        $this->dir = \Console::$dir;	// recupera el directorio base
+		$output->writeln("<comment>Antonella is packing the plugin</comment>");
         $SO = strtoupper(substr(PHP_OS, 0, 3));
         
         if ($SO === 'WIN') {

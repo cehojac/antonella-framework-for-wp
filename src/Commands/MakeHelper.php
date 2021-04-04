@@ -2,7 +2,6 @@
 
 namespace CH\Commands;
  
-use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Input\InputArgument;
@@ -14,12 +13,10 @@ use Symfony\Component\Console\Input\InputOption;
   *		 https://symfony.com/doc/current/console/input.html
   *		 https://symfony.com/doc/current/console/input.html#using-command-options		
   */
- class MakeHelper extends Command
-{
+class MakeHelper extends BaseCommand {
+	
     protected $namespace;
 
-    protected $paths;
-    
     protected function configure()
     {
         $this->setName('make:helper')
@@ -45,22 +42,27 @@ use Symfony\Component\Console\Input\InputOption;
      *
      * @param array $data argumentos de la linea de comandos
      *                    donde $data[2] representa el nombre del fichero
-     *                    Uso:	php antonella helper auxiliares
+     *                    Uso:	php antonella make:helper auxiliares
      *                    Out: src/Helpers/auxiliares.php
      */
     public function makeHelper($data)
     {
-        $c = new \Console;
+        /*
+		$c = new \Console;
         $this->namespace = $c->namespace;
-        $this->paths = $c->paths;
-
-        $target = $c->getPath('helpers', $data);
+        $this->paths = $c->paths;*/
+		
+		$this->namespace = $this->getNamespace();
+		$target = $this->getPath('helpers', $data);
+		
+		// Si la ruta no existe la crea
         if (!file_exists(dirname($target))) {
             mkdir(dirname($target), 0755, true);
         }
+		
         $StubGenerator = $this->namespace.'\Classes\StubGenerator';
         $stub = new $StubGenerator(
-            $c->getPath('stubs', 'helper'),
+            $this->getPath('stubs', 'helper'),			// 'stubs/helper.stub',
             $target
         );
 
