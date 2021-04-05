@@ -43,6 +43,8 @@ class MakeWidget extends BaseCommand {
      *	Crea un widget desde la consola.
      *
      *	@param array $data arguments leidos desde la consola
+	 *	@param OutputInterface $output Salida por pantalla
+	 *  @param string $option option
      *	@param string --enque Optional indica si queremos añadirlo al array widgets de config.php
      *	example => php antonella widget MyFirstWidget
      * 	example => php antonella widget MyFirtWidget [--enque | -e]
