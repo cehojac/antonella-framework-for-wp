@@ -66,7 +66,7 @@ class Config
      * @example [['example','CH\ExampleController::example_shortcode']]
      */
     public $shortcodes = [
-        ['example', 'CH\ExampleController::example_shortcode'],
+        ['example', 'CH\Controllers\ExampleController::example_shortcode'],
     ];
     /**
      * add Gutenberg's blocks.
