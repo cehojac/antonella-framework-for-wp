@@ -14,9 +14,9 @@ use Symfony\Component\Console\Input\InputOption;
   *		 https://symfony.com/doc/current/console/input.html
   *		 https://symfony.com/doc/current/console/input.html#using-command-options		
   */
- class Add extends Command
+ class Add extends BaseCommand
 {
-    protected $understant = '<comment>Antonella no understand you. please read the manual in https://antonellaframework.com</comment>';
+   
     protected function configure()
     {
         $this->setName('add')

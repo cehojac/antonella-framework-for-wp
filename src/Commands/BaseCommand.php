@@ -7,6 +7,12 @@ class BaseCommand extends \Symfony\Component\Console\Command\Command {
 	private $paths;
 	
 	private $dir;
+
+    protected $understant = '<comment>Antonella no understand you. please read the manual in https://antonellaframework.com</comment>';
+
+    protected $testdir = "wp-test";
+    
+    protected $port = 8010;
 	
 	function __construct() {
 		
