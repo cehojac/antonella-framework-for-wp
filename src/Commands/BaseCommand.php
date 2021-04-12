@@ -23,6 +23,7 @@ class BaseCommand extends \Symfony\Component\Console\Command\Command {
 	
 		$this->paths = [
             'controllers' => $this->dir.'/src/Controllers',
+			'commands' => $this->dir.'/src/Commands',
             'widgets' => $this->dir.'/src/Widgets',
             'helpers' => $this->dir.'/src/Helpers',
             'classes' => $this->dir.'/src/Classes',
@@ -61,6 +62,11 @@ class BaseCommand extends \Symfony\Component\Console\Command\Command {
         $namespace = substr(key($psr), 0, -1);
 
         return $namespace;
+	}
+	
+	/** devuelve el directorio base */
+	public function getDirBase() {
+		return $this->dir;
 	}
 	
 	

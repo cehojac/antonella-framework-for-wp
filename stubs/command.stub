@@ -1,0 +1,43 @@
+<?php
+    
+namespace %NAMESPACE%;
+
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Input\InputArgument;
+use Symfony\Component\Console\Input\InputOption;
+
+/**
+ *	@see https://symfony.com/doc/current/console.html
+ */
+class %CLASSNAME% extends BaseCommand {
+	
+	 // the name of the command (the part after "antonella")
+    protected static $defaultName = '%SHORTCODE%';
+	
+	protected function configure()
+    {
+        $this->setDescription('Command description')
+            ->setHelp('Command help')
+            ->addArgument('name', InputArgument::REQUIRED, 'Argument description');
+       
+    }
+ 
+    protected function execute(InputInterface $input, OutputInterface $output)
+    {
+		
+		// retirve directory base
+		// $dir = $this->getDirBase();		
+		
+		// retrive argument
+		$name = $input->getArgument('name');
+				
+		// ... put here the code
+		
+		// for show message in console
+		// $output->writeln("<info>Your success message</info>");
+		// $output->writeln("<error>Your error message</error>");
+		
+	}
+	
+} /* generated with antollena framework */
