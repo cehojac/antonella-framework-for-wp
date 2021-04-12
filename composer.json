@@ -1,6 +1,6 @@
 {
     "name":"cehojac/antonella-framework-for-wp",
-    "version":"2.0",
+    "version":"1.8",
     "keywords": ["framework", "wordpress", "plugins"],
     "prefer-stable": true,
     "minimum-stability": "dev",
@@ -25,6 +25,7 @@
         }
     ],
     "license": "MIT",
+	"require":{},
     "require-dev":{
         "vlucas/phpdotenv":"^3.5",
 		"symfony/console": "^4.0"
@@ -43,9 +44,9 @@
     },
     "scripts":{
         "post-create-project-cmd": [
-            "php antonella namespace",
+            "php nella namespace",
             "php -r \"copy('.env-example', '.env');\"",
-            "php antonella add blade"
+            "php nella add blade"
         ]
     }
 }
