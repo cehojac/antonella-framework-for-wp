@@ -10,9 +10,9 @@ use Symfony\Component\Console\Input\InputOption;
  
 /**
   * @see https://code.tutsplus.com/es/tutorials/how-to-create-custom-cli-commands-using-the-symfony-console-component--cms-31274
-  *		 https://symfony.com/doc/current/console
-  *		 https://symfony.com/doc/current/console/input.html
-  *		 https://symfony.com/doc/current/console/input.html#using-command-options		
+  *	https://symfony.com/doc/current/console
+  *	https://symfony.com/doc/current/console/input.html
+  *	https://symfony.com/doc/current/console/input.html#using-command-options		
   */
  class Add extends BaseCommand
 {

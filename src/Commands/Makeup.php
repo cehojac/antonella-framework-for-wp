@@ -38,30 +38,12 @@ class Makeup extends Command
         'mix-manifest.json',
         'webpack.mix.js',
         'webpack.config.js',
-        'nella'
+        'nella',
+		'src'.DIRECTORY_SEPARATOR.'Classes'.DIRECTORY_SEPARATOR.'StubGenerator.php',
+		'StubGenerator.php'
     ];
-    protected $dirs_to_exclude_win = [
-        '.',
-        '..',
-        '.git',
-        '.github',
-        'docu',
-        'docs',
-        'wp-test',
-        'resources'.DIRECTORY_SEPARATOR.'css',
-        'resources'.DIRECTORY_SEPARATOR.'js',
-		'src'.DIRECTORY_SEPARATOR.'Commands',
-        'stubs',
-		'cypress',
-        'node_modules',
-        'components',
-        'vendor'.DIRECTORY_SEPARATOR.'vlucas',
-        'vendor'.DIRECTORY_SEPARATOR.'symfony'.DIRECTORY_SEPARATOR.'polyfill-php80',
-        'vendor'.DIRECTORY_SEPARATOR.'symfony'.DIRECTORY_SEPARATOR.'polyfill-mbstring',
-		'vendor'.DIRECTORY_SEPARATOR.'symfony'.DIRECTORY_SEPARATOR.'console',
-		'vendor'.DIRECTORY_SEPARATOR.'symfony'.DIRECTORY_SEPARATOR.'var-dumper',
-    ];
-    protected $dirs_to_exclude_linux = [
+    
+    protected $dirs_to_exclude = [
         '.git',
         '.github',
         'docu',
@@ -75,11 +57,12 @@ class Makeup extends Command
         'node_modules',
         'components',
         'vendor'.DIRECTORY_SEPARATOR.'vlucas',
-        'vendor'.DIRECTORY_SEPARATOR.'symfony'.DIRECTORY_SEPARATOR.'polyfill-php80',
-        'vendor'.DIRECTORY_SEPARATOR.'symfony'.DIRECTORY_SEPARATOR.'polyfill-mbstring',
-		'vendor'.DIRECTORY_SEPARATOR.'symfony'.DIRECTORY_SEPARATOR.'console',		
+        'vendor'.DIRECTORY_SEPARATOR.'symfony'.DIRECTORY_SEPARATOR.'console',		
         'vendor'.DIRECTORY_SEPARATOR.'symfony'.DIRECTORY_SEPARATOR.'var-dumper',
+		//'vendor'.DIRECTORY_SEPARATOR.'symfony'.DIRECTORY_SEPARATOR.'polyfill-php80'
+        //'vendor'.DIRECTORY_SEPARATOR.'symfony'.DIRECTORY_SEPARATOR.'polyfill-mbstring'
     ];
+	
     protected $dir;
 
 
@@ -94,73 +77,16 @@ class Makeup extends Command
     {
         $this->dir = \Console::$dir;	// recupera el directorio base
 		$output->writeln("<comment>Antonella is packing the plugin</comment>");
-        $SO = strtoupper(substr(PHP_OS, 0, 3));
-        
-        if ($SO === 'WIN') {
-            $this->makeup_win();
-        } else {
-            $this->makeup_linux();
-        }
+        		
+		$this->makeup();		
+		
         $output->writeln("<info>============================</info>");
         $output->writeln("<info>The plugin's zip file is OK!</info>");
         $output->writeln("<info>============================</info>");
         
 	}
    
-    public function makeup_win()
-    {
-       
-        file_exists($this->dir.'/'.basename($this->dir).'.zip') ? unlink($this->dir.'/'.basename($this->dir).'.zip') : false;
-        $zip = new \ZipArchive();
-        $zip->open(basename($this->dir).'.zip', \ZipArchive::CREATE);
-
-        $dirName = $this->dir;
-
-        if (!is_dir($dirName)) {
-            throw new Exception('Directory '.$dirName.' does not exist');
-        }
-
-        $dirName = realpath($dirName);
-        if (substr($dirName, -1) != '/') {
-            $dirName .= '/';
-        }
-
-
-        $dirStack = [$dirName];
-      
-        $cutFrom = strrpos(substr($dirName, 0, -1), '/') + strlen($this->dir) + 1;
-
-        while (!empty($dirStack)) {
-            $currentDir = array_pop($dirStack);
-            $filesToAdd = [];
-
-            $dir = dir($currentDir);
-
-            while (false !== ($node = $dir->read())) {
-                if (in_array($node, $this->files_to_exclude) || in_array($node, $this->dirs_to_exclude_win)) {
-                    continue;
-                }
-                if (is_dir($currentDir.$node)) {
-                    array_push($dirStack, $currentDir.$node.'/');
-                }
-                if (is_file($currentDir.$node)) {
-                    $filesToAdd[] = $node;
-                }
-            }
-
-            $localDir = substr($currentDir, $cutFrom);
-
-            $zip->addEmptyDir($localDir);
-            foreach ($filesToAdd as $file) {
-                $zip->addFile($currentDir.$file, $localDir.$file);
-            }
-        }
-
-        $zip->close();
-    }
-
-    
-    public function makeup_linux() 
+    private function makeup() 
     {
     
         file_exists($this->dir.'/'.basename($this->dir).'.zip') ? unlink($this->dir.'/'.basename($this->dir).'.zip') : false;
@@ -174,7 +100,7 @@ class Makeup extends Command
             throw new Exception('Directory '.$dirName.' does not exist');
         }
         
-        $dirToExclude = $this->dirs_to_exclude_linux;
+        $dirToExclude = $this->dirs_to_exclude;
         $files = new \RecursiveIteratorIterator( 
             new \RecursiveCallbackFilterIterator(
                 new \RecursiveDirectoryIterator(
