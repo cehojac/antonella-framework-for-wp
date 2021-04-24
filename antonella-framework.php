@@ -1,7 +1,5 @@
 <?php
 
-namespace CH;
-
 /*
 Plugin Name: Antonella Framework
 Plugin URI:

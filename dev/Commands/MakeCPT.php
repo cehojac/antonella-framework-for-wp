@@ -1,6 +1,6 @@
 <?php
 
-namespace CH\Commands;
+namespace Dev\Commands;
  
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -16,15 +16,17 @@ use Symfony\Component\Console\Input\InputOption;
 
 class MakeCPT extends BaseCommand {
 
+    // the name of the command (the part after "antonella")
+    protected static $defaultName = 'make:cpt';
+
     protected $namespace;
 
     protected function configure()
     {
         
-		$this->setName('make:cpt')
-            ->setDescription('Make a Custom Post Type')
-			->setHelp('Example: name [--enque | -e]')
-            ->addArgument('name', InputArgument::REQUIRED, 'The name of the cpt, Use => php antonella make:cpt name');
+		$this->setDescription('Make a Custom Post Type')
+			 ->setHelp('Example: name [--enque | -e]')
+             ->addArgument('name', InputArgument::REQUIRED, 'The name of the cpt, Use => php antonella make:cpt name');
 		
     }
  

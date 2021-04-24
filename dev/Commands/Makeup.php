@@ -1,6 +1,6 @@
 <?php
 
-namespace CH\Commands;
+namespace Dev\Commands;
  
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -10,6 +10,9 @@ use Symfony\Component\Console\Input\InputOption;
  
 class Makeup extends Command
 {
+    
+    // the name of the command (the part after "antonella")
+    protected static $defaultName = 'makeup';
     
     protected $files_to_exclude = [
         '.gitignore',
@@ -39,38 +42,33 @@ class Makeup extends Command
         'webpack.mix.js',
         'webpack.config.js',
         'nella',
-		'src'.DIRECTORY_SEPARATOR.'Classes'.DIRECTORY_SEPARATOR.'StubGenerator.php',
+        'nella2',
+		'dev'.DIRECTORY_SEPARATOR.'Classes'.DIRECTORY_SEPARATOR.'StubGenerator.php',
 		'StubGenerator.php'
     ];
     
     protected $dirs_to_exclude = [
         '.git',
         '.github',
-        'docu',
+        'dev',
         'docs',
         'wp-test',
         'resources'.DIRECTORY_SEPARATOR.'css',
         'resources'.DIRECTORY_SEPARATOR.'js',
-		'src'.DIRECTORY_SEPARATOR.'Commands',
-		'stubs',
-        'cypress',
+		'cypress',
         'node_modules',
-        'components',
         'vendor'.DIRECTORY_SEPARATOR.'vlucas',
         'vendor'.DIRECTORY_SEPARATOR.'symfony'.DIRECTORY_SEPARATOR.'console',		
         'vendor'.DIRECTORY_SEPARATOR.'symfony'.DIRECTORY_SEPARATOR.'var-dumper',
-		//'vendor'.DIRECTORY_SEPARATOR.'symfony'.DIRECTORY_SEPARATOR.'polyfill-php80'
-        //'vendor'.DIRECTORY_SEPARATOR.'symfony'.DIRECTORY_SEPARATOR.'polyfill-mbstring'
-    ];
+	];
 	
     protected $dir;
 
 
     protected function configure()
     {
-        $this->setName('makeup')
-            ->setDescription('Compress and generate a .zip plugin`s file for upload to WordPress.')
-            ->setHelp('Demonstration of custom commands created by Symfony Console component.');
+        $this->setDescription('Compress and generate a .zip plugin`s file for upload to WordPress.')
+             ->setHelp('Demonstration of custom commands created by Symfony Console component.');
     }
  
     protected function execute(InputInterface $input, OutputInterface $output)

@@ -1,6 +1,6 @@
 <?php
     
-namespace CH\Commands;
+namespace Dev\Commands;
 
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;

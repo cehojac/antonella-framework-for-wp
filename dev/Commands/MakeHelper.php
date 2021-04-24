@@ -1,6 +1,6 @@
 <?php
 
-namespace CH\Commands;
+namespace Dev\Commands;
  
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -15,14 +15,16 @@ use Symfony\Component\Console\Input\InputOption;
   */
 class MakeHelper extends BaseCommand {
 	
+    // the name of the command (the part after "antonella")
+    protected static $defaultName = 'make:helper';
+
     protected $namespace;
 
     protected function configure()
     {
-        $this->setName('make:helper')
-            ->setDescription('Make a helper file in the folder src/Helpers')
-            ->setHelp('Set a name for you helper. For example auxiliarHelper')
-            ->addArgument('nameHelper', InputArgument::REQUIRED, 'Name to helper file');
+        $this->setDescription('Make a helper file in the folder src/Helpers')
+             ->setHelp('Set a name for you helper. For example auxiliarHelper')
+             ->addArgument('nameHelper', InputArgument::REQUIRED, 'Name to helper file');
        
     }
  
@@ -60,9 +62,9 @@ class MakeHelper extends BaseCommand {
             mkdir(dirname($target), 0755, true);
         }
 		
-        $StubGenerator = $this->namespace.'\Classes\StubGenerator';
+        $StubGenerator = 'Dev\Classes\StubGenerator';
         $stub = new $StubGenerator(
-            $this->getPath('stubs', 'helper'),			// 'stubs/helper.stub',
+            $this->getPath('stubs', 'helper'),			// 'dev/stubs/helper.stub',
             $target
         );
 

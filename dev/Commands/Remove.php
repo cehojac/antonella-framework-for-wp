@@ -1,6 +1,6 @@
 <?php
 
-namespace CH\Commands;
+namespace Dev\Commands;
  
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -16,13 +16,17 @@ use Symfony\Component\Console\Input\InputOption;
   */
  class Remove extends Command
 {
+    
+    // the name of the command (the part after "antonella")
+    protected static $defaultName = 'remove';
+
     protected $understant = '<comment>Antonella no understand you. please read the manual in https://antonellaframework.com</comment>';
+    
     protected function configure()
     {
-        $this->setName('remove')
-            ->setDescription('Remove Antonella`s Modules. Now only is possible add blade and dd')
-            ->setHelp('Demonstration of custom commands created by Symfony Console component.')
-            ->addArgument('module', InputArgument::REQUIRED, 'Blade or DD');																		// OPTIONAL [--color=your-color] --or
+        $this->setDescription('Remove Antonella`s Modules. Now only is possible add blade and dd')
+             ->setHelp('Demonstration of custom commands created by Symfony Console component.')
+             ->addArgument('module', InputArgument::REQUIRED, 'Blade or DD');																		// OPTIONAL [--color=your-color] --or
 																							//			[--color your-color]
     }
  

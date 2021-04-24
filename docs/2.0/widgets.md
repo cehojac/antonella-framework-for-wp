@@ -3,7 +3,7 @@
 Antonella Frameworks nos permite crear widgets de una manera sencilla mediante el siguiente comando
 
 ```bash
-php antonella widget MyWidget [--enque]
+php antonella make:widget MyWidget [--enque]
 ```
 
 Este comando creará el controlador `MyWidget.php` dentro de la carpeta src/Widgets, opcionalmente podemos pasarle
@@ -19,7 +19,7 @@ el argumento --enque.
 src/Widgets/MyWidget.php
 ```php
 <?php
-namespace CH/Widgets;
+namespace Antonella\CH\Widgets;
       
 class MyWidget extends \WP_Widget
 {
@@ -94,4 +94,4 @@ public $widgets = [
 ];
 ```
 
-[Volver al índice](https://github.com/cehojac/antonella-framework-for-wp/tree/1.8/docs/1.8/readme.md)
+[Volver al índice](https://github.com/cehojac/antonella-framework-for-wp/tree/2.0/docs/2.0/readme.md)

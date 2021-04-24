@@ -1,6 +1,6 @@
 <?php
 
-namespace CH\Commands;
+namespace Dev\Commands;
 
 class BaseCommand extends \Symfony\Component\Console\Command\Command {
 	
@@ -21,14 +21,16 @@ class BaseCommand extends \Symfony\Component\Console\Command\Command {
 	
 		$this->dir = \Console::$dir;	// recupera el directorio base
 	
+        //$this->dir = PLUGINDIR;
+
 		$this->paths = [
             'controllers' => $this->dir.'/src/Controllers',
-			'commands' => $this->dir.'/src/Commands',
+			'commands' => $this->dir.'/dev/Commands',
             'widgets' => $this->dir.'/src/Widgets',
             'helpers' => $this->dir.'/src/Helpers',
-            'classes' => $this->dir.'/src/Classes',
-            'blocks' => $this->dir.'/components',
-            'stubs' => $this->dir.'/stubs',
+            'classes' => $this->dir.'/dev/Classes',
+            'blocks' => $this->dir.'/dev/components',
+            'stubs' => $this->dir.'/dev/stubs',
             'config' => $this->dir.'/src/Config.php',
             'gutenberg' => $this->dir.'/src/Gutenberg.php',
 		];
@@ -54,7 +56,9 @@ class BaseCommand extends \Symfony\Component\Console\Command\Command {
     }
 	
 	
-	/** devuelve el namespace desde composer.json */
+	/** 
+      * devuelve el namespace (principal) desde composer.json 
+    **/
 	public function getNamespace() {
 		$composer = file_get_contents($this->dir.'/composer.json');
         $composer_json = json_decode($composer);
@@ -179,6 +183,13 @@ class BaseCommand extends \Symfony\Component\Console\Command\Command {
                 '%PARAMS%' => $args,
             ]);
         }
+    }
+	
+	
+	public function slug_title($title, $fallback_title = '-') {
+		require_once $this->testdir . '/wp-includes/formatting.php';
+        
+        return sanitize_title($title, $fallback_title);
     }
 	
 }

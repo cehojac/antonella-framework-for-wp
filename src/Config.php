@@ -1,6 +1,9 @@
 <?php
 
-namespace CH;
+namespace Antonella\CH;
+
+define('__CONTROLLERS__', __NAMESPACE__ . '\Controllers');
+define('__WIDGETS__', __NAMESPACE__ . '\Widgets');
 
 class Config
 {

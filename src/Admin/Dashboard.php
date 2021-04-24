@@ -1,8 +1,8 @@
 <?php
 
-namespace CH\Admin;
+namespace Antonella\CH\Admin;
 
-use CH\Config;
+use Antonella\CH\Config;
 
 class Dashboard
 {

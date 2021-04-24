@@ -1,6 +1,6 @@
 <?php
 
-namespace CH\Commands;
+namespace Dev\Commands;
  
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -16,16 +16,18 @@ use Symfony\Component\Console\Input\InputOption;
 
 class AddFilter extends BaseCommand {
 	
-	protected $namespace;
-
+	// the name of the command (the part after "antonella")
+    protected static $defaultName = 'add:filter';
+    
+    protected $namespace;    
+    
     protected function configure()
     {
         
-		$this->setName('add:filter')
-            ->setDescription('Add a filter hook')
-			->setHelp('Example: the_content:ExampleController@add_text_to_content [--enque | -e]')
-            ->addArgument('data', InputArgument::REQUIRED, 'The hook next to the controller and its method, Use => tag:Controller@method:priority:num_args')
-			->addOption('enque', 'e', InputOption::VALUE_NONE, 'If set to true, the hook is added to the config.php file');
+		$this->setDescription('Add a filter hook')
+			 ->setHelp('Example: the_content:ExampleController@add_text_to_content [--enque | -e]')
+             ->addArgument('data', InputArgument::REQUIRED, 'The hook next to the controller and its method, Use => tag:Controller@method:priority:num_args')
+			 ->addOption('enque', 'e', InputOption::VALUE_NONE, 'If set to true, the hook is added to the config.php file');
 		
     }
  
@@ -56,7 +58,7 @@ class AddFilter extends BaseCommand {
         $args = $args ?? 1; 				// Si IS_NULL asigna le 1
         list($controller, $method) = array_pad(explode('@', $callable), 2, 'index');
         
-        $namespace = $this->getNamespace();
+        $namespace = $this->getNamespace(); // devuelve el namespace ppal
         $class = str_replace('/', '\\', sprintf('%s\Controllers\%s', $namespace, $controller));
 
         /* Si no existe el method o el controller lo añade y/o crea */

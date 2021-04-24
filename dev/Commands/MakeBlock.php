@@ -1,6 +1,6 @@
 <?php
 
-namespace CH\Commands;
+namespace Dev\Commands;
  
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -16,17 +16,19 @@ use Symfony\Component\Console\Input\InputOption;
 
 class MakeBlock extends BaseCommand {
 
+    // the name of the command (the part after "antonella")
+    protected static $defaultName = 'make:block';
+    
     protected $namespace;
 	
 	protected function configure()
     {
         
-		$this->setName('make:block')
-            ->setDescription('Make a Custom Gutenberg Block')
-			->setHelp('Example: php antonella make:block namespace/name [--callable | -c] [--enque | -e]')
-            ->addArgument('name', InputArgument::REQUIRED, 'The block name with her namespace, Use => namespace/name [--callable | -c] [--enque | -e]')
-			->addOption('callable', 'c', InputOption::VALUE_NONE, 'If set to true, allows a rendering from php')
-			->addOption('enque', 'e', InputOption::VALUE_NONE, 'If set to true, the new block is added to the config.php file');
+		$this->setDescription('Make a Custom Gutenberg Block')
+			 ->setHelp('Example: php antonella make:block namespace/name [--callable | -c] [--enque | -e]')
+             ->addArgument('name', InputArgument::REQUIRED, 'The block name with her namespace, Use => namespace/name [--callable | -c] [--enque | -e]')
+			 ->addOption('callable', 'c', InputOption::VALUE_NONE, 'If set to true, allows a rendering from php')
+			 ->addOption('enque', 'e', InputOption::VALUE_NONE, 'If set to true, the new block is added to the config.php file');
 		
     }
  
@@ -66,7 +68,7 @@ class MakeBlock extends BaseCommand {
 
             // creamos el directorio dentro de components
             $folder = array_reverse(explode('/', $block))[0];
-            $target = str_replace('\\', '/', sprintf($this->getDirBase().'/components/%s/index.js', $folder));
+            $target = str_replace('\\', '/', sprintf($this->getDirBase().'/dev/components/%s/index.js', $folder));
             if (!file_exists(dirname($target))) {
                 mkdir(dirname($target), 0755, true);
                 $output->writeln(sprintf("<info>The directory %s has been created</info>", dirname($target)));
@@ -75,7 +77,7 @@ class MakeBlock extends BaseCommand {
 
         // creamos el fichero index.js mediante la plantilla ./stubs/block.stub
         // ó ./stubs/server-side-block.stub
-        $StubGenerator = $this->getNamespace().'\Classes\StubGenerator';
+        $StubGenerator ='Dev\Classes\StubGenerator';
         $template = 'block';
         if ($option['callable']) {
             $template = 'server-side-block';
@@ -89,8 +91,8 @@ class MakeBlock extends BaseCommand {
             '%TITLE%' => ucwords($folder),
         ]);
 
-        file_put_contents($this->getDirBase()."/components/$folder/editor.css", '/* Your style for editor and front-end */', FILE_APPEND | LOCK_EX);
-        file_put_contents($this->getDirBase()."/components/$folder/style.css", '/* Your style for front-end */', FILE_APPEND | LOCK_EX);
+        file_put_contents($this->getDirBase()."/dev/components/$folder/editor.css", '/* Your style for editor and front-end */', FILE_APPEND | LOCK_EX);
+        file_put_contents($this->getDirBase()."/dev/components/$folder/style.css", '/* Your style for front-end */', FILE_APPEND | LOCK_EX);
         $output->writeln("<info>Your block $folder has been created</info>");
 
 		if ($option['enque']) {
@@ -128,7 +130,7 @@ class MakeBlock extends BaseCommand {
             $output->writeln("<info>The Config.php File has been updated</info>");
 
             // Todo append component componets/index.js
-            $content = explode("\n", file_get_contents(str_replace('\\', '/', $this->getDirBase().'/components/index.js')));
+            $content = explode("\n", file_get_contents(str_replace('\\', '/', $this->getDirBase().'/dev/components/index.js')));
             $found = false;
             foreach ($content as $line) {
                 if (trim($line) === sprintf('import "./%s"', $folder)) {
@@ -138,8 +140,8 @@ class MakeBlock extends BaseCommand {
             }
 
             if (!$found) {
-                file_put_contents($this->getDirBase().'/components/index.js', sprintf("\nimport \"./%s\";", $folder), FILE_APPEND | LOCK_EX);
-                $output->writeln("<info>The components/index.js File has been updated</info>");
+                file_put_contents($this->getDirBase().'/dev/components/index.js', sprintf("\nimport \"./%s\";", $folder), FILE_APPEND | LOCK_EX);
+                $output->writeln("<info>The dev/components/index.js File has been updated</info>");
             }
         }
 		

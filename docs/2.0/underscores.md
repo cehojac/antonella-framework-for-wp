@@ -7,7 +7,7 @@ Para más información visite el [repositorio oficial en git](https://github.com
 ## Ejemplo de uso
 
 ```bash
-php antonella maketheme <slug> [--activate] [--enable-network] [--theme_name=<title>] [--author=<full-name>] [--author_uri=<uri>] [--sassify] [--woocommerce] [--force]
+php antonella make:theme <slug> [--activate] [--enable-network] [--theme_name=<title>] [--author=<full-name>] [--author_uri=<uri>] [--sassify] [--woocommerce] [--force]
 ```
 
 Este comando no es más que un wrapper de `wp scaffold <comand>`, eres libre de usar uno u otro.
@@ -43,7 +43,7 @@ php wp-cli.phar scaffold _s sample --theme_name=\"Sample Theme\" --path=wp-test 
 ### Ejemplo
 
 ```bash
-php antonella maketheme sample-theme --theme_name=\"Sample Theme\" --author=\"Carlos Herrera\" 
+php antonella make:theme sample-theme --theme_name=\"Sample Theme\" --author=\"Carlos Herrera\" 
 ```
 
 Genera el theme de nombre "Sample Theme" y author "Carlos Herrera"
@@ -76,4 +76,4 @@ Nicolas Gallagher and Jonathan Neal https://necolas.github.io/normalize.css/
 */
 ```
  
-[Volver al índice](https://github.com/cehojac/antonella-framework-for-wp/tree/1.8/docs/1.8/readme.md)
+[Volver al índice](https://github.com/cehojac/antonella-framework-for-wp/tree/2.0/docs/2.0/readme.md)

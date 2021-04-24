@@ -1,7 +1,7 @@
 <?php
 
-namespace CH\Commands;
- 
+namespace Dev\Commands;
+
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -14,16 +14,17 @@ use Symfony\Component\Console\Input\InputOption;
   *	https://symfony.com/doc/current/console/input.html
   *	https://symfony.com/doc/current/console/input.html#using-command-options		
   */
- class Add extends BaseCommand
+class Add extends BaseCommand
 {
    
+    // the name of the command (the part after "antonella")
+    protected static $defaultName = 'add';    
+    
     protected function configure()
     {
-        $this->setName('add')
-            ->setDescription('Add Antonella`s Modules. Now only is possible add blade and dd')
-            ->setHelp('Demonstration of custom commands created by Symfony Console component.')
-            ->addArgument('module', InputArgument::REQUIRED, 'Blade or DD');																		// OPTIONAL [--color=your-color] --or
-																							//			[--color your-color]
+        $this->setDescription('Add Antonella`s Modules. Now only is possible add blade and dd')
+             ->setHelp('Demonstration of custom commands created by Symfony Console component.')
+             ->addArgument('module', InputArgument::REQUIRED, 'Blade or DD');
     }
  
     protected function execute(InputInterface $input, OutputInterface $output)

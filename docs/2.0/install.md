@@ -53,7 +53,7 @@ DBUSER=root
 DBNAME=
 DBPASS=
 
-TESTDIR=wp-test
+TEST_DIR=wp-test
 PORT=8010
 LOCALE=en_US
 ```
@@ -65,7 +65,7 @@ DBUSER=root
 DBNAME=
 DBPASS=
 
-TESTDIR=wp-test
+TEST_DIR=wp-test
 PORT=8080
 LOCALE=es_ES
 ```
@@ -74,13 +74,14 @@ Luego ejecute
 
 ```bash
 php antonella serve
+php antonella --port 8081 --force
 ```
 
-Éste comando creará un servidor local dentro de la carpeta wp-test accesible desde el puerto 8010 (por default) o el 
-que haya configurado en su fichero .env (si es el caso).
+Éste comando creará un servidor local dentro de la carpeta wp-test accesible desde el puerto 8010 (por default), el 
+que haya configurado en su fichero .env (si es el caso) o bien el dado como parámetro.
 
 ```bash
-php antonella test refresh
+php antonella refresh
 ```
 
 A diferencia del comando anterior, éste aplica los nuevos cambios (empaquetando e instalado 
@@ -95,15 +96,16 @@ Para acceder al panel de administración puede ingresar mediante la url
 > **Username:** `test`  
 > **Password:** `test`
 
-Para evitar conflictos con otros plugin asegurese de cambiar el namespace CH (por default) por otro
+Para evitar conflictos con otros plugin asegurese de cambiar el namespace Antonella\CH (por default) por otro
 
 ```bash
-php antonella namespace FOO
+php antonella generate:namespace FOO
 ```
-Donde FOO es el nuevo nombre del namespace ó
-```bash
-php antonella namespace
-```
-Donde antonella seignará automáticamente un namespace
+Donde Antonella\FOO es el nuevo nombre del namespace ó
 
-[Volver al índice](https://github.com/cehojac/antonella-framework-for-wp/tree/1.8/docs/1.8/readme.md)
+```bash
+php antonella generate:namespace
+```
+Donde antonella generará y asignará automáticamente un nuevo namespace
+
+[Volver al índice](https://github.com/cehojac/antonella-framework-for-wp/tree/2.0/docs/2.0/readme.md)

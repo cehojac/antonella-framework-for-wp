@@ -15,14 +15,14 @@ npm install
 ## Creando mi primer block
 
 ```bash
-php antonella block namespace/your-block [--callable] [--enque]
+php antonella make:block namespace/your-block [--callable | -c] [--enque | -e]
 ```
 
 ### Argumentos
 
 ```text
-namespace: Tu Namespace para evitar confictos con otros blocks, si es omitido se usará como namespace antonella
-your-block: El nombre de tu block a crear
+namespace: Requerido. Tu Namespace para evitar confictos con otros blocks, si es omitido se usará como namespace antonella
+your-block: Requerido. El nombre de tu block a crear
 --callable: Optional. Indica si queremos o no crear un block dinámico, renderizado desde php
 --enque: Registra el block en la sección $gutenberg_blocks[] del fichero Config.php
 ```
@@ -30,17 +30,17 @@ your-block: El nombre de tu block a crear
 ### Ejemplo 1
 
 ```bash
-php antonella block hello-word --enque
+php antonella make:block hello-word --enque
 ```
 
 Éste comando hace varias cosas por nosotros.
 
-1. Crea un fichero components/hello-word/index.js con la definición de nuestro block `antonella/hello-world` 
+1. Crea un fichero `dev/components/hello-word/index.js` con la definición de nuestro block `antonella/hello-world` 
 y sus respectivos ficheros de estilos uno para el editor (editor.css) y otro para el front-end (style.css) 
 2. Actualiza el fichero index.js dentro del directorio components haciendo un import al block recien creado
 3. Registra el block en la sección `$gutenberg_blocks[]` del fichero Config.php
 
-components/hello-word/index.js
+dev/components/hello-word/index.js
 
 ```js
 const { registerBlockType } = wp.blocks;
@@ -67,7 +67,7 @@ registerBlockType('antonella/hello-word',{
 });
 ```
 
-components/index.js
+dev/components/index.js
 
 ```js
 /* Add Components */
@@ -118,7 +118,7 @@ A diferencia de los block's estáticos los block's dinámicos necesitan indicarl
 fichero src/Gutenberg.php como podemos observar en el código de arriba.
 
 ```bash
-php antonella block namespace/dinamic --callable --enque
+php antonella make:block namespace/dinamic --callable --enque
 ```
 
 # Compilando
@@ -149,12 +149,12 @@ nuestro entorno local )
 
 --or
 
-`php antonella test refresh` 
+`php antonella refresh` 
 
-[Ver más](https://github.com/cehojac/antonella-framework-for-wp/tree/1.8/docs/1.8/install.md)
+[Ver más](https://github.com/cehojac/antonella-framework-for-wp/tree/2.0/docs/2.0/install.md)
 
 # Links consultados
 1 [Transpilando JavaScript fácilmente con wp-scripts](https://neliosoftware.com/es/blog/transpilando-javascript-facilmente-con-wp-scripts/)
 2 [CREANDO TU PRIMER BLOQUE DE GUTENBERG CON WP-SCRIPTS, JAVASCRIPT Y REACT](https://codigoconjuan.com/creando-tu-primer-bloque-de-gutenberg-con-wp-scripts-javascript-y-react/)
 
-[Volver al índice](https://github.com/cehojac/antonella-framework-for-wp/tree/1.8/docs/1.8/readme.md)
+[Volver al índice](https://github.com/cehojac/antonella-framework-for-wp/tree/2.0/docs/2.0/readme.md)

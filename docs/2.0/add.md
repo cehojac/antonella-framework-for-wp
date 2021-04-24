@@ -4,11 +4,19 @@ El comando add nos permite añadir pakages como blade ó dd, action y filter.
 
 ## Añadir packages
 
+Uso
+
+```bash
+php antonella add <module>
+```
+
+Ejemplos 
+
 ```bash
 php antonella add blade
 ```
 
-Éste comando instalará el package blade para trabajar con vistas
+Éste comando instalará el package blade para trabajar con el motor de plantillas blade
 
 ```bash
 php antonella add dd
@@ -18,27 +26,29 @@ php antonella add dd
 
 ## Add Action
 
-Permite añadir un hook de tipo action y lo registra.
+Permite añadir un hook de tipo action y lo registra en el array correspondiente.
+
+Uso
 
 ```bash
-php antonella add action tag:MyController@method:prioridad:num_args [--enque]
+php antonella add:action tag:MyController@method:priority:num_args [--enque | -e]
 ```
 
 ### Argumentos
 
 ```text
-tag: Hook
-MyController: Nombre del Controlador si no existe, éste es creado
-method: Method static del Controlador (sino existe será creado)
-prioridad: default(10) Prioridad
-num_args: default(1) Numero de argumentos que acepta la function	 	
---enque: Registra el hook action en la sección $add_action[] del fichero Config.php
+tag: Requerido. Hook
+MyController: Requerido. Nombre del Controlador si no existe, éste es creado
+method: Requerido. Method static del Controlador (sino existe será creado)
+priority: Opcional. default(10) Prioridad
+num_args: Opcional. default(1) Número de argumentos que acepta la function	 	
+[--enque | -e]: Opcional. Registra el hook action en la sección $add_action[] del fichero Config.php
 ```
 
 ### Ejemplo de uso
 
 ```bash
-php antonella add action init:MyController@action --enque
+php antonella add:action init:MyController@action --enque
 ```
 
 Out: scr/Controllers/MyController.php
@@ -46,7 +56,7 @@ Out: scr/Controllers/MyController.php
 ```php
 <?php
     
-namespace CH\Controllers;
+namespace Antonella\CH\Controllers;
           
 class MyController
 {
@@ -84,24 +94,24 @@ public $add_action = [
 Permite añadir un hook de tipo filter y lo registra.
 
 ```bash
-php antonella add filter tag:MyController@method:prioridad:num_args [--enque]
+php antonella add:filter tag:MyController@method:priority:num_args [--enque | -e]
 ```
 
 ### Argumentos
 
 ```text
-tag: Hook
-MyController: Nombre del Controlador si no existe, éste es creado
-method: Method static del Controlador (sino existe será creado)
-prioridad: default(10) Prioridad
-num_args: default(1) Numero de argumentos que acepta la function	 	
---enque: Registra el hook filter en la sección $add_filter[] del fichero Config.php
+tag: Requerido. Hook
+MyController: Requerido. Nombre del Controlador si no existe, éste es creado
+method: Requerido. Method static del Controlador (sino existe será creado)
+priority: Opcional. default(10) Prioridad
+num_args: Opcional. default(1) Numero de argumentos que acepta la function	 	
+[--enque | -e]: Opcional. Registra el hook filter en la sección $add_filter[] del fichero Config.php
 ```
 
 ### Ejemplo de uso
 
 ```bash
-php antonella add filter the_content:MyController@add_text_to_content:10:1 --enque
+php antonella add:filter the_content:MyController@add_text_to_content:10:1 --enque
 ```
 
 Out: scr/Controllers/MyController.php
@@ -109,7 +119,7 @@ Out: scr/Controllers/MyController.php
 ```php
 <?php
     
-namespace CH\Controllers;
+namespace Antonella\CH\Controllers;
           
 class MyController
 {
@@ -143,4 +153,4 @@ public $add_filter = [
 ];
 ```
 
-[Volver al índice](https://github.com/cehojac/antonella-framework-for-wp/tree/1.8/docs/1.8/readme.md)
+[Volver al índice](https://github.com/cehojac/antonella-framework-for-wp/tree/2.0/docs/2.0/readme.md)

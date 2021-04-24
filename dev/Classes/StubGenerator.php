@@ -1,6 +1,6 @@
 <?php
 
-namespace CH\Classes;
+namespace Dev\Classes;
 
 use RuntimeException;
 

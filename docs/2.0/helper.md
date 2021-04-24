@@ -26,7 +26,7 @@ php antonella add dd
 ## Como registrar mis propios helpers
 
 ```bash
-php antonella helper mihelper
+php antonella make:helper mihelper
 ```
 
 Out: src/Helpers/mihelper.php
@@ -46,4 +46,4 @@ if (!function_exists('mihelper')) {
 ?>
 ```
 
-[Volver al índice](https://github.com/cehojac/antonella-framework-for-wp/tree/1.8/docs/1.8/readme.md)
+[Volver al índice](https://github.com/cehojac/antonella-framework-for-wp/tree/2.0/docs/2.0/readme.md)

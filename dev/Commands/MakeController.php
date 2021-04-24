@@ -1,6 +1,6 @@
 <?php
 
-namespace CH\Commands;
+namespace Dev\Commands;
  
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -16,14 +16,16 @@ use Symfony\Component\Console\Input\InputOption;
 
 class MakeController extends BaseCommand {
 
+    // the name of the command (the part after "antonella")
+    protected static $defaultName = 'make:controller';
+
     protected $namespace;
 
     protected function configure()
     {
-        $this->setName('make:controller')
-            ->setDescription('Make a controller file in the folder src/Controllers')
-            ->setHelp('Set a name for you controller. For example greatController')
-            ->addArgument('nameController', InputArgument::REQUIRED, 'Name to controller file');
+        $this->setDescription('Make a controller file in the folder src/Controllers')
+             ->setHelp('Set a name for you controller. For example greatController')
+             ->addArgument('nameController', InputArgument::REQUIRED, 'Name to controller file');
        
     }
  
@@ -55,10 +57,10 @@ class MakeController extends BaseCommand {
             mkdir(dirname($target), 0755, true);
         }
 		
-        // Crea una clase a partir de una fichero plantilla (stubs/controller.stub)
-        $StubGenerator = $this->namespace.'\Classes\StubGenerator';
+        // Crea una clase a partir de una fichero plantilla (dev/stubs/controller.stub)
+        $StubGenerator = 'Dev\Classes\StubGenerator';
         $stub = new $StubGenerator(
-            $this->getPath('stubs', 'controller'),				// 'stubs/controller.stub',
+            $this->getPath('stubs', 'controller'),				// 'dev/stubs/controller.stub',
             $target
         );
 

@@ -1,6 +1,6 @@
 <?php
     
-namespace CH\Commands;
+namespace Dev\Commands;
 
 use Dotenv\Dotenv;
 use Symfony\Component\Console\Input\ArrayInput;

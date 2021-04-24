@@ -1,8 +1,8 @@
 <?php
 
-namespace CH;
+namespace Antonella\CH;
 
-use CH\Classes\Template;
+use Antonella\CH\Classes\Template;
 
 class Gutenberg
 {

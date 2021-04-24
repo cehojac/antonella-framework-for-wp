@@ -1,6 +1,6 @@
 <?php
 
-namespace CH\Commands;
+namespace Dev\Commands;
  
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -15,15 +15,17 @@ use Symfony\Component\Console\Input\InputOption;
   */
 class MakeCommand extends BaseCommand {
 	
+    // the name of the command (the part after "antonella")
+    protected static $defaultName = 'make:command';
+
     protected $namespace;
 
     protected function configure()
     {
-        $this->setName('make:command')
-            ->setDescription('Make a new Command')
-            ->setHelp('Set a name for you new command.')
-            ->addArgument('name', InputArgument::REQUIRED, 'Name new command')
-			->addArgument('short-code', InputArgument::REQUIRED, 'Short code command, use shortcode or short:code');
+        $this->setDescription('Make a new Command')
+             ->setHelp('Set a name for you new command.')
+             ->addArgument('name', InputArgument::REQUIRED, 'Name new command')
+			 ->addArgument('short-code', InputArgument::REQUIRED, 'Short code command, use shortcode or short:code');
        
     }
  
@@ -52,21 +54,21 @@ class MakeCommand extends BaseCommand {
 		$name = strrpos($name, 'Command') === false ? $name.'Command' : $name;
 		$target = $this->getPath('commands', $name);
 		
-		// Crea una clase a partir de una fichero plantilla (stubs/command.stub)
-        $StubGenerator = $this->namespace.'\Classes\StubGenerator';
+		// Crea una clase a partir de una fichero plantilla (dev/stubs/command.stub)
+        $StubGenerator = 'Dev\Classes\StubGenerator';
         $stub = new $StubGenerator(
-            $this->getPath('stubs', 'command'),				// 'stubs/command.stub',
+            $this->getPath('stubs', 'command'),				// 'dev/stubs/command.stub',
             $target
         );
 		
 		// remplace
 		$stub->render([
-			'%NAMESPACE%' => $this->namespace.'\\Commands',
+			'%NAMESPACE%' => 'Dev\\Commands',
 			'%CLASSNAME%' => $name,
 			'%SHORTCODE%' => $short_code
 		]);
 		
-		$output->writeln("<info>The ClassName $name.php created into src/Commands folder</info>");
+		$output->writeln("<info>The ClassName $name.php created into dev/Commands folder</info>");
     }
     
 }

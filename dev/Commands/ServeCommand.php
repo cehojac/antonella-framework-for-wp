@@ -1,6 +1,6 @@
 <?php
     
-namespace CH\Commands;
+namespace Dev\Commands;
 
 use Dotenv\Dotenv;
 use Symfony\Component\Console\Input\ArrayInput;
@@ -169,11 +169,11 @@ class ServeCommand extends BaseCommand {
         $zip->close();
         file_exists($this->destiny) ? unlink($this->destiny) : false;
 		
-		system("php wp-cli.phar plugin activate $pluginname --path=$testdir");
+		system("@php wp-cli.phar plugin activate $pluginname --path=$testdir");
         $output->writeln("Your plugin has been refreshed in test.");
 		
 		foreach ($plugins as $plugin)		
-			system("php wp-cli.phar plugin install $plugin --path=$testdir --activate");
+			system("@php wp-cli.phar plugin install $plugin --path=$testdir --activate");
         
 		
 	}

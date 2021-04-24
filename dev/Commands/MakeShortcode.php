@@ -1,6 +1,6 @@
 <?php
 
-namespace CH\Commands;
+namespace Dev\Commands;
  
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -16,16 +16,18 @@ use Symfony\Component\Console\Input\InputOption;
 
 class MakeShortcode extends BaseCommand {
 
+    // the name of the command (the part after "antonella")
+    protected static $defaultName = 'make:shortcode';
+    
     protected $namespace;
 
     protected function configure()
     {
         
-		$this->setName('make:shortcode')
-            ->setDescription('Make a shortcode')
-			->setHelp('Example: name:ExampleController@shortcode [--enque | -e]')
-            ->addArgument('data', InputArgument::REQUIRED, 'The shortcode next to the controller and its method, Use => name:Controller@method')
-			->addOption('enque', 'e', InputOption::VALUE_NONE, 'If set to true, the new shortcode is added to the config.php file');
+		$this->setDescription('Make a shortcode')
+			 ->setHelp('Example: name:ExampleController@shortcode [--enque | -e]')
+             ->addArgument('data', InputArgument::REQUIRED, 'The shortcode next to the controller and its method, Use => name:Controller@method')
+			 ->addOption('enque', 'e', InputOption::VALUE_NONE, 'If set to true, the new shortcode is added to the config.php file');
 		
     }
  

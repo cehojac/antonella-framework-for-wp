@@ -1,6 +1,6 @@
 <?php
 
-namespace CH\Commands;
+namespace Dev\Commands;
  
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -16,16 +16,18 @@ use Symfony\Component\Console\Input\InputOption;
 
 class MakeWidget extends BaseCommand {
 
+    // the name of the command (the part after "antonella")
+    protected static $defaultName = 'make:widget';
+
     protected $namespace;
 
     protected function configure()
     {
         
-		$this->setName('make:widget')
-            ->setDescription('Make a widget in the folder src/Widgets')
-			->setHelp('Set a name for you widget. For example MyFirstWidget [--enque | -e]')
-            ->addArgument('name', InputArgument::REQUIRED, 'Name for you widget')
-			->addOption('enque', 'e', InputOption::VALUE_NONE, 'If set to true, the new widget is added to the config.php file');
+		$this->setDescription('Make a widget in the folder src/Widgets')
+			 ->setHelp('Set a name for you widget. For example MyFirstWidget [--enque | -e]')
+             ->addArgument('name', InputArgument::REQUIRED, 'Name for you widget')
+			 ->addOption('enque', 'e', InputOption::VALUE_NONE, 'If set to true, the new widget is added to the config.php file');
 		
     }
  
@@ -59,10 +61,10 @@ class MakeWidget extends BaseCommand {
             mkdir(dirname($target), 0755, true);
         }
 		
-        // Crea una clase a partir de una fichero plantilla (stubs/controller.stub)
-        $StubGenerator = $this->getNamespace().'\Classes\StubGenerator';
+        // Crea una clase a partir de una fichero plantilla (dev/stubs/controller.stub)
+        $StubGenerator = 'Dev\Classes\StubGenerator';
         $stub = new $StubGenerator(
-            $this->getPath('stubs', 'widget'),	//__DIR__ . '/stubs/widget.stub',
+            $this->getPath('stubs', 'widget'),	//__DIR__ . '/dev/stubs/widget.stub',
             $target
         );
 

@@ -1,15 +1,15 @@
 # Custom Post Type (CPT)
 
-Los Custom Post Type no son mas que entradas personalizadas que se comportan como un page o un post y que
+Los Custom Post Type no son mas que entradas personalizadas que se comportan como una page o un post y que
 permiten ser extendidos facilmente mediante el uso custom field's (campos personalizados).
 
 ## Como crear un CPT
 
 ```bash
-php antonella cpt car
+php antonella make:cpt car
 ```
 
-Éste comando crea la entrada personalizada cars y lo registra en el fichero Config.php
+Éste comando crea custom post type car y lo registra en el fichero Config.php
 
 ```php
 /**
@@ -48,4 +48,4 @@ public $post_types =[
 ];
 ```
 
-[Volver al índice](https://github.com/cehojac/antonella-framework-for-wp/tree/1.8/docs/1.8/readme.md)
+[Volver al índice](https://github.com/cehojac/antonella-framework-for-wp/tree/2.0/docs/2.0/readme.md)

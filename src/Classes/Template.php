@@ -1,6 +1,6 @@
 <?php
 
-namespace CH\Classes;
+namespace Antonella\CH\Classes;
 
 class Template {
 	
