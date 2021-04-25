@@ -64,7 +64,7 @@ class MakeShortcode extends BaseCommand {
                 'class' => $class,
                 'method' => $method,
             ]);
-            $output->writeln("<info>The method $method has been added to Controller $class</info>");
+            $output->writeln("<info>The method $method has been added to Controller $class.php</info>");
         }
 
         /* Encolamos el metodo al array $actions[] de config.php */
@@ -72,7 +72,8 @@ class MakeShortcode extends BaseCommand {
             $target = $this->getPath('config');							// src/config.php
             $content = explode("\n", file_get_contents($target));
 
-            $class = ltrim($class, $namespace); // removemos el namespace
+                                                                        // $class = ltrim($class, $namespace); // removemos el namespace
+            $class = substr( $class, strlen($namespace));
             $this->__search_and_replace($content,
             [
                 'public$shortcodes=[];' => sprintf("\tpublic \$shortcodes = [\n\t\t['%s', __NAMESPACE__ . '%s::%s']\n\t];", $tag, $class, $method),

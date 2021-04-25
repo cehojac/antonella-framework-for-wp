@@ -5,7 +5,6 @@ namespace Dev\Commands;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Input\InputArgument;
-use Symfony\Component\Console\Input\InputOption;
  
 /**
   * @see https://code.tutsplus.com/es/tutorials/how-to-create-custom-cli-commands-using-the-symfony-console-component--cms-31274
@@ -33,7 +32,7 @@ class MakeCommand extends BaseCommand {
     {
         
         $data = [
-			'name' => $input->getArgument('name'),
+			'name' => rtrim($input->getArgument('name'), '.php'),   // removemos el .php si esta incluido
 			'short_code' => $input->getArgument('short-code')
 		];
 		

@@ -12,64 +12,71 @@ use Symfony\Component\Console\Input\InputOption;
  */
 class NamespaceCommand extends BaseCommand {
 	
-	 // the name of the command (the part after "antonella")
+	// the name of the command (the part after "antonella")
     protected static $defaultName = 'namespace';
 	
 	protected function configure()
     {
         $this->setDescription('Set a new namespace')
             ->setHelp('php antonella namespace ABCDE')
-            ->addArgument('namespace', InputArgument::OPTIONAL, 'New value, CH default');
+            ->addArgument('namespace', InputArgument::OPTIONAL, 'New value, CH default')
+            ->addOption('namespace', null, InputOption::VALUE_NONE, 'show current namespace');
        
     }
  
     protected function execute(InputInterface $input, OutputInterface $output)
     {
 		
-		// retirve directory base
-		// $dir = $this->getDirBase();		
-		
-		// retrive argument
-		$output->writeln("<info>Renaming the namespace...</info>");
-		
-		$newname = strtoupper($input->getArgument('namespace')) ?: $this->get_rand_letters();
-		$slash = DIRECTORY_SEPARATOR;
-        $composer = file_get_contents($this->getDirBase().$slash.'composer.json');
-        $namespace = $this->getNamespace();
-		
-		
-        $core = file_get_contents($this->getDirBase().$slash.'antonella-framework.php');
-        $core = str_replace($namespace, $newname, $core);
-        $composer = str_replace($namespace, $newname, $composer);
-        file_put_contents($this->getDirBase().$slash.'antonella-framework.php', $core);
-        file_put_contents($this->getDirBase().$slash.'composer.json', $composer);
-        $dirName = $this->getDirBase().$slash.'src';
-        $dirName = realpath($dirName);
-        if (substr($dirName, -1) != '/') {
-            $dirName .= $slash;
+		if ( !$input->getArgument('namespace') && $input->getOption('namespace'))
+        {
+            $namespace = $this->getNamespace();
+            $output->writeln("<info>The current namespace is: $namespace</info>");
         }
-        $dirStack = [$dirName];
-        while (!empty($dirStack)) {
-            $currentDir = array_pop($dirStack);
-            $filesToAdd = [];
-            $dir = dir($currentDir);
-            while (false !== ($node = $dir->read())) {
-                if (($node == '..') || ($node == '.')) {
-                    continue;
-                }
-                if (is_dir($currentDir.$node)) {
-                    array_push($dirStack, $currentDir.$node.$slash);
-                }
-                if (is_file($currentDir.$node)) {
-                    $file = file_get_contents($currentDir.$node);
-                    $file = str_replace($namespace, $newname, $file);
-                    file_put_contents($currentDir.$node, $file);
+        else {
+            
+            // retrive argument
+            $output->writeln("<info>Renaming the namespace...</info>");
+            
+            $newname = strtoupper($input->getArgument('namespace')) ?: $this->get_rand_letters();
+            $slash = DIRECTORY_SEPARATOR;
+            $composer = file_get_contents($this->getDirBase().$slash.'composer.json');
+            $namespace = $this->getNamespace();
+            
+            
+            $core = file_get_contents($this->getDirBase().$slash.'antonella-framework.php');
+            $core = str_replace($namespace, $newname, $core);
+            $composer = str_replace($namespace, $newname, $composer);
+            file_put_contents($this->getDirBase().$slash.'antonella-framework.php', $core);
+            file_put_contents($this->getDirBase().$slash.'composer.json', $composer);
+            $dirName = $this->getDirBase().$slash.'src';
+            $dirName = realpath($dirName);
+            if (substr($dirName, -1) != '/') {
+                $dirName .= $slash;
+            }
+            $dirStack = [$dirName];
+            while (!empty($dirStack)) {
+                $currentDir = array_pop($dirStack);
+                $filesToAdd = [];
+                $dir = dir($currentDir);
+                while (false !== ($node = $dir->read())) {
+                    if (($node == '..') || ($node == '.')) {
+                        continue;
+                    }
+                    if (is_dir($currentDir.$node)) {
+                        array_push($dirStack, $currentDir.$node.$slash);
+                    }
+                    if (is_file($currentDir.$node)) {
+                        $file = file_get_contents($currentDir.$node);
+                        $file = str_replace($namespace, $newname, $file);
+                        file_put_contents($currentDir.$node, $file);
+                    }
                 }
             }
+            
+            system('composer dump-autoload');
+            $output->writeln("<info>The new namespace is $newname</info>");
+        
         }
-		
-		system('composer dump-autoload');
-        $output->writeln("<info>The new namespace is $newname</info>");
 	}
 	
 	/** 

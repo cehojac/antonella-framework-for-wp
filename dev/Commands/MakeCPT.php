@@ -5,7 +5,6 @@ namespace Dev\Commands;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Input\InputArgument;
-use Symfony\Component\Console\Input\InputOption;
  
 /**
   * @see https://code.tutsplus.com/es/tutorials/how-to-create-custom-cli-commands-using-the-symfony-console-component--cms-31274
@@ -70,7 +69,7 @@ class MakeCPT extends BaseCommand {
         [
             "singular"      => "'.$data.'",
             "plural"        => "'.$data.'s",
-            "slug"          => "'.$data.'",
+            "slug"          => "'.$this->slug_title($data).'",
             "position"      => 99,
             "taxonomy"      => [],
             "image"         => "antonella-icon.png",

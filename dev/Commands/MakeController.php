@@ -5,7 +5,6 @@ namespace Dev\Commands;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Input\InputArgument;
-use Symfony\Component\Console\Input\InputOption;
  
 /**
   * @see https://code.tutsplus.com/es/tutorials/how-to-create-custom-cli-commands-using-the-symfony-console-component--cms-31274
@@ -33,6 +32,10 @@ class MakeController extends BaseCommand {
     {
 
         $name = $input->getArgument('nameController');
+
+         // eliminamos el .php y descartamos @
+         $name = explode('@', rtrim($name, '.php'))[0];
+
         $this->makeController($name);
         $output->writeln("<info>===================================================================</info>");
 		$output->writeln("<info>Controller $name.php created into src\Controllers folder</info>");
@@ -49,7 +52,7 @@ class MakeController extends BaseCommand {
     protected function makeController($data)
     {
         
-		$this->namespace = $this->getNamespace();
+        $this->namespace = $this->getNamespace();
 		$target = $this->getPath('controllers', $data); 	// devuelve el paths para los controllers, src/Controllers
 
 		// si la ruta no existe la crea

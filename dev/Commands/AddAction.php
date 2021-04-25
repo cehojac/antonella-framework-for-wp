@@ -74,8 +74,9 @@ class AddAction extends BaseCommand {
             		$target = $this->getPath('config');						// src/config.php
             		$content = explode("\n", file_get_contents($target));
 
-            		$class = ltrim($class, $namespace); 					// removemos el namespace
-            		$this->__search_and_replace($content,
+            		// $class = ltrim($class, $namespace); 					// removemos el namespace
+            		$class = substr( $class, strlen($namespace));
+					$this->__search_and_replace($content,
             		[
                 		'public$add_action=[];' => sprintf("\tpublic \$add_action = [\n\t\t['%s', [__NAMESPACE__ . '%s','%s'], %s, %s]\n\t];", $tag, $class, $method, $priority, $args),
                 		'public$add_action=[' => sprintf("\tpublic \$add_action = [\n\t\t['%s', [__NAMESPACE__ . '%s','%s'], %s, %s]", $tag, $class, $method, $priority, $args),	// append

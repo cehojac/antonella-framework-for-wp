@@ -4,8 +4,6 @@ namespace Dev\Commands;
 
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Input\InputArgument;
-use Symfony\Component\Console\Input\InputOption;
 
 /**
  *	@see https://symfony.com/doc/current/console.html
@@ -17,38 +15,25 @@ class SetNameCommand extends BaseCommand {
 	
 	protected function configure()
     {
-        $this->setDescription('Set Plugin Name, example: "My First Plugin"')
-            ->setHelp('php antonella setname "Plugin Name" [--textdomain plugin-name]')
-            ->addArgument('name', InputArgument::REQUIRED, 'Plugin Name')
-			->addOption('textdomain', null, InputOption::VALUE_REQUIRED)
-			->addOption('description', null, InputOption::VALUE_REQUIRED)
-			->addOption('username', null, InputOption::VALUE_REQUIRED)
-			->addOption('email', null, InputOption::VALUE_REQUIRED);
-       
+        $this->setDescription('Set Plugin Name')
+			->setHidden(true)
+            ->setHelp('php antonella setname');       
     }
  
     protected function execute(InputInterface $input, OutputInterface $output)
     {
 		
-		// retirve directory base
-		// $dir = $this->getDirBase();		
-		
-		$name = $input->getArgument('name');
+		// valores por default
 		$params = [
-			'name' => $name,
-			'textdomain' => $this->slug_title($name)
+			'name' => ucwords(str_replace('-', ' ', basename($this->getDirBase()))),
+			'description' => 'My first plugin with Antonella Framework',
+			'textdomain' => basename($this->getDirBase()),
+			'version' => '1.0',
+			'username' => 'Carlos Herrera',
+			'email' => ''
 		];
 		
-		echo "ola";
-		die();
-		
-		// valores desde consola
-		$arguments = ['textdomain', 'description', 'username', 'email'];
-		foreach ($arguments as $arg) {
-			if ( $input->getOption($arg))
-				$params[$arg] = $input->getOption($arg);
-		}
-		
+				
 		// valores desde git
 		$arguments = ['username', 'email'];
 		foreach ($arguments as $arg) {
@@ -61,19 +46,37 @@ class SetNameCommand extends BaseCommand {
 			}
 		}
 		
-		var_dump( $params );
-		die();
-		
 		$this->setNamePlugin($params, $output);
-		
-		// for show message in console
-		// $output->writeln("<info>Your success message</info>");
-		// $output->writeln("<error>Your error message</error>");
-		
 	}
 	
 	private function setNamePlugin($params, $output) {
 		
+		if (file_exists('antonella-framework.php')) {
+			$name = sprintf('%1$s.php',basename($this->getDirBase()));
+
+			$target = 'antonella-framework.php';							
+            $content = explode("\n", file_get_contents($target));
+
+			$this->__replace_if_matches($content,
+			[
+                'Plugin Name' => sprintf('Plugin Name: %1$s', $params['name']),
+				'Description' => sprintf('Description: %1$s', $params['description']),
+				'Version' => sprintf('Version: %1$s', $params['version']),
+				'Author URI' => 'Author URI:',
+				'Author' => sprintf('Author: %1$s <%2$s>', preg_replace('~[\r\n]+~', '', $params['username']), preg_replace('~[\r\n]+~', '', $params['email'])),
+				'Text Domain' => sprintf('Text Domain: %1$s', $params['textdomain'])
+			]);
+
+			$out = implode("\n", $content);
+			file_put_contents($target, $out);
+			$output->writeln("<info>The file has been updated</info>");
+
+			rename("antonella-framework.php", $name);
+			$output->writeln("<info>the file has been renamed</info>");
+			die();
+		}
+
+		// $output->writeln("<info>Success</info>");
 	}
 	
 } /* generated with antollena framework */

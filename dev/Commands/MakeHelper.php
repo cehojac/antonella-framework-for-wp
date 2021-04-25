@@ -5,7 +5,6 @@ namespace Dev\Commands;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Input\InputArgument;
-use Symfony\Component\Console\Input\InputOption;
  
 /**
   * @see https://code.tutsplus.com/es/tutorials/how-to-create-custom-cli-commands-using-the-symfony-console-component--cms-31274
@@ -31,10 +30,10 @@ class MakeHelper extends BaseCommand {
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         
-        $name = $input->getArgument('nameHelper');
+        $name = rtrim($input->getArgument('nameHelper'), '.php');   // removemos el .php
         $this->makeHelper($name);
 		$output->writeln("<info>======================================================</info>");
-		$output->writeln("<info>The Helper $name.php created into src/Helper folder</info>");
+		$output->writeln("<info>The Helper $name.php created into src/Helpers folder</info>");
         $output->writeln("<info>======================================================</info>");
 
         
@@ -49,12 +48,7 @@ class MakeHelper extends BaseCommand {
      */
     public function makeHelper($data)
     {
-        /*
-		$c = new \Console;
-        $this->namespace = $c->namespace;
-        $this->paths = $c->paths;*/
-		
-		$this->namespace = $this->getNamespace();
+        $this->namespace = $this->getNamespace();
 		$target = $this->getPath('helpers', $data);
 		
 		// Si la ruta no existe la crea

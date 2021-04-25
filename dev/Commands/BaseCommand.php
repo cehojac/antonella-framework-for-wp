@@ -21,9 +21,7 @@ class BaseCommand extends \Symfony\Component\Console\Command\Command {
 	
 		$this->dir = \Console::$dir;	// recupera el directorio base
 	
-        //$this->dir = PLUGINDIR;
-
-		$this->paths = [
+        $this->paths = [
             'controllers' => $this->dir.'/src/Controllers',
 			'commands' => $this->dir.'/dev/Commands',
             'widgets' => $this->dir.'/src/Widgets',
@@ -92,6 +90,30 @@ class BaseCommand extends \Symfony\Component\Console\Command\Command {
 
             $content[$key] = isset($search[$value]) ? $search[$value].$coma : $line;
         }
+    }
+
+    /**
+     * Busca y reemplaza un valor sobre memoria
+     * Por cada linea busca y reemplaza entre varias opciones ($data)
+     * @param array $content Array de string donde cada posición corresponde con una linea del fichero
+     * @param array $data Array asociativo multidimensional [ ['search1' => 'replace1'], ['search2' => 'replace2'] ... [] ]
+     */
+    public function __replace_if_matches(&$content, $data) {
+       
+        foreach($content as $key => $line) {
+            
+            $value = mb_strtolower(preg_replace('/\s+/', ' ', $line));
+
+            foreach ($data as $search => $replace) {
+                
+                $search = mb_strtolower(preg_replace('/\s+/', ' ', $search));
+                if ( substr($value, 0, strlen($search)) == $search ) {
+                    $content[$key] = $replace;
+                    break;
+                }
+            }
+        }
+
     }
 	
 	/**
@@ -162,7 +184,7 @@ class BaseCommand extends \Symfony\Component\Console\Command\Command {
             $classname = array_reverse(explode('\\', $class))[0];
             $namespace = rtrim($class, '\\'.$classname);
 
-            $StubGenerator = $this->getNamespace().'\Classes\StubGenerator';
+            $StubGenerator = 'Dev\Classes\StubGenerator';
             $stub = new $StubGenerator(
                 $this->getPath('stubs', 'controller-with-method'),	//__DIR__ . '/stubs/controller-with-method.stub',
                 $target
@@ -185,11 +207,13 @@ class BaseCommand extends \Symfony\Component\Console\Command\Command {
         }
     }
 	
-	
-	public function slug_title($title, $fallback_title = '-') {
-		require_once $this->testdir . '/wp-includes/formatting.php';
-        
-        return sanitize_title($title, $fallback_title);
+	/**
+     * convierte un string en un slug string
+     * @params $title string la cadena a convertir
+     * @params $char char caracter a reemplazar el espacio en blanco
+     */
+	public function slug_title($title, $char = '-') {
+		return strtolower(trim(preg_replace('/[^A-Za-z0-9-]+/', $char, $title)));
     }
-	
+
 }

@@ -15,9 +15,9 @@ plugins.push(
     if (!fs.existsSync(assets)) fs.mkdirSync(assets,{ recursive: true });
     
     const files = [
-		{from: path.resolve(__dirname, 'components/compiled/index.css'), to: path.resolve(__dirname, 'assets/blocks/css/editor.css')},
-		{from: path.resolve(__dirname, 'components/compiled/style-index.css'), to: path.resolve(__dirname, 'assets/blocks/css/style.css')},
-		{from: path.resolve(__dirname, 'components/compiled/index.js'), to: path.resolve(__dirname, 'assets/blocks/index.js')},
+		{from: path.resolve(__dirname, 'dev/components/compiled/index.css'), to: path.resolve(__dirname, 'assets/blocks/css/editor.css')},
+		{from: path.resolve(__dirname, 'dev/components/compiled/style-index.css'), to: path.resolve(__dirname, 'assets/blocks/css/style.css')},
+		{from: path.resolve(__dirname, 'dev/components/compiled/index.js'), to: path.resolve(__dirname, 'assets/blocks/index.js')},
 		// Mueve ficheros estaticos
 		{from: path.resolve(__dirname, 'node_modules/bootstrap/dist/css/bootstrap-grid.min.css'), to: path.resolve(__dirname, 'assets/css/bootstrap-grid.min.css')}
 	];
@@ -36,11 +36,11 @@ module.exports = {
   /** Carga la configuración por defecto */
   ...defaultConfig,
   entry: {
-    index: path.resolve( __dirname, './components', 'index.js' ),
+    index: path.resolve( __dirname, 'dev/components', 'index.js' ),
   },
   output: {
 		filename: '[name].js',
-		path: path.resolve( __dirname, './components/compiled' ),
+		path: path.resolve( __dirname, 'dev/components/compiled' ),
 	},
   module: {
     ...defaultConfig.module,

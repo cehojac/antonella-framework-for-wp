@@ -34,7 +34,7 @@ class MakeWidget extends BaseCommand {
     protected function execute(InputInterface $input, OutputInterface $output)
     {
 
-        $name = $input->getArgument('name');
+        $name = rtrim($input->getArgument('name'), '.php');     // removemos el .php
 		$option = $input->getOption('enque');
 		$this->makeWidget($name, $output, $option);
 		
@@ -69,7 +69,7 @@ class MakeWidget extends BaseCommand {
         );
 
         $stub->render([
-            '%NAMESPACE%' => $namespace.'/Widgets',
+            '%NAMESPACE%' => $namespace.'\\Widgets',
             '%CLASSNAME%' => $data,
         ]);
 

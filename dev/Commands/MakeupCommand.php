@@ -2,13 +2,10 @@
 
 namespace Dev\Commands;
  
-use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Input\InputArgument;
-use Symfony\Component\Console\Input\InputOption;
  
-class Makeup extends Command
+class MakeupCommand extends BaseCommand
 {
     
     // the name of the command (the part after "antonella")
@@ -41,9 +38,7 @@ class Makeup extends Command
         'mix-manifest.json',
         'webpack.mix.js',
         'webpack.config.js',
-        'nella',
-        'nella2',
-		'dev'.DIRECTORY_SEPARATOR.'Classes'.DIRECTORY_SEPARATOR.'StubGenerator.php',
+        'dev'.DIRECTORY_SEPARATOR.'Classes'.DIRECTORY_SEPARATOR.'StubGenerator.php',
 		'StubGenerator.php'
     ];
     
@@ -73,8 +68,9 @@ class Makeup extends Command
  
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $this->dir = \Console::$dir;	// recupera el directorio base
-		$output->writeln("<comment>Antonella is packing the plugin</comment>");
+        $this->dir = $this->getDirBase();	// recupera el directorio base
+		
+        $output->writeln("<comment>Antonella is packing the plugin</comment>");
         		
 		$this->makeup();		
 		
@@ -95,7 +91,7 @@ class Makeup extends Command
         $dirName = $this->dir;
 
         if (!is_dir($dirName)) {
-            throw new Exception('Directory '.$dirName.' does not exist');
+            throw new \Exception('Directory '.$dirName.' does not exist');
         }
         
         $dirToExclude = $this->dirs_to_exclude;

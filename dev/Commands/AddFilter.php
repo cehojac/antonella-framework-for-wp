@@ -75,7 +75,9 @@ class AddFilter extends BaseCommand {
             $target = $this->getPath('config');						// src/config.php
             $content = explode("\n", file_get_contents($target));
 
-            $class = ltrim($class, $namespace); // removemos el namespace
+            // $class = ltrim($class, $namespace); // removemos el namespace
+            $class = substr( $class, strlen($namespace));
+            
             $this->__search_and_replace($content,
             [
                 'public$add_filter=[];' => sprintf("\tpublic \$add_filter = [\n\t\t['%s', [__NAMESPACE__ . '%s','%s'], %s, %s]\n\t];", $tag, $class, $method, $priority, $args),
