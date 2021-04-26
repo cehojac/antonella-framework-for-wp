@@ -1,6 +1,6 @@
 <?php
 
-namespace CH;
+namespace Antonella\CH;
 
 class Language
 {

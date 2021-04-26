@@ -9,17 +9,16 @@ class Console extends Application  {
 	
 	public static $dir = __DIR__;
 	
-	private $namespace = 'CH';
+	private $namespace;
 
-	private $path = 'src/Commands/';
+	private $path = 'dev/Commands';
 
 	private $name = 'Antonella Framework for WordPress';
 	
 	function __construct() {
 		$ver = $this->readVersion();
 		parent::__construct($this->name, $ver);
-		$this->namespace = $this->readNamespace();
-		
+		$this->namespace = 'Dev'; 
 		// cargamos todos los commandos
 		$this->loadCommands();
 	}

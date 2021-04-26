@@ -1,6 +1,6 @@
 <?php
 
-namespace CH;
+namespace Antonella\CH;
 
 /*
 Plugin Name: Antonella Framework
@@ -27,11 +27,6 @@ defined('ABSPATH') or die(__('Lo siento por aqui no puedes pasar :)'));
 * @return null
 */
 define('NELLA_URL', __FILE__);
-
-/*
- * Devuelve el directorio raiz del pluging
- */
-define('MY_PLUGIN_PATH', plugin_dir_path(__FILE__));
 
 $loader = require __DIR__.'/vendor/autoload.php';
 $antonella = new Start();

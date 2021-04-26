@@ -1,6 +1,6 @@
 {
     "name":"cehojac/antonella-framework-for-wp",
-    "version":"1.8",
+    "version":"2.0",
     "keywords": ["framework", "wordpress", "plugins"],
     "prefer-stable": true,
     "minimum-stability": "dev",
@@ -12,6 +12,12 @@
             "email": "hi@carlos-herrera.com",
             "homepage": "https://carlos-herrera.com",
             "role": "Developer"
+        },
+        {
+            "name": "David Turnes",
+            "email": "d3turnes@gmail.com",
+            "homepage": "https://extendscode.com",
+            "role": "Contributor"
         }
     ],
       "support": {
@@ -31,11 +37,19 @@
 		"symfony/console": "^4.0"
     },
     "autoload": {
-        "psr-4": {"CH\\": "src/"},
+        "psr-4": {
+            "Antonella\\CH\\": "src/",
+            "Dev\\": "dev/"
+        },
         "files": [
             "src/helpers.php"
         ],
-		"classmap": ["src"]
+		"classmap": []
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Tests\\": "tests"
+        }
     },
     "extra": {
         "installer-paths": {
@@ -44,7 +58,8 @@
     },
     "scripts":{
         "post-create-project-cmd": [
-            "php antonella namespace",
+            "@php antonella setname",
+			"php antonella namespace",
             "php -r \"copy('.env-example', '.env');\"",
             "php antonella add blade"
         ]

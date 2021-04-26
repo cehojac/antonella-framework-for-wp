@@ -3,7 +3,7 @@
 * No modify this file !!!
 */
 
-namespace CH;
+namespace Antonella\CH;
 
 class Request
 {

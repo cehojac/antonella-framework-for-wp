@@ -1,6 +1,6 @@
 <?php
 
-namespace CH\Admin;
+namespace Antonella\CH\Admin;
 
 class PageAdmin extends Admin
 {

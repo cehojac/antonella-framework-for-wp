@@ -1,6 +1,6 @@
 <?php
 
-namespace CH;
+namespace Antonella\CH;
 
 class Config
 {
@@ -26,7 +26,7 @@ class Config
      * POST data process
      * get the post data and execute the function.
      *
-     * @example ['post_data'=>'CH::function']
+     * @example ['post_data'=>'Antonella\CH::function']
      */
     public $post = [
     ];
@@ -34,7 +34,7 @@ class Config
      * GET data process
      * get the get data and execute the function.
      *
-     * @example ['get_data'=>'CH::function']
+     * @example ['get_data'=>'Antonella\CH::function']
      */
     public $get = [
     ];
@@ -43,36 +43,34 @@ class Config
      *
      * @input array
      *
-     * @example ['body_class','CH::function',10,2]
-     * @example ['body_class',['CH','function'],10,2]
+     * @example ['body_class','Antonella\CH::function',10,2]
+     * @example ['body_class',['Antonella\CH','function'],10,2]
      */
-    public $add_filter = [
-    ];
+	public $add_filter = [];
     /**
      * add_action data functions.
      *
      * @input array
      *
-     * @example ['body_class','CH::function',10,2]
-     * @example ['body_class',['CH','function'],10,2]
+     * @example ['body_class','Antonella\CH::function',10,2]
+     * @example ['body_class',['Antonella\CH','function'],10,2]
      */
-    public $add_action = [
-    ];
+	public $add_action = [];
     /**
      * add custom shortcodes.
      *
      * @input array
      *
-     * @example [['example','CH\ExampleController::example_shortcode']]
+     * @example [['example','Antonella\CH\Controllers\ExampleController::example_shortcode']]
      */
-    public $shortcodes = [
-        ['example', 'CH\Controllers\ExampleController::example_shortcode'],
+	public $shortcodes = [
+		['example', 'Antonella\CH\Controllers\ExampleController::example_shortcode'],
     ];
     /**
      * add Gutenberg's blocks.
      */
-    public $gutenberg_blocks = [
-        'antonella/hero' => [],
+	public $gutenberg_blocks = [ 
+		'antonella/hero' => [],
         'antonella/dinamico' => [
             'attributes' => [
                 'posts' => [
@@ -241,7 +239,7 @@ class Config
      *
      * @input array
      *
-     * @example public $widget = [__NAMESPACE__.'\YouClassWidget']  //only the class
+     * @example public $widget = [__NAMESPACE__.'\Widgets\YouClassWidget']  //only the class
      */
-    public $widgets = [];
+	public $widgets = [];
 }
