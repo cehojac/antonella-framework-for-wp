@@ -11,7 +11,7 @@ class Template {
 		$dir = \plugin_dir_path(NELLA_URL);
 
 		ob_start();
-		$view = str_replace('\\', '/', sprintf("$1$s/resources/templates/%2$s.php", $dir, $template));
+		$view = str_replace('\\', '/', sprintf("%s/resources/templates/%s.php", $dir, $template));
         	//include( $dir . DIRECTORY_SEPARATOR . 'resources/templates' . DIRECTORY_SEPARATOR . $template . '.php');
         include( $view );
 		$content = ob_get_contents();
