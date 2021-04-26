@@ -28,9 +28,7 @@ class SetNameCommand extends BaseCommand {
 			'name' => ucwords(str_replace('-', ' ', basename($this->getDirBase()))),
 			'description' => 'My first plugin with Antonella Framework',
 			'textdomain' => basename($this->getDirBase()),
-			'version' => '1.0',
-			'username' => 'Carlos Herrera',
-			'email' => ''
+			'version' => '1.0'
 		];
 		
 				
@@ -45,6 +43,9 @@ class SetNameCommand extends BaseCommand {
 				}
 			}
 		}
+
+		$params['username'] = $params['username'] ?: 'Carlos Herrera';
+		$params['email'] = $params['email'] ?: '';
 		
 		$this->setNamePlugin($params, $output);
 	}
