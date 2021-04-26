@@ -70,8 +70,7 @@ class Config
      * add Gutenberg's blocks.
      */
 	public $gutenberg_blocks = [ 
-		'antonella/example' => [],
-        'antonella/hero' => [],
+		'antonella/hero' => [],
         'antonella/dinamico' => [
             'attributes' => [
                 'posts' => [
