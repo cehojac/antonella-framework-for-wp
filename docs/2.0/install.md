@@ -99,13 +99,18 @@ Para acceder al panel de administración puede ingresar mediante la url
 Para evitar conflictos con otros plugin asegurese de cambiar el namespace Antonella\CH (por default) por otro
 
 ```bash
-php antonella generate:namespace FOO
+php antonella namespace FOO
 ```
 Donde Antonella\FOO es el nuevo nombre del namespace ó
 
 ```bash
-php antonella generate:namespace
+php antonella namespace
 ```
 Donde antonella generará y asignará automáticamente un nuevo namespace
+
+```bash
+php antonella namespace --namesapce
+```
+Para obtener el namespace actual
 
 [Volver al índice](https://github.com/cehojac/antonella-framework-for-wp/tree/2.0/docs/2.0/readme.md)
