@@ -63,7 +63,7 @@ class ThemeListCommand extends BaseCommand {
 			die();
 		}
 		
-		system("php wp-cli.phar $cmd --path=$testDIR");		
+		system("php wp-cli.phar $cmd");		
 	}
 	
 } /* generated with antollena framework */

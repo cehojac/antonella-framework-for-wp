@@ -25,7 +25,7 @@ php wp-cli.phar scaffold _s sample-theme --theme_name="Sample Theme" --path=wp-t
 	El slug para el nuevo tema, y usado para prefijar funciones ( para evitar conflictos ) y como clave del textdomain (traducciones).
 [--activate] 
 	Activar el tema recién descargado.
-[--enable-network]
+[--enable-network]	
 	Habilita el tema recién descargado para toda la red
 [--theme_name=<title>]
 	Establece el Nombre del Theme dentro del style.css
@@ -112,6 +112,45 @@ php antonella theme:list --filter=status,inactive --fields=name,status --format=
 ```
 
 ## Eliminar theme
+
+```bash
+php antonella theme:delete <theme>
+```
+
+### Opciones
+
+```bash
+[<theme>[,<theme>]]
+	Uno o más themes para eliminar. Lista de theme separados por coma
+[-all]
+	Si `--all` está presente, se eliminarán todos los temas excepto el tema activo
+	Es excluyente de [<theme>[,<theme>]]
+[--force]
+	Si `--force` está presente, el theme active será también eliminado
+	Es excluyente de [<theme>[,<theme>]]
+	Sólo es válido si está presente la opción --all
+```
+
+### Ejemplos
+
+```bash
+php antonella theme:delete twentytwenty,twentytwentyone
+```
+
+Eliminará los themes, twentytwenty y twentytwentyone
+
+```bash
+php antonella theme:delete --all
+```
+
+Elimina todos los themes excepto el theme activo
+
+```bash
+php antonella theme:delete --all --force
+```
+
+Elimina todos los themes y el theme activo
+```
 
 
 [Volver al índice](https://github.com/cehojac/antonella-framework-for-wp/tree/2.0/docs/2.0/readme.md)
