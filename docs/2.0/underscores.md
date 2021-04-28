@@ -150,7 +150,5 @@ php antonella theme:delete --all --force
 ```
 
 Elimina todos los themes y el theme activo
-```
-
 
 [Volver al índice](https://github.com/cehojac/antonella-framework-for-wp/tree/2.0/docs/2.0/readme.md)
