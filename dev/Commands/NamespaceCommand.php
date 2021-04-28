@@ -37,18 +37,35 @@ class NamespaceCommand extends BaseCommand {
             // retrive argument
             $output->writeln("<info>Renaming the namespace...</info>");
             
-            $newname = strtoupper($input->getArgument('namespace')) ?: $this->get_rand_letters();
-            $slash = DIRECTORY_SEPARATOR;
-            $composer = file_get_contents($this->getDirBase().$slash.'composer.json');
+            $newname = sprintf('Antonella\\%1$s', strtoupper($input->getArgument('namespace')) ?: $this->get_rand_letters());
+            $newname_c = str_replace('\\', '\\\\', $newname);		// for composer.json
+			
+			$slash = DIRECTORY_SEPARATOR;
             $namespace = $this->getNamespace();
-            
-            
-            $core = file_get_contents($this->getDirBase().$slash.'antonella-framework.php');
-            $core = str_replace($namespace, $newname, $core);
-            $composer = str_replace($namespace, $newname, $composer);
-            file_put_contents($this->getDirBase().$slash.'antonella-framework.php', $core);
+            $namespace_c = str_replace('\\', '\\\\', $namespace);	// for composer.json
+			
+			// composer
+			$composer = file_get_contents($this->getDirBase().$slash.'composer.json');
+			$composer = str_replace($namespace_c, $newname_c, $composer);
             file_put_contents($this->getDirBase().$slash.'composer.json', $composer);
-            $dirName = $this->getDirBase().$slash.'src';
+            
+			
+			// core
+			$files = [
+				str_replace('\\', '/', sprintf('%1$s/antonella-framework.php', $this->getDirBase())),
+				str_replace('\\', '/', sprintf('%1$s/%2$s.php', $this->getDirBase(), basename($this->getDirBase())))
+			];
+			
+			foreach ($files as $file) {
+				if (file_exists($file)) {
+					$core = file_get_contents($file);
+					$core = str_replace($namespace, $newname, $core);
+					file_put_contents($file, $core);
+				}
+			}
+			
+			// resto de ficheros
+			$dirName = $this->getDirBase().$slash.'src';
             $dirName = realpath($dirName);
             if (substr($dirName, -1) != '/') {
                 $dirName .= $slash;
