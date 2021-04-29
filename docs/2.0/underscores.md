@@ -7,16 +7,15 @@ Para más información visite el [repositorio oficial en git](https://github.com
 ## Ejemplo de uso
 
 ```bash
-php antonella make:theme <slug> [--activate] [--enable-network] [--theme_name=<title>] [--author=<full-name>] [--author_uri=<uri>] [--sassify] [--woocommerce] [--force]
+php antonella make:theme <slug> [--activate|-a] [--enable-network|-n] [--theme_name=<title>] [--author=<full-name>] [--author_uri=<uri>] [--sassify] [--woocommerce] [--force]
 ```
 
 Este comando no es más que un wrapper de `wp scaffold <comand>`, eres libre de usar uno u otro.
 
-Nota. Si optas por esta segunda manera asegurate de pasar el argumento --path=wp-test para indicar donde se encuentra la instalación 
-de wordpress
+Nota. No olvides pasar el argumento --path=wp-test para indicar donde se encuentra la instalación de tu WP
 
 ```bash
-php wp-cli.phar scaffold _s sample --theme_name=\"Sample Theme\" --path=wp-test --force` 
+php wp-cli.phar scaffold _s sample-theme --theme_name="Sample Theme" --path=wp-test` 
 ```
 
 ## Opciones
@@ -26,6 +25,8 @@ php wp-cli.phar scaffold _s sample --theme_name=\"Sample Theme\" --path=wp-test 
 	El slug para el nuevo tema, y usado para prefijar funciones ( para evitar conflictos ) y como clave del textdomain (traducciones).
 [--activate] 
 	Activar el tema recién descargado.
+[--enable-network]	
+	Habilita el tema recién descargado para toda la red
 [--theme_name=<title>]
 	Establece el Nombre del Theme dentro del style.css
 [--author=<full-name>]
@@ -36,14 +37,14 @@ php wp-cli.phar scaffold _s sample --theme_name=\"Sample Theme\" --path=wp-test 
 	Incluye los style como sass
 [--woocommerce]
 	Si queremos que nuestro theme sea compatible con woocommerce
-[--force]
-	Sobreescribe los ficheros existentes. En éste caso no es necesario ya que está aplicado por default.
+[--debug]
+	Muestra el comando a ser ejecutado sin ejecutarse
 ```
 
-### Ejemplo
+### Ejemplos
 
 ```bash
-php antonella make:theme sample-theme --theme_name=\"Sample Theme\" --author=\"Carlos Herrera\" 
+php antonella make:theme sample-theme --theme_name="Sample Theme" --author="Carlos Herrera" 
 ```
 
 Genera el theme de nombre "Sample Theme" y author "Carlos Herrera"
@@ -75,5 +76,79 @@ Normalizing styles have been helped along thanks to the fine work of
 Nicolas Gallagher and Jonathan Neal https://necolas.github.io/normalize.css/
 */
 ```
- 
+
+# Operar con los Themes
+
+Ahora es posible listar y eliminar theme
+
+## Listar themes
+
+```bash
+php antonella theme:list
+```
+
+### Opciones
+
+```bash
+[--filter=key1,value1:key2,value2]
+	Permite filtrar por distintas key,value. --filter=status,inactive:update,none
+	Este comando genera, la siguinete salida. --status=inactive --update=none
+[--field=<field>]
+	Imprime el valor de un solo campo para cada tema
+[--fields=<fields>]
+	Imprime sólo los campos específicos. Ejemplo --fields=name,status,version
+[--format=table|csv|json|count|yaml]
+	Renderiza la salida a uno de los siguientes formatos. Por defecto es table
+```
+
+Muestra todos los themes instalados (activos o no)
+
+### Ejemplos
+
+```bash
+php antonella theme:list --filter=status,inactive:update,none
+php antonella theme:list --filter=status,inactive --field=name
+php antonella theme:list --filter=status,inactive --fields=name,status --format=json
+```
+
+## Eliminar theme
+
+```bash
+php antonella theme:delete <theme>
+```
+
+### Opciones
+
+```bash
+[<theme>[,<theme>]]
+	Uno o más themes para eliminar. Lista de theme separados por coma
+[-all]
+	Si `--all` está presente, se eliminarán todos los temas excepto el tema activo
+	Es excluyente de [<theme>[,<theme>]]
+[--force]
+	Si `--force` está presente, el theme active será también eliminado
+	Es excluyente de [<theme>[,<theme>]]
+	Sólo es válido si está presente la opción --all
+```
+
+### Ejemplos
+
+```bash
+php antonella theme:delete twentytwenty,twentytwentyone
+```
+
+Eliminará los themes, twentytwenty y twentytwentyone
+
+```bash
+php antonella theme:delete --all
+```
+
+Elimina todos los themes excepto el theme activo
+
+```bash
+php antonella theme:delete --all --force
+```
+
+Elimina todos los themes y el theme activo
+
 [Volver al índice](https://github.com/cehojac/antonella-framework-for-wp/tree/2.0/docs/2.0/readme.md)

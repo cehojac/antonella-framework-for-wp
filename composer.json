@@ -58,7 +58,7 @@
     },
     "scripts":{
         "post-create-project-cmd": [
-            "@php antonella setname",
+            "php antonella setname",
 			"php antonella namespace",
             "php -r \"copy('.env-example', '.env');\"",
             "php antonella add blade"

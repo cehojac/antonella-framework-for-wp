@@ -10,6 +10,7 @@ use Symfony\Component\Console\Input\InputOption;
 
 /**
  *	@see https://symfony.com/doc/current/console.html
+ *		 https://developer.wordpress.org/cli/commands/scaffold/_s/
  */
 class MakeThemeCommand extends BaseCommand {
 	
