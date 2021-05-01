@@ -6,7 +6,7 @@ namespace Antonella\CH;
 Plugin Name: Antonella Framework
 Plugin URI:
 Description:Another plugin developed on Antonella Framework for WP
-Version: 1.8
+Version: 2.0
 Author: Carlos Herrera
 Author URI:
 Framework: Antonella Framework for WP
@@ -26,7 +26,6 @@ defined('ABSPATH') or die(__('Lo siento por aqui no puedes pasar :)'));
 *
 * @return null
 */
-define('NELLA_URL', __FILE__);
 
 $loader = require __DIR__.'/vendor/autoload.php';
 $antonella = new Start();

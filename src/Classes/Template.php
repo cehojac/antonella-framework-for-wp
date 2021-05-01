@@ -8,7 +8,7 @@ class Template {
 		
 		$data?extract($data):false;
 		
-		$dir = \plugin_dir_path(NELLA_URL);
+		$dir = \plugin_dir_path(__FILE__);
 
 		ob_start();
 		$view = str_replace('\\', '/', sprintf("%s/resources/templates/%s.php", $dir, $template));

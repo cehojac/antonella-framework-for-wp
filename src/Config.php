@@ -61,10 +61,10 @@ class Config
      *
      * @input array
      *
-     * @example [['example','Antonella\CH\Controllers\ExampleController::example_shortcode']]
+     * @example [['example','Antonella\CH\Shortcodes::example_function']]
      */
 	public $shortcodes = [
-		['example', 'Antonella\CH\Controllers\ExampleController::example_shortcode'],
+		['example', __NAMESPACE__.'\Shortcodes::example_function'],
     ];
     /**
      * add Gutenberg's blocks.
@@ -192,6 +192,26 @@ class Config
      */
     public $post_types = [
         [
+            "singular"      => "viaje",
+            "plural"        => "viajes",
+            "slug"          => "viaje",
+            "position"      => 4,
+            "taxonomy"      => ['aereolinea','aereopuerto'],
+            "image"         => "dashicons-airplane",
+            "gutemberg"     => true
+        ],
+
+        [
+            "singular"      => "coche",
+            "plural"        => "coches",
+            "slug"          => "coche",
+            "position"      => 3,
+            "taxonomy"      => ['rueda','motor'],
+            "image"         => "dashicons-pressthis",
+            "gutemberg"     => true
+        ],
+
+        [
             'singular' => '',
             'plural' => '',
             'slug' => '',
@@ -199,7 +219,7 @@ class Config
             'taxonomy' => [], //['category','category2','category3'],
             'image' => 'antonella-icon.png',
             'gutemberg' => true,
-            //advanced
+            //advanced https://codex.wordpress.org/Function_Reference/register_post_type.
             /*
             'labels'        => [],
             'args'          => [],
@@ -222,7 +242,7 @@ class Config
             'plural' => '',
             'slug' => '',
             'gutemberg' => true,
-            //advanced
+            //advanced https://codex.wordpress.org/Function_Reference/register_taxonomy.
             /*
             "labels"        =>[],
             "args"          =>[],

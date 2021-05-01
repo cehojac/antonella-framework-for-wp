@@ -25,13 +25,12 @@ class Shortcodes
     * @info: https://codex.wordpress.org/Shortcode
     * @return string
     */
-    public function example_function($atts)
+    public static function example_function($atts)
     {
         extract(shortcode_atts([
          'data1' => 1,
              'data2' => 1,
          ], $atts));
-
-        return "<div>$content</div>";
+        return '<img src="'.asset('img/antonella-icon.png').'" alt="Antonella Icon" />';
     }
 }
