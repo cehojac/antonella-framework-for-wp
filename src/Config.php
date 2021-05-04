@@ -192,26 +192,6 @@ class Config
      */
     public $post_types = [
         [
-            "singular"      => "viaje",
-            "plural"        => "viajes",
-            "slug"          => "viaje",
-            "position"      => 4,
-            "taxonomy"      => ['aereolinea','aereopuerto'],
-            "image"         => "dashicons-airplane",
-            "gutemberg"     => true
-        ],
-
-        [
-            "singular"      => "coche",
-            "plural"        => "coches",
-            "slug"          => "coche",
-            "position"      => 3,
-            "taxonomy"      => ['rueda','motor'],
-            "image"         => "dashicons-pressthis",
-            "gutemberg"     => true
-        ],
-
-        [
             'singular' => '',
             'plural' => '',
             'slug' => '',
