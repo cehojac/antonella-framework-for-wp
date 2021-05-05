@@ -45,15 +45,35 @@ class MakeCPT extends BaseCommand {
      *
      * @version 1.0.0
      *
-     * @param array $data el dato que viene desde la consola
+     * @param string $name el nombre del custom post type
      * @param OutputInterface $output
 	 *
      * @return void
      */
-    public function makeCpt($data, $output)
+    public function makeCpt($name, $output)
     {
         
-		if (isset($data) and !empty($data)) {
+		if (isset($name) and !empty($name)) {
+
+            // Si existe no lo añadimos
+            $className = sprintf('\\%1$s\\Config', $this->getNamespace());
+            $config = new $className();
+
+            $cpts = $config->post_types;
+            $find = false;
+            foreach ($cpts as $cpt) {
+                if ( in_array($name, [ $cpt['singular'] ]) || 
+                     in_array(mb_strtolower($name),[ mb_strtolower($cpt['singular']), mb_strtolower($cpt['slug']) ])) {
+                    $find = true;
+                    break;
+                }
+            }
+            
+            if ( $find ) {
+                $output->writeln("<info>Warning !!! The Custom Post Type \"$name\" was already created</info>");
+                die();
+            }
+
             // Abrir el archivo
             $slash = DIRECTORY_SEPARATOR;
             $archivo = $this->getPath('config');
@@ -67,9 +87,9 @@ class MakeCPT extends BaseCommand {
                 if (strpos($contenido[$i], 'public $post_types = [') !== false) {
                     $contenido[$i] = '    public $post_types = [
         [
-            "singular"      => "'.$data.'",
-            "plural"        => "'.$data.'s",
-            "slug"          => "'.$this->slug_title($data).'",
+            "singular"      => "'.$name.'",
+            "plural"        => "'.$name.'s",
+            "slug"          => "'.$this->slug_title($name).'",
             "position"      => 99,
             "taxonomy"      => [],
             "image"         => "antonella-icon.png",
@@ -80,7 +100,7 @@ class MakeCPT extends BaseCommand {
             }
             $contenido = implode("\n", $contenido);
             file_put_contents($archivo, $contenido);
-            $output->writeln("<info>Add new Custom PostType {$data} in src/Config.php file</info>");
+            $output->writeln("<info>Add new Custom PostType {$name} in src/Config.php file</info>");
         } else {
             $output->writeln("<error>The name is required</error>");
         }		

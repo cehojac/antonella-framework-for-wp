@@ -6,12 +6,12 @@ class %CLASSNAME% extends \WP_Widget
     /**
      * Please complete the public variables
     */
-    public $name_widget=''; // <--complete this
+    public $name_widget='%CLASSNAME%'; // <--complete this
 
     public $options=
     [
         'classname'=>'', // <-- complete this
-        'description'=>'' // <-- complete this
+        'description'=>'Add your description here' // <-- complete this
     ];
 
     public $form_values=

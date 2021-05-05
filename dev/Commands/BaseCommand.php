@@ -127,7 +127,8 @@ class BaseCommand extends \Symfony\Component\Console\Command\Command {
         extract($data);
         $markwater = '}/*generatedwithantollenaframework*/';
 
-        $controller = ltrim($class, sprintf('%s\\Controllers\\', $this->getNamespace()));
+        // $controller = ltrim($class, sprintf('%s\\Controllers\\', $this->getNamespace()));
+        $controller = array_reverse(explode('\\', $class))[0];  // extraemos el controller de la variable $class
         $target = $this->getPath('controllers', $controller);
 
         if (file_exists($target)) {
@@ -214,6 +215,44 @@ class BaseCommand extends \Symfony\Component\Console\Command\Command {
      */
 	public function slug_title($title, $char = '-') {
 		return strtolower(trim(preg_replace('/[^A-Za-z0-9-]+/', $char, $title)));
+    }
+
+    /**
+     * Compreuba si key esta en set
+     * @param array $key La key a buscar
+     * @param array $set Conjunto donde buscar
+     */
+    public function __in_array($key, $set) {
+        
+        $exists = false;
+        list($tag, $class, $method) = $key;
+        
+        $key1 = json_encode([$tag, [$class,$method]]);                          // ['tag','Antonella\CH::function']
+        $key2 = json_encode([$tag, sprintf('%1$s::%2$s',$class, $method)]);     // ['tag', ['Antonella\CH','function']]
+        
+        foreach ($set as $value) {
+            $tag = $value[0];
+            list($class, $method) = is_array($value[1]) ? $value[1] : explode('::', $value[1]);  
+
+            $val1 = json_encode([$tag, [$class,$method]]);
+            $val2 = json_encode([$tag, sprintf('%1$s::%2$s',$class, $method)]);
+            
+            if ( (md5($key1) === md5($val1))  || (md5($key2) === md5($val2)) ) {
+                $exists = true;
+                break;
+            }
+
+        }
+
+        return $exists;
+    }
+
+    /**
+     * devuelve una instancia de la clase Config llamada dinámicamente
+     */
+    public function newConfig() {
+        $classConfig = sprintf('%1$s\Config', $this->getNamespace());
+        return new $classConfig();
     }
 
 }

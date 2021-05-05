@@ -23,9 +23,9 @@ class Hooks
     */
     public function registrer()
     {
-        register_activation_hook(NELLA_URL, [__NAMESPACE__.'\Install', 'index']);
-        register_deactivation_hook(NELLA_URL, [__NAMESPACE__.'\Desactivate', 'index']);
-        register_uninstall_hook(NELLA_URL, __NAMESPACE__.'\Unistall::index');
+        register_activation_hook(__FILE__, [__NAMESPACE__.'\Install', 'index']);
+        register_deactivation_hook(__FILE__, [__NAMESPACE__.'\Desactivate', 'index']);
+        register_uninstall_hook(__FILE__, __NAMESPACE__.'\Unistall::index');
     }
 
     /*

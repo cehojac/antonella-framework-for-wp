@@ -1,7 +1,7 @@
 <?php
 
 namespace Dev\Commands;
- 
+
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Input\InputArgument;
@@ -52,6 +52,9 @@ class AddAction extends BaseCommand {
     	public function addAction($data, $output, $option)
     	{
         
+			// cargamos la clase Config dinámicamente
+			$config = $this->newConfig();
+
 			list($tag, $callable, $priority, $args) = array_pad(explode(':', $data), 4, null);
         	$priority = $priority ?? 10; 			// IF IS_NULL asigna le 10
         	$args = $args ?? 1; 					// Si IS_NULL asigna le 1
@@ -71,11 +74,19 @@ class AddAction extends BaseCommand {
 
         	/* Encolamos el metodo al array $actions[] de config.php */
         	if ($option) {
-            		$target = $this->getPath('config');						// src/config.php
+					$target = $this->getPath('config');						// src/config.php
             		$content = explode("\n", file_get_contents($target));
 
             		// $class = ltrim($class, $namespace); 					// removemos el namespace
             		$class = substr( $class, strlen($namespace));
+					
+					//$key = [$tag, [$this->getNamespace().$class,$method]];
+					$key = [$tag, $this->getNamespace().$class, $method];
+					if ( $this->__in_array($key, $config->add_action) ) {
+						$output->writeln("<info>the record was not added, because it already exists in \$add_action[]</info>");
+						die();
+					}
+
 					$this->__search_and_replace($content,
             		[
                 		'public$add_action=[];' => sprintf("\tpublic \$add_action = [\n\t\t['%s', [__NAMESPACE__ . '%s','%s'], %s, %s]\n\t];", $tag, $class, $method, $priority, $args),

@@ -43,8 +43,12 @@ class Config
      *
      * @input array
      *
-     * @example ['body_class','Antonella\CH::function',10,2]
-     * @example ['body_class',['Antonella\CH','function'],10,2]
+     * @example ['body_class','Antonella\CH\Controllers\Controller::function',10,2]
+     * @example ['body_class',['Antonella\CH\Controllers\Controller','function'],10,2]
+     * @example ['body_class',__NAMESPACE__.'\Controllers\Controller::function',10,2]
+     * @example ['body_class',[__NAMESPACE__.'\Controllers\Controller','function'],10,2] *
+     * 
+     * [*] default value
      */
 	public $add_filter = [];
     /**
@@ -52,8 +56,12 @@ class Config
      *
      * @input array
      *
-     * @example ['body_class','Antonella\CH::function',10,2]
-     * @example ['body_class',['Antonella\CH','function'],10,2]
+     * @example ['body_class','Antonella\CH\Controllers\Controller::function',10,2]
+     * @example ['body_class',['Antonella\CH\Controllers\Controller','function'],10,2]
+     * @example ['body_class',__NAMESPACE__.'\Controllers\Controller::function',10,2]
+     * @example ['body_class',__NAMESPACE__.'\Controllers\Controller','function'],10,2] *
+     * 
+     * [*] default value
      */
 	public $add_action = [];
     /**
@@ -61,11 +69,14 @@ class Config
      *
      * @input array
      *
-     * @example [['example','Antonella\CH\Controllers\ExampleController::example_shortcode']]
+     * @example [['example','Antonella\CH\Controllers\ShortcodeController::example_function']] *
+     * @example [['example', __NAMESPACE__ . '\Controllers\ShortController::example_function']]
+     * 
+     * [*] default value 
      */
 	public $shortcodes = [
-		['example', 'Antonella\CH\Controllers\ExampleController::example_shortcode'],
-    ];
+		['example', __NAMESPACE__ . '\Shortcodes::example_function']
+	];
     /**
      * add Gutenberg's blocks.
      */
@@ -91,7 +102,7 @@ class Config
             'style' => '',				// opcional style css for front-end
             'atrtibutes' => [],			// opcional, solo si tu block recibe atributos
             'render_callback' => ''		// opcional Function a renderizar en php, por default
-                                        // __NAMESPACE__ . '\Gutenberg::namespace_block-name_render_callback
+                                        // __NAMESPACE__ . '\Gutenberg::{$block_name}_render_callback
         ]
         */
     ];
@@ -192,6 +203,26 @@ class Config
      */
     public $post_types = [
         [
+            "singular"      => "libro",
+            "plural"        => "libros",
+            "slug"          => "libro",
+            "position"      => 1,
+            "taxonomy"      => ['categoria','year','genero'],
+            "image"         => "dashicons-format-status",
+            "gutemberg"     => true
+        ],
+
+        [
+            "singular"      => "coche",
+            "plural"        => "coches",
+            "slug"          => "coche",
+            "position"      => 2,
+            "taxonomy"      => ['marca','modelo','motor'],
+            "image"         => "dashicons-universal-access-alt",
+            "gutemberg"     => true
+        ],
+
+        [
             'singular' => '',
             'plural' => '',
             'slug' => '',
@@ -199,13 +230,14 @@ class Config
             'taxonomy' => [], //['category','category2','category3'],
             'image' => 'antonella-icon.png',
             'gutemberg' => true,
-            //advanced
+            // advanced https://codex.wordpress.org/Function_Reference/register_post_type.
             /*
             'labels'        => [],
             'args'          => [],
             'rewrite'       => []
             */
-        ],
+        ]
+        
     ];
 
     /**
@@ -222,7 +254,7 @@ class Config
             'plural' => '',
             'slug' => '',
             'gutemberg' => true,
-            //advanced
+            //advanced https://codex.wordpress.org/Function_Reference/register_taxonomy
             /*
             "labels"        =>[],
             "args"          =>[],

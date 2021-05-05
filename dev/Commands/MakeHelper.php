@@ -23,14 +23,14 @@ class MakeHelper extends BaseCommand {
     {
         $this->setDescription('Make a helper file in the folder src/Helpers')
              ->setHelp('Set a name for you helper. For example auxiliarHelper')
-             ->addArgument('nameHelper', InputArgument::REQUIRED, 'Name to helper file');
+             ->addArgument('name', InputArgument::REQUIRED, 'Name to helper file');
        
     }
  
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         
-        $name = rtrim($input->getArgument('nameHelper'), '.php');   // removemos el .php
+        $name = rtrim($input->getArgument('name'), '.php');   // removemos el .php
         $this->makeHelper($name);
 		$output->writeln("<info>======================================================</info>");
 		$output->writeln("<info>The Helper $name.php created into src/Helpers folder</info>");
