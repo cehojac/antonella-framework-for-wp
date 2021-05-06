@@ -89,8 +89,7 @@ class MakeupCommand extends BaseCommand
 		$output->writeln("<comment>Antonella is packing the plugin</comment>");
         		
 		$SO=strtoupper(substr(PHP_OS, 0, 3));
-		
-		if($SO==='WIN') {
+        if($SO==='WIN') {
 			$this->makeup_win();
         }
         else {

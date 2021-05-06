@@ -43,7 +43,7 @@ class SetNameCommand extends BaseCommand {
 				}
 			}
 		}
-
+		
 		$params['username'] = $params['username'] ?: 'Carlos Herrera';
 		$params['email'] = $params['email'] ?: '';
 		

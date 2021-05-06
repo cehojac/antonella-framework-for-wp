@@ -34,8 +34,8 @@ class MakeWidget extends BaseCommand {
     protected function execute(InputInterface $input, OutputInterface $output)
     {
 
-        $name = rtrim($input->getArgument('name'), '.php');     // removemos el .php
-		$option = $input->getOption('enque');
+        $name = $this->prepare( ucfirst($input->getArgument('name')));
+        $option = $input->getOption('enque');
 		$this->makeWidget($name, $output, $option);
 		
 	}
@@ -80,8 +80,8 @@ class MakeWidget extends BaseCommand {
 
             $this->__search_and_replace($content,
             [
-                'public$widgets=[];' => sprintf("\tpublic \$widgets = [ \n\t\t[__NAMESPACE__ . '\Widgets\%s']\n\t];", $data),
-                'public$widgets=[' => sprintf("\tpublic \$widgets = [ \n\t\t[__NAMESPACE__ . '\Widgets\%s']", $data),	// append
+                'public$widgets=[];' => sprintf("\tpublic \$widgets = [ \n\t\t__NAMESPACE__ . '\Widgets\%s'\n\t];", $data),
+                'public$widgets=[' => sprintf("\tpublic \$widgets = [ \n\t\t__NAMESPACE__ . '\Widgets\%s',", $data),	// append
             ]);
 
             $newContent = implode("\n", $content);
@@ -92,4 +92,11 @@ class MakeWidget extends BaseCommand {
 
         $output->writeln("<info>The Widget $data.php created into src/Widgets folder</info>");
 	}
+
+    private function prepare($name) {
+        $name = rtrim($name, '.php');                               // removemos el .php
+        $name = rtrim($name, 'Widget').'Widget';                    // removemos el sufix 'Widget' y lo añadimos
+
+        return $name;
+    }
 }

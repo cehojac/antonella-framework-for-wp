@@ -51,12 +51,15 @@ class MakeShortcode extends BaseCommand {
     protected function makeShortcode($data, $output, $option)
     {
         
+        // cargamos la clase Config dinámicamente
+		$config = $this->newConfig();
 		
 		list($tag, $callable) = explode(':', $data);
         list($controller, $method) = array_pad(explode('@', $callable), 2, 'short_code');
         
         $namespace = $this->getNamespace();
         $class = str_replace('/', '\\', sprintf('%s\Controllers\%s', $namespace, $controller));
+
 
         /* Si no existe el method o el controller lo añade y/o crea */
         if (!method_exists($class, $method)) {
@@ -74,6 +77,14 @@ class MakeShortcode extends BaseCommand {
 
                                                                         // $class = ltrim($class, $namespace); // removemos el namespace
             $class = substr( $class, strlen($namespace));
+            
+            //$key = [$tag, sprintf("%s%s::%s",$this->getNamespace(),$class,$method)];
+            $key = [$tag, $this->getNamespace().$class, $method];
+            if ( $this->__in_array($key, $config->shortcodes) ) {
+                $output->writeln("<info>the record was not added, because it already exists in \$shortcodes[]</info>");
+                die();
+            }
+            
             $this->__search_and_replace($content,
             [
                 'public$shortcodes=[];' => sprintf("\tpublic \$shortcodes = [\n\t\t['%s', __NAMESPACE__ . '%s::%s']\n\t];", $tag, $class, $method),

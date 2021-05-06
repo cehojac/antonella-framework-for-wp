@@ -28,9 +28,10 @@ class Shortcodes
     public static function example_function($atts)
     {
         extract(shortcode_atts([
-         'data1' => 1,
-             'data2' => 1,
-         ], $atts));
-        return '<img src="'.asset('img/antonella-icon.png').'" alt="Antonella Icon" />';
+            'data1' => 1,
+            'data2' => 1,
+        ], $atts));
+
+        return '<img src="'.asset('img/antonella-icon.png').'" alt="Antonella Icon" title="'.$data1.'" />';
     }
 }
