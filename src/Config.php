@@ -203,26 +203,6 @@ class Config
      */
     public $post_types = [
         [
-            "singular"      => "libro",
-            "plural"        => "libros",
-            "slug"          => "libro",
-            "position"      => 1,
-            "taxonomy"      => ['categoria','year','genero'],
-            "image"         => "dashicons-format-status",
-            "gutemberg"     => true
-        ],
-
-        [
-            "singular"      => "coche",
-            "plural"        => "coches",
-            "slug"          => "coche",
-            "position"      => 2,
-            "taxonomy"      => ['marca','modelo','motor'],
-            "image"         => "dashicons-universal-access-alt",
-            "gutemberg"     => true
-        ],
-
-        [
             'singular' => '',
             'plural' => '',
             'slug' => '',
