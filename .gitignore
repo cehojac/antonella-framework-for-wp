@@ -13,3 +13,4 @@ antonella-framework-for-wp.zip
 *.zip
 /cypress/
 cypress.json
+.vscode
