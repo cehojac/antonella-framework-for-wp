@@ -180,6 +180,6 @@ class PostTypes
         $capabilities['delete_terms'] = isset($tx['args']['capabilities']['delete_terms']) ? $tx['args']['capabilities']['delete_terms'] : (isset($tx['capabilities']['delete_terms']) ? $tx['capabilities']['delete_terms'] : 'manage_'.$slug);
         $capabilities['assign_terms'] = isset($tx['args']['capabilities']['assign_terms']) ? $tx['args']['capabilities']['assign_terms'] : (isset($tx['capabilities']['assign_terms']) ? $tx['capabilities']['assign_terms'] : 'edit_'.$slug);
 
-        register_taxonomy($plural, [$post_type], $args);
+        register_taxonomy($slug, [$post_type], $args);
     }
 }
