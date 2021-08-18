@@ -1,5 +1,8 @@
 <?php
-if (!function_exists('asset')) {
+
+namespace  Antonella\CH;
+
+if (!function_exists(__NAMESPACE__.'\asset')) {
     /**
      * Show the assets folder url
      * for call this function globally:
@@ -9,7 +12,7 @@ if (!function_exists('asset')) {
         return plugin_dir_url( dirname(dirname(__FILE__)))."assets/$uri";
     } 
 }
-if (!function_exists('path')) {
+if (!function_exists(__NAMESPACE__.'\path')) {
     /**
      * Show the plugin path
      * for call this function globally:

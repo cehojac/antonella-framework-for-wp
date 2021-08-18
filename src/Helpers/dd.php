@@ -1,6 +1,7 @@
 <?php
+namespace  Antonella\CH;
 
-if (!function_exists('dd')) {
+if (!function_exists(__NAMESPACE__.'\dd')) {
     /**
      * Dump variables and die.
      */
@@ -11,7 +12,7 @@ if (!function_exists('dd')) {
     }
 }
 
-if (!function_exists('d')) {
+if (!function_exists(__NAMESPACE__.'\d')) {
     /**
      * Dump variable.
      */

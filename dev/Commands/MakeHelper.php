@@ -65,6 +65,7 @@ class MakeHelper extends BaseCommand {
         $folder = array_reverse(explode('/', dirname($target)))[0];
         $stub->render([
             '%NAME%' => $data,
+            '%NAMESPACE%' => $this->namespace.'\\Controllers'.($folder == 'src' ? '' : '\\'.str_replace('/', '\\', dirname($name))),
         ]);
     }
     

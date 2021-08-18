@@ -1,5 +1,8 @@
 <?php
-if (!function_exists('%NAME%')) {
+
+namespace %NAMESPACE%;
+
+if (!function_exists(__NAMESPACE__.'\%NAME%')) {
     /**
      * Make your Helper
      * not use exist helpers
