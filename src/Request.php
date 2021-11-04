@@ -44,7 +44,7 @@ class Request
         require_once ABSPATH.'wp-includes/pluggable.php';
         foreach ($datas as $key => $data) {
             if (isset($_REQUEST[$key])) {
-                call_user_func_array($data, $_REQUEST);
+                call_user_func_array($data, [$_REQUEST]);
             } else {
                 continue;
             }
