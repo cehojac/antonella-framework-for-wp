@@ -27,7 +27,7 @@ create a folder for yours antonella framework's projects and execute
 
 ~~`composer create-project --prefer-dist cehojac/antonella-framework-for-wp:dev-master my-awesome-plugin`~~
 
-`git clone --branch 2.0 https://github.com/cehojac/antonella-framework-for-wp my-awesome-plugin`
+`git clone --recursive --branch 2.0 https://github.com/cehojac/antonella-framework-for-wp my-awesome-plugin`
 
 my-awesome-plugin is your project's plugin
 
