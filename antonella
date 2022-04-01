@@ -409,7 +409,7 @@ if (!function_exists('{$data[2]}')) {
         $line = fgets($handle);
         echo $line;
         fclose($handle);
-        if(trim($line) === 'yes' || trim($line ==='y')){
+        if(trim($line) === 'yes' || trim($line) === 'y'){
             echo "\n"; 
             echo("Adding Blade... \n");
             exec('composer require jenssegers/blade');
