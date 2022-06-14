@@ -108,12 +108,6 @@ al method proporcionado.
 
 [See more](https://github.com/cehojac/antonella-framework-for-wp/blob/2.0/docs/2.0/add.md)
 
-`php antonella make:block namespace/your-block [--callable | -c] [--enque | -e]`
-
-Crea un block de gutenberg compatible con js moderno, haciendo uso de @wordpress/script. El argumento optional --callable indica que haremos uso de un block dinamico que será renderizado desde php. Con el argumento --enque tambien optional nos permite encolarlo al array correspondiente dentro del fichero config.php
-
-[See more](https://github.com/cehojac/antonella-framework-for-wp/blob/2.0/docs/2.0/gutenberg.md)
-
 ### Example
 
 `php antonella make:block antonella/prueba --enque`
