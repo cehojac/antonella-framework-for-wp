@@ -108,14 +108,6 @@ al method proporcionado.
 
 [See more](https://github.com/cehojac/antonella-framework-for-wp/blob/2.0/docs/2.0/add.md)
 
-### Example
-
-`php antonella make:block antonella/prueba --enque`
-
-Creará los ficheros index.js, editor.css y style.css dentro de la carpeta prueba en el directorio components, el fichero index.js representará nuestro block, mientras que los otros dos ficheros seran los estilos para el backend(editor) y el frontend.
-
-Para obtener un único fichero con todos los blocks tan solo debemos ejecutar el comando `npm run build` éste creará  en assets/blocks un index.js y en blocks/css sus respectivos ficheros de estilos para el backend (editor.css) y frontend (style.css).
-
 ## Export you zip plugin
 
 `php antonella makeup`
