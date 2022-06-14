@@ -78,35 +78,6 @@ class Config
 		['example', __NAMESPACE__ . '\Shortcodes::example_function']
 	];
     /**
-     * add Gutenberg's blocks.
-     */
-	public $gutenberg_blocks = [ 
-		'antonella/hero' => [],
-        'antonella/dinamico' => [
-            'attributes' => [
-                'posts' => [
-                    'type' => 'array',
-                    'default' => [],
-                ],
-                'count' => [
-                    'type' => 'number',
-                    'default' => 3,
-                ],
-            ],
-            'render_callback' => __NAMESPACE__.'\Gutenberg::antonella_dinamico_render_callback',
-        ],
-        /*
-        'antonella/example' => [		// namespace/block-name
-            'editor_script' => '',		// opcional toma el mismo fichero js para todos los blocks
-            'editor_script' => '',		// opcional style css for backend
-            'style' => '',				// opcional style css for front-end
-            'atrtibutes' => [],			// opcional, solo si tu block recibe atributos
-            'render_callback' => ''		// opcional Function a renderizar en php, por default
-                                        // __NAMESPACE__ . '\Gutenberg::{$block_name}_render_callback
-        ]
-        */
-    ];
-    /**
      * Dashboard.
      *
      * @reference: https://codex.wordpress.org/Function_Reference/wp_add_dashboard_widget

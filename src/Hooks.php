@@ -68,9 +68,6 @@ class Hooks
         \add_action('init', [__NAMESPACE__.'\PostTypes', 'index'], 1);
         //WIDGETS
         \add_action('widgets_init', [__NAMESPACE__.'\Widgets', 'index'], 1);
-        //GUTENBERG'S BLOCKS
-        //\add_action('enqueue_block_editor_assets',array(__NAMESPACE__.'\Gutenberg','blocks'),1,10);
-        \add_action('init', [__NAMESPACE__.'\Gutenberg', 'blocks'], 1, 10);
         // DASHBOARD
         \add_action('wp_dashboard_setup', [__NAMESPACE__.'\Admin\Dashboard', 'index']);
         // add_action( 'admin_enqueue_scripts', array(__NAMESPACE__.'\Admin\Dashboard','scripts') );
