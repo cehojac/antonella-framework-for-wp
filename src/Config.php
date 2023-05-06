@@ -41,7 +41,7 @@ class Config
     * add_filter data functions
     * @input array
     * @example ['body_class','CH::function',10,2]
-    * @example ['body_class',['CH','function'],10,2]
+    * @example ['body_class',[__NAMESPACE__.'\ExampleController,'function'],10,2]
     */
     public $add_filter=[
     ];
@@ -49,18 +49,31 @@ class Config
     * add_action data functions
     * @input array
     * @example ['body_class','CH::function',10,2]
-    * @example ['body_class',['CH','function'],10,2]
+    * @example ['body_class',[__NAMESPACE__.'\ExampleController','function'],10,2]
     */
     public $add_action=[
     ];
     /**
     * add custom shortcodes
     * @input array
-    * @example [['example','CH\ExampleController::example_shortcode']]
+    * @example [['example','__NAMESPACE__.\ExampleController::example_shortcode']]
     */
     public $shortcodes=[
-        ['example','CH\ExampleController::example_shortcode']
+       // ['example',__NAMESPACE__'.\ExampleController::example_shortcode']
     ];
+
+    /**
+     * add APIs Endpoints
+     * @param array
+     * @example [['name','GET',__NAMESPACE__.'\apiController::index']]
+     * @example route: /wp-json/my-plugin-endpoint/v1/name
+     */
+    public $api_endpoint_name= "my-plugin-endpoint";
+    public $api_endpoint_version=1;
+    public $api_endpoints_functions=[
+     //    ['name','GET',__NAMESPACE__.'\ExampleController::example_api']
+    ];
+
     /**
      * add Gutenberg's blocks
      */
@@ -99,7 +112,7 @@ class Config
             "icon"      => "antonella-icon.png",
             "slug"      => "my-custom-page",
         ]
-        
+
             [
                 "path"      => ["page"],
                 "name"      => "My Custom Page",
@@ -202,7 +215,7 @@ class Config
             "rewrite"       =>[],
             "capabilities"  =>[]
             */
-        ] 
+        ]
     ];
     
     /**
@@ -213,5 +226,5 @@ class Config
      * @example public $widget = [__NAMESPACE__.'\YouClassWidget']  //only the class
      */
     public $widgets=[];
-    
+
 }

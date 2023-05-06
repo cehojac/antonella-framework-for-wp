@@ -1,6 +1,6 @@
 {
     "name":"cehojac/antonella-framework-for-wp",
-    "version":"1.7.3",
+    "version":"1.8.0",
     "keywords": ["framework", "wordpress", "plugins"],
     "prefer-stable": true,
     "minimum-stability": "dev",

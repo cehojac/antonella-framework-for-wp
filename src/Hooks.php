@@ -21,9 +21,9 @@ class Hooks
     */
     public function registrer()
     {
-        register_activation_hook( NELLA_URL, array(__NAMESPACE__.'\Install','index'));
-        register_deactivation_hook( NELLA_URL, array(__NAMESPACE__.'\Desactivate','index') );
-        register_uninstall_hook( NELLA_URL, __NAMESPACE__.'\Unistall::index' );
+        register_activation_hook( __FILE__, array(__NAMESPACE__.'\Install','index'));
+        register_deactivation_hook( __FILE__, array(__NAMESPACE__.'\Desactivate','index') );
+        register_uninstall_hook( __FILE__, __NAMESPACE__.'\Unistall::index' );
     }
     /*
     * filter call
@@ -57,6 +57,9 @@ class Hooks
         \add_action( 'admin_init', array(__NAMESPACE__.'\Admin\PageAdmin','index') );
         //INIT SECTION
         \add_action( 'init', array(__NAMESPACE__.'\Init','index'), 0 );
+        //API SECION
+        \add_action('rest_api_init',array(__NAMESPACE__.'\Api','index'),1);
+        
         //REQUEST SECTION ON FRONT
        // \add_action('parse_request', array(__NAMESPACE__.'\Request','index'),1);
         //REQUEST SECTION ON WP-ADMIN (aun por hacer)

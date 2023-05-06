@@ -1,0 +1,37 @@
+version: '3'
+
+services:
+  mysql:
+    image: mariadb
+    restart: always
+    ports:
+      - 8081:3306
+    environment:
+      MYSQL_USER: wordpress
+      MYSQL_ROOT_PASSWORD: wordpress
+      MYSQL_DATABASE: wordpress
+      MYSQL_PASSWORD: wordpress
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    ports:
+      - 80:80
+    environment:
+      MYSQL_USERNAME: 'user'
+      MYSQL_ROOT_PASSWORD: 'password'
+
+  wordpress:
+    depends_on:
+      - mysql
+    image: wordpress:php8.0-apache
+    ports:
+      - 8080:80
+    restart: always
+    volumes:
+      - ./:/var/www/html/wp-content/plugins/antonella-framework
+    environment:
+      WORDPRESS_DB_HOST: mysql:3306
+      WORDPRESS_DB_USER: wordpress
+      WORDPRESS_DB_PASSWORD: wordpress
+    links:
+      - mysql
