@@ -4,7 +4,6 @@ namespace CH;
 
 class Config
 {
-   
     /*
     * Plugins option
     * storage in database the option value
@@ -12,30 +11,30 @@ class Config
     * @example ["example_data" => 'foo',]
     * @return void
     */
-    public $plugin_options=[];
+    public $plugin_options = [];
     /**
     * Language Option
     * define a unique word for translate call
     */
-    public $language_name='antonella';
+    public $language_name = 'antonella';
     /**
     * Plugin text prefix
     * define a unique word for this plugin
     */
-    public $plugin_prefix='ch_nella';
+    public $plugin_prefix = 'ch_nella';
     /**
     * POST data process
     * get the post data and execute the function
     * @example ['post_data'=>'CH::function']
     */
-    public $post=[
+    public $post = [
     ];
     /**
     * GET data process
     * get the get data and execute the function
     * @example ['get_data'=>'CH::function']
     */
-    public $get=[
+    public $get = [
     ];
     /**
     * add_filter data functions
@@ -43,7 +42,7 @@ class Config
     * @example ['body_class','CH::function',10,2]
     * @example ['body_class',[__NAMESPACE__.'\ExampleController,'function'],10,2]
     */
-    public $add_filter=[
+    public $add_filter = [
     ];
     /**
     * add_action data functions
@@ -51,14 +50,14 @@ class Config
     * @example ['body_class','CH::function',10,2]
     * @example ['body_class',[__NAMESPACE__.'\ExampleController','function'],10,2]
     */
-    public $add_action=[
+    public $add_action = [
     ];
     /**
     * add custom shortcodes
     * @input array
     * @example [['example','__NAMESPACE__.\ExampleController::example_shortcode']]
     */
-    public $shortcodes=[
+    public $shortcodes = [
        // ['example',__NAMESPACE__'.\ExampleController::example_shortcode']
     ];
 
@@ -68,23 +67,23 @@ class Config
      * @example [['name','GET',__NAMESPACE__.'\apiController::index']]
      * @example route: /wp-json/my-plugin-endpoint/v1/name
      */
-    public $api_endpoint_name= "my-plugin-endpoint";
-    public $api_endpoint_version=1;
-    public $api_endpoints_functions=[
+    public $api_endpoint_name = 'my-plugin-endpoint';
+    public $api_endpoint_version = 1;
+    public $api_endpoints_functions = [
      //    ['name','GET',__NAMESPACE__.'\ExampleController::example_api']
     ];
 
     /**
      * add Gutenberg's blocks
      */
-    public $gutenberg_blocks =[
+    public $gutenberg_blocks = [
     ];
     /**
     * Dashboard
 
     * @reference: https://codex.wordpress.org/Function_Reference/wp_add_dashboard_widget
     */
-    public $dashboard=[
+    public $dashboard = [
         [
         'slug'      => '',
         'name'      => '',
@@ -97,13 +96,13 @@ class Config
     /**
     * Files for use in Dashboard
     */
-    public $files_dashboard=[];
+    public $files_dashboard = [];
 
     /*
     * Plugin menu
     * set your menu option here
     */
-    public $plugin_menu=[
+    public $plugin_menu = [
     /*
         [
             "path"      => ["page"],
@@ -176,15 +175,15 @@ class Config
      * https://codex.wordpress.org/Function_Reference/register_post_type
      */
 
-    public $post_types =[
+    public $post_types = [
         [
-            "singular"      => "",
-            "plural"        => "",
-            "slug"          => "",
-            "position"      => 12,
-            "taxonomy"      => [], //['category','category2','category3'],
-            "image"         => "antonella-icon.png",
-            "gutemberg"     => true,
+            'singular'      => '',
+            'plural'        => '',
+            'slug'          => '',
+            'position'      => 12,
+            'taxonomy'      => [], //['category','category2','category3'],
+            'image'         => 'antonella-icon.png',
+            'gutemberg'     => true,
             //advanced
             /*
             'labels'        => [],
@@ -203,11 +202,11 @@ class Config
      */
     public $taxonomies = [
         [
-            "post_type"     => "",
-            "singular"      => "",
-            "plural"        => "",
-            "slug"          => "",
-            "gutemberg"     => true,
+            'post_type'     => '',
+            'singular'      => '',
+            'plural'        => '',
+            'slug'          => '',
+            'gutemberg'     => true,
             //advanced
             /*
             "labels"        =>[],
@@ -225,6 +224,5 @@ class Config
      * @input array
      * @example public $widget = [__NAMESPACE__.'\YouClassWidget']  //only the class
      */
-    public $widgets=[];
-
+    public $widgets = [];
 }

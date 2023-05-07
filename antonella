@@ -35,12 +35,14 @@ class Antonella
         '.github',
         'wp-test',
         'vendor'.DIRECTORY_SEPARATOR.'vlucas',
+        'vendor'.DIRECTORY_SEPARATOR.'squizlabs',
     ];
     protected $dirs_to_exclude_linux=[
         '.git',
         '.github',
         'wp-test',
         'vendor'.DIRECTORY_SEPARATOR.'vlucas',
+        'vendor'.DIRECTORY_SEPARATOR.'squizlabs',
     ];
     protected $testdir='wp-test';
     protected $understant="Antonella no understand you. please read the manual in https://antonellaframework.com";

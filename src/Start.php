@@ -1,7 +1,9 @@
 <?php
+
 /**
 * No modify this file !!!
 */
+
 namespace CH;
 
 /*

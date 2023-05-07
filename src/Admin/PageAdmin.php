@@ -1,6 +1,7 @@
 <?php
 
 namespace CH\Admin;
+
 use Jenssegers\Blade\Blade;
 
 class PageAdmin extends Admin
@@ -12,7 +13,6 @@ class PageAdmin extends Admin
 
     public static function DashboardExample($post, $callback_args)
     {
-        echo "Hello World, this is my first Dashboard Widget!";
+        echo 'Hello World, this is my first Dashboard Widget!';
     }
-
 }

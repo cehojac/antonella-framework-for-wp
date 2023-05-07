@@ -1,4 +1,5 @@
 <?php
+
 namespace CH;
 
 class Desactivate
@@ -8,6 +9,5 @@ class Desactivate
     */
     public function index()
     {
-
     }
 }
