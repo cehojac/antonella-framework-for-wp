@@ -26,7 +26,9 @@ class Antonella
         'bitbucket-pipelines.yml',
         'wp-cli.phar',
         '.env',
-        '.env-example'
+        '.env-example',
+        '.phpcs.xml',
+        'docker-compose.yaml'
     ];
     protected $dirs_to_exclude_win=[
         '.',
@@ -36,6 +38,12 @@ class Antonella
         'wp-test',
         'vendor'.DIRECTORY_SEPARATOR.'vlucas',
         'vendor'.DIRECTORY_SEPARATOR.'squizlabs',
+        'vendor'.DIRECTORY_SEPARATOR.'phpunit',
+        'vendor'.DIRECTORY_SEPARATOR.'sebastian',
+        'vendor'.DIRECTORY_SEPARATOR.'theseer',
+        'vendor'.DIRECTORY_SEPARATOR.'nikic',
+        'vendor'.DIRECTORY_SEPARATOR.'phar-io',
+        'vendor'.DIRECTORY_SEPARATOR.'myclabs',
     ];
     protected $dirs_to_exclude_linux=[
         '.git',
@@ -43,6 +51,12 @@ class Antonella
         'wp-test',
         'vendor'.DIRECTORY_SEPARATOR.'vlucas',
         'vendor'.DIRECTORY_SEPARATOR.'squizlabs',
+        'vendor'.DIRECTORY_SEPARATOR.'phpunit',
+        'vendor'.DIRECTORY_SEPARATOR.'sebastian',
+        'vendor'.DIRECTORY_SEPARATOR.'theseer',
+        'vendor'.DIRECTORY_SEPARATOR.'nikic',
+        'vendor'.DIRECTORY_SEPARATOR.'phar-io',
+        'vendor'.DIRECTORY_SEPARATOR.'myclabs',
     ];
     protected $testdir='wp-test';
     protected $understant="Antonella no understand you. please read the manual in https://antonellaframework.com";

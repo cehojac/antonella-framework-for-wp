@@ -1,8 +1,23 @@
-version: '3'
+version: '3.1'
 
 services:
+    
+  php:
+    image: php:8.1-fpm
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    restart: unless-stopped
+    environment:
+      PMA_HOST: mysql
+    depends_on:
+      - mysql
+    ports:
+      - "9000:80"
+
   mysql:
-    image: mariadb
+    container_name: mysql
+    image: mysql:5.7
     restart: always
     ports:
       - 8081:3306
@@ -11,27 +26,32 @@ services:
       MYSQL_ROOT_PASSWORD: wordpress
       MYSQL_DATABASE: wordpress
       MYSQL_PASSWORD: wordpress
-
-  phpmyadmin:
-    image: phpmyadmin/phpmyadmin
-    ports:
-      - 80:80
-    environment:
-      MYSQL_USERNAME: 'user'
-      MYSQL_ROOT_PASSWORD: 'password'
+  web:
+    image: php:8
 
   wordpress:
+    hostname: antonella.test
+    container_name: wp-antonella
     depends_on:
       - mysql
-    image: wordpress:php8.0-apache
+      - php
+    image: wordpress
     ports:
       - 8080:80
-    restart: always
+   # restart: always
     volumes:
       - ./:/var/www/html/wp-content/plugins/antonella-framework
     environment:
       WORDPRESS_DB_HOST: mysql:3306
       WORDPRESS_DB_USER: wordpress
       WORDPRESS_DB_PASSWORD: wordpress
-    links:
-      - mysql
+      WORDPRESS_DB_NAME: wordpress
+      WORDPRESS_TABLE_PREFIX: anto_
+      WORDPRESS_CONFIG_EXTRA: |
+         define('DOMAIN_CURRENT_SITE', 'antonella.test');
+         define('WP_DEBUG', true);
+         define('WP_DEBUG_LOG', true);
+         define('WP_DEBUG_DISPLAY', false);
+
+         
+      
