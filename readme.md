@@ -12,11 +12,7 @@ You can read the full documentation in https://antonellaframework.com/documentac
 ## License
  [MIT License](LICENSE.md)
 
- **RELATIONSHIP WITH WORDPRESS AND GPL**  
-Antonella Framework is licensed under the MIT license. However, any plugin 
-created using Antonella Framework and distributed for use within WordPress 
-**must comply with the [GPL license](https://wordpress.org/about/license/)**, in accordance with WordPress requirements 
-and the philosophy of free software.  
+**Important:** If you create a WordPress plugin using Antonella Framework and distribute it, your plugin **must be [GPL license](https://wordpress.org/about/license/)**, in accordance with WordPress licensing requirements.  
 
 ## Requeriments
 * php (minimun 5.6) 
