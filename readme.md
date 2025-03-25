@@ -11,6 +11,9 @@ Antonella Framework for WordPress
 Framework for develop WordPress plugins based on Model View Controller
 You can read the full documentation in https://antonellaframework.com/documentacion
 
+## License
+ [MIT License](LICENSE.md)
+
 ## Requeriments
 * php (minimun 5.6) 
 * composer
