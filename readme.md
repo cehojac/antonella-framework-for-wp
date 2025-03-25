@@ -1,8 +1,6 @@
 ![Antonella Framework](https://antonellaframework.com/wp-content/uploads/2018/06/anonella-repositorio.png)
 
-[![Total Downloads](https://poser.pugx.org/cehojac/antonella-framework-for-wp/downloads)](https://packagist.org/packages/cehojac/antonella-framework-for-wp)
-[![Latest Unstable Version](https://poser.pugx.org/cehojac/antonella-framework-for-wp/v/unstable)](https://packagist.org/packages/cehojac/antonella-framework-for-wp)
-[![License](https://poser.pugx.org/cehojac/antonella-framework-for-wp/license)](https://packagist.org/packages/cehojac/antonella-framework-for-wp)
+[![Latest Stable Version](http://poser.pugx.org/cehojac/antonella-framework-for-wp/v)](https://packagist.org/packages/cehojac/antonella-framework-for-wp) [![Total Downloads](http://poser.pugx.org/cehojac/antonella-framework-for-wp/downloads)](https://packagist.org/packages/cehojac/antonella-framework-for-wp) [![Latest Unstable Version](http://poser.pugx.org/cehojac/antonella-framework-for-wp/v/unstable)](https://packagist.org/packages/cehojac/antonella-framework-for-wp) [![License](http://poser.pugx.org/cehojac/antonella-framework-for-wp/license)](https://packagist.org/packages/cehojac/antonella-framework-for-wp) [![PHP Version Require](http://poser.pugx.org/cehojac/antonella-framework-for-wp/require/php)](https://packagist.org/packages/cehojac/antonella-framework-for-wp)
 [![Gitter](https://badges.gitter.im/Antonella-Framework/community.svg)](https://gitter.im/Antonella-Framework/community?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
 
 Antonella Framework for WordPress
