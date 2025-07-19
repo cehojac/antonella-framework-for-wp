@@ -11,7 +11,6 @@ class Antonella
         '.travis.yml',
         'composer.json',
         'composer.lock',
-      //  'package.json',
         'package-lock.json',
         'antonella',
         'readme.md',
@@ -46,7 +45,11 @@ class Antonella
         'vendor'.DIRECTORY_SEPARATOR.'phar-io',
         'vendor'.DIRECTORY_SEPARATOR.'myclabs',
         'vendor'.DIRECTORY_SEPARATOR.'test',
-        'docker'
+        'docker',
+        'node_modules',
+        'wordpress',
+        'antonella-docs'
+        
     ];
     protected $dirs_to_exclude_linux=[
         '.git',
@@ -61,7 +64,10 @@ class Antonella
         'vendor'.DIRECTORY_SEPARATOR.'phar-io',
         'vendor'.DIRECTORY_SEPARATOR.'myclabs',
         'vendor'.DIRECTORY_SEPARATOR.'test',
-        'docker'
+        'docker',
+        'node_modules',
+        'wordpress',
+        'antonella-docs'
     ];
     protected $testdir='wp-test';
     protected $understant="Antonella no understand you. please read the manual in https://antonellaframework.com";

@@ -18,6 +18,16 @@ const sidebars: SidebarsConfig = {
     'intro',
     {
       type: 'category',
+      label: 'Configuration',
+      items: [
+        'configuration/config-overview',
+        'configuration/plugin-menu',
+        'configuration/custom-post-types',
+        'configuration/taxonomies',
+      ],
+    },
+    {
+      type: 'category',
       label: 'Antonella Framework Guide',
       items: [
         'tutorial-basics/create-a-document',
