@@ -24,6 +24,8 @@ const sidebars: SidebarsConfig = {
         'configuration/plugin-menu',
         'configuration/custom-post-types',
         'configuration/taxonomies',
+        'configuration/hooks-filters',
+        'configuration/api-endpoints',
       ],
     },
     {
