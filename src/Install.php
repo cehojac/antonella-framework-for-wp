@@ -52,8 +52,8 @@ class Install
         global $wpdb;
         foreach ($options as $sql) {
             if ($wpdb->get_var("SHOW TABLES LIKE '{$sql['table']}'") != $sql['table']) {
-                $query = "CREATE TABLE IF NOT EXISTS {$sql['table']} ( {$sql['query']} ) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;";
-                $wpdb->query($sql['query']);
+                $query = "CREATE TABLE IF NOT EXISTS {$sql['table']} ( {$sql['query']} ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci AUTO_INCREMENT=1 ;";
+                $wpdb->query($query);
             }
         }
     }

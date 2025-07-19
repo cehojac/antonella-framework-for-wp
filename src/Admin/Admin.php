@@ -3,6 +3,7 @@
 namespace CH\Admin;
 
 use CH\Config;
+use CH\Security;
 
 class Admin
 {
@@ -65,6 +66,9 @@ class Admin
 
     public function option_page()
     {
+        // Check user capabilities
+        Security::check_user_capability('manage_options');
+        
         return('Hello World !!');
     }
 }

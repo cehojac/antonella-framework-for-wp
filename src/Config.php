@@ -177,11 +177,11 @@ class Config
 
     public $post_types = [
         [
-            'singular'      => '',
-            'plural'        => '',
-            'slug'          => '',
+            'singular'      => 'Paquete',
+            'plural'        => 'Paquetes',
+            'slug'          => 'packs',
             'position'      => 12,
-            'taxonomy'      => [], //['category','category2','category3'],
+            'taxonomy'      => ['sitios','tamaños','volumen'], //['category','category2','category3'],
             'image'         => 'antonella-icon.png',
             'gutemberg'     => true,
             //advanced
@@ -202,10 +202,10 @@ class Config
      */
     public $taxonomies = [
         [
-            'post_type'     => '',
-            'singular'      => '',
-            'plural'        => '',
-            'slug'          => '',
+            'post_type'     => 'packs',
+            'singular'      => 'pastels',
+            'plural'        => 'pastelesss',
+            'slug'          => 'cakes',
             'gutemberg'     => true,
             //advanced
             /*

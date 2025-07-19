@@ -9,3 +9,5 @@ composer.lock
 wp-test/*
 wp-cli.phar
 antonella-framework-for-wp.zip
+db_data
+wordpress

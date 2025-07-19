@@ -1,6 +1,6 @@
 {
     "name":"cehojac/antonella-framework-for-wp",
-    "version":"1.8.0",
+    "version":"1.9.0",
     "keywords": ["framework", "wordpress", "plugins"],
     "prefer-stable": true,
     "minimum-stability": "dev",
@@ -25,10 +25,15 @@
         }
     ],
     "license": "MIT",
-    "require": {
+    "require":{
+        "php": ">=8.0.0"
     },
     "require-dev":{
-        "vlucas/phpdotenv":"^3.5"
+        "antonella-framework/antonella":">=1.0.0",
+        "vlucas/phpdotenv":"^3.5",
+        "phpunit/phpunit": "^9.5"
+      
+      
     },
     "autoload": {
         "psr-4": {"CH\\": "src/"},
@@ -42,10 +47,16 @@
         }
     },
     "scripts":{
+        "phpcs-check": "phpcs --colors -s",
+        "phpcs-fix": "phpcbf --colors -s",
+        "phpcs-auto-check": "@phpcs-check --standard=.phpcs.xml",
+        "phpcs-auto-fix": "@phpcs-fix --standard=.phpcs.xml",
+        "phpcs-auto-check-summary": "phpcs --report=summary -p",
+        "phpcs-auto-fix-summary": "phpcbf --report=summary -p",
         "post-create-project-cmd": [
             "php antonella namespace",
-            "php -r \"copy('.env-example', '.env');\"",
-            "php antonella add blade"
+            "php antonella updateproject",
+            "php -r \"copy('.env-example', '.env');\""
         ]
     }
 }

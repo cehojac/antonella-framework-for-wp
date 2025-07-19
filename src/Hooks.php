@@ -25,9 +25,10 @@ class Hooks
     */
     public function registrer()
     {
-        register_activation_hook(__FILE__, array(__NAMESPACE__ . '\Install','index'));
-        register_deactivation_hook(__FILE__, array(__NAMESPACE__ . '\Desactivate','index'));
-        register_uninstall_hook(__FILE__, __NAMESPACE__ . '\Unistall::index');
+        $plugin_file = dirname(__DIR__) . '/antonella-framework.php';
+        register_activation_hook($plugin_file, array(__NAMESPACE__ . '\Install','index'));
+        register_deactivation_hook($plugin_file, array(__NAMESPACE__ . '\Desactivate','index'));
+        register_uninstall_hook($plugin_file, __NAMESPACE__ . '\Uninstall::index');
     }
     /*
     * filter call

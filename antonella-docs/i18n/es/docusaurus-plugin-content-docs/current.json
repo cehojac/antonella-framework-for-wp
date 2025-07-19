@@ -1,0 +1,14 @@
+{
+  "version.label": {
+    "message": "Actual",
+    "description": "The label for version current"
+  },
+  "sidebar.tutorialSidebar.category.Antonella Framework Guide": {
+    "message": "Guía de Antonella Framework",
+    "description": "The label for category Antonella Framework Guide in sidebar tutorialSidebar"
+  },
+  "sidebar.tutorialSidebar.category.Tutorial Extras": {
+    "message": "Tutorial Extras",
+    "description": "The label for category Tutorial Extras in sidebar tutorialSidebar"
+  }
+}

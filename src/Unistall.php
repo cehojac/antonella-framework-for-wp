@@ -2,7 +2,7 @@
 
 namespace CH;
 
-class Unistall
+class Uninstall
 {
     public function __construct()
     {
@@ -12,8 +12,8 @@ class Unistall
     {
 
         $config = new Config();
-        $unistall = new Unistall();
-        $unistall->delete_options($config->plugin_options);
+        $uninstall = new Uninstall();
+        $uninstall->delete_options($config->plugin_options);
     }
 
     public function delete_options($options)
