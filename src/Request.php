@@ -1,8 +1,8 @@
 <?php
 
 /**
-* No modify this file !!!
-*/
+ * No modify this file !!!
+ */
 
 namespace CH;
 
@@ -23,7 +23,7 @@ class Request
         $this->process($config->post);
         $this->process($config->get);
     }
-    
+
     /**
      * Verify nonce for security
      * @param $nonce_name string The name of the nonce field
@@ -33,10 +33,10 @@ class Request
     public function verify_nonce($nonce_name, $action)
     {
         if (!isset($_POST[$nonce_name]) || !wp_verify_nonce($_POST[$nonce_name], $action)) {
-            die(__('Security check failed', 'antonella'));
+            die(__('Security check failed', 'antonella-framework'));
         }
     }
-    
+
     /**
      * process function
      * process the request input (POST and GET)

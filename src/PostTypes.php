@@ -46,18 +46,26 @@ class PostTypes
       $taxonomy = $pt['taxonomy'];
   
       // Definición de variables de traducción
-      $name = _x($pt['labels']['name'] ?? $plural, 'Post Type General Name', $translate);
-      $singular_name = _x($pt['labels']['singular_name'] ?? $singular, 'Post Type Singular Name', $translate);
-      $menu_name = __($pt['labels']['menu_name'] ?? $singular, $translate);
-      $all_items = __($pt['labels']['all_items'] ?? $plural, $translate);
-      $view_item = sprintf(esc_html__('See %s', $translate), $singular);
-      $add_new_item = sprintf(esc_html__('Add %s', $translate), $singular);
-      $add_new = sprintf(esc_html__('Add %s', $translate), $singular);
-      $edit_item = sprintf(esc_html__('Edit %s', $translate), $singular);
-      $update_item = sprintf(esc_html__('Update %s', $translate), $singular);
-      $search_items = sprintf(esc_html__('Search %s', $translate), $singular);
-      $not_found = sprintf(esc_html__('%s not found', $translate), $singular);
-      $not_found_in_trash = sprintf(esc_html__('%s not found in trash', $translate), $singular);
+      $name = $pt['labels']['name'] ?? $plural;
+      $singular_name = $pt['labels']['singular_name'] ?? $singular;
+      $menu_name = $pt['labels']['menu_name'] ?? $singular;
+      $all_items = $pt['labels']['all_items'] ?? $plural;
+      // translators: %s is the singular name of the post type
+      $view_item = sprintf(esc_html__('See %s', 'antonella-framework'), $singular);
+      // translators: %s is the singular name of the post type
+      $add_new_item = sprintf(esc_html__('Add %s', 'antonella-framework'), $singular);
+      // translators: %s is the singular name of the post type
+      $add_new = sprintf(esc_html__('Add %s', 'antonella-framework'), $singular);
+      // translators: %s is the singular name of the post type
+      $edit_item = sprintf(esc_html__('Edit %s', 'antonella-framework'), $singular);
+      // translators: %s is the singular name of the post type
+      $update_item = sprintf(esc_html__('Update %s', 'antonella-framework'), $singular);
+      // translators: %s is the singular name of the post type
+      $search_items = sprintf(esc_html__('Search %s', 'antonella-framework'), $singular);
+      // translators: %s is the singular name of the post type
+      $not_found = sprintf(esc_html__('%s not found', 'antonella-framework'), $singular);
+      // translators: %s is the singular name of the post type
+      $not_found_in_trash = sprintf(esc_html__('%s not found in trash', 'antonella-framework'), $singular);
   
       $labels = [
           'name' => $name,
@@ -81,10 +89,11 @@ class PostTypes
           'feeds' => $pt['rewrite']['feeds'] ?? false,
       ];
   
-      $description = sprintf(esc_html__('Info about %s', $translate), $singular);
+      // translators: %s is the singular name of the post type
+      $description = sprintf(esc_html__('Info about %s', 'antonella-framework'), $singular);
   
       $args = [
-          'label' => __($pt['args']['label'] ?? $plural, $translate),
+          'label' => $pt['args']['label'] ?? $plural,
           'labels' => $labels,
           'description' => $description,
           'supports' => $pt['args']['supports'] ?? ['title', 'editor', 'comments', 'thumbnail'],
@@ -117,7 +126,7 @@ class PostTypes
                   $tx,
                   [$slug],
                   [
-                      'label' => __($tx, $translate),
+                      'label' => $tx,
                       'show_in_rest' => true,
                       'show_ui' => true,
                       'show_admin_column' => true,
@@ -151,19 +160,29 @@ class PostTypes
         $translate    = $config->language_name;
 
       // Definición de variables de traducción
-        $name = _x($tx['labels']['name'] ?? $plural, 'Taxonomy general name', $translate);
-        $singular_name = _x($tx['labels']['singular_name'] ?? $singular, 'Taxonomy singular name', $translate);
-        $search_items = sprintf(esc_html__('Search %s', $translate), $singular);
-        $all_items = sprintf(esc_html__('All %s', $translate), $singular);
-        $parent_item = sprintf(esc_html__('Parent %s', $translate), $singular);
-        $parent_item_colon = sprintf(esc_html__('Parent %s:', $translate), $singular);
-        $edit_item = sprintf(esc_html__('Edit %s', $translate), $singular);
-        $view_item = sprintf(esc_html__('View %s', $translate), $singular);
-        $update_item = sprintf(esc_html__('Update %s', $translate), $singular);
-        $add_new_item = sprintf(esc_html__('Add new %s', $translate), $singular);
-        $new_item_name = sprintf(esc_html__('New %s', $translate), $singular);
-        $menu_name = _x($tx['labels']['menu_name'] ?? $plural, 'Taxonomy menu name', $translate);
-        $popular_items = _x('Popular ' . $plural, 'Taxonomy popular items', $translate);
+        $name = $tx['labels']['name'] ?? $plural;
+        $singular_name = $tx['labels']['singular_name'] ?? $singular;
+        // translators: %s is the singular name of the taxonomy
+        $search_items = sprintf(esc_html__('Search %s', 'antonella-framework'), $singular);
+        // translators: %s is the singular name of the taxonomy
+        $all_items = sprintf(esc_html__('All %s', 'antonella-framework'), $singular);
+        // translators: %s is the singular name of the taxonomy
+        $parent_item = sprintf(esc_html__('Parent %s', 'antonella-framework'), $singular);
+        // translators: %s is the singular name of the taxonomy
+        $parent_item_colon = sprintf(esc_html__('Parent %s:', 'antonella-framework'), $singular);
+        // translators: %s is the singular name of the taxonomy
+        $edit_item = sprintf(esc_html__('Edit %s', 'antonella-framework'), $singular);
+        // translators: %s is the singular name of the taxonomy
+        $view_item = sprintf(esc_html__('View %s', 'antonella-framework'), $singular);
+        // translators: %s is the singular name of the taxonomy
+        $update_item = sprintf(esc_html__('Update %s', 'antonella-framework'), $singular);
+        // translators: %s is the singular name of the taxonomy
+        $add_new_item = sprintf(esc_html__('Add new %s', 'antonella-framework'), $singular);
+        // translators: %s is the singular name of the taxonomy
+        $new_item_name = sprintf(esc_html__('New %s', 'antonella-framework'), $singular);
+        $menu_name = $tx['labels']['menu_name'] ?? $plural;
+        // translators: %s is the plural name of the taxonomy
+        $popular_items = sprintf(esc_html__('Popular %s', 'antonella-framework'), $plural);
         $labels = [
             'name' => $name,
              'singular_name' => $singular_name,
