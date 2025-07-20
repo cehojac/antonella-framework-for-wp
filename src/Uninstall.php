@@ -8,7 +8,7 @@ class Uninstall
     {
     }
 
-    public function index()
+    public static function index()
     {
 
         $config = new Config();
