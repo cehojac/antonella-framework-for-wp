@@ -41,7 +41,7 @@ class ExampleController
         // Output the form
         ?>
         <div class="wrap">
-            <h1><?php echo Security::escape_output(__('Example Form', 'antonella')); ?></h1>
+            <h1><?php echo esc_html(__('Example Form', 'antonella')); ?></h1>
             
             <form method="post" action="">
                 <?php 
@@ -52,7 +52,7 @@ class ExampleController
                 <table class="form-table">
                     <tr>
                         <th scope="row">
-                            <label for="name"><?php echo Security::escape_output(__('Name', 'antonella')); ?></label>
+                            <label for="name"><?php echo esc_html(__('Name', 'antonella')); ?></label>
                         </th>
                         <td>
                             <input type="text" id="name" name="name" class="regular-text" />
@@ -60,7 +60,7 @@ class ExampleController
                     </tr>
                     <tr>
                         <th scope="row">
-                            <label for="email"><?php echo Security::escape_output(__('Email', 'antonella')); ?></label>
+                            <label for="email"><?php echo esc_html(__('Email', 'antonella')); ?></label>
                         </th>
                         <td>
                             <input type="email" id="email" name="email" class="regular-text" />
@@ -68,7 +68,7 @@ class ExampleController
                     </tr>
                     <tr>
                         <th scope="row">
-                            <label for="message"><?php echo Security::escape_output(__('Message', 'antonella')); ?></label>
+                            <label for="message"><?php echo esc_html(__('Message', 'antonella')); ?></label>
                         </th>
                         <td>
                             <textarea id="message" name="message" rows="5" cols="50"></textarea>

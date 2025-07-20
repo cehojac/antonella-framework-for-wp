@@ -22,6 +22,16 @@ echo "✅ WordPress está disponible"
 # Verificar si WordPress ya está instalado
 if wp core is-installed --allow-root --path=/var/www/html; then
     echo "✅ WordPress ya está instalado"
+    
+    # Actualizar WordPress a la última versión
+    echo "🔄 Verificando actualizaciones de WordPress..."
+    if wp core check-update --allow-root --path=/var/www/html --format=count; then
+        echo "📥 Actualizando WordPress a la última versión..."
+        wp core update --allow-root --path=/var/www/html
+        echo "✅ WordPress actualizado correctamente"
+    else
+        echo "✅ WordPress ya está en la última versión"
+    fi
 else
     echo "📦 Instalando WordPress..."
     
@@ -36,6 +46,11 @@ else
         --path=/var/www/html
     
     echo "✅ WordPress instalado correctamente"
+    
+    # Actualizar WordPress a la última versión después de la instalación
+    echo "🔄 Actualizando WordPress a la última versión..."
+    wp core update --allow-root --path=/var/www/html
+    echo "✅ WordPress actualizado a la última versión"
 fi
 
 # Activar el framework Antonella
@@ -68,6 +83,16 @@ wp theme activate twentytwentyfour --allow-root --path=/var/www/html
 # Configurar permalinks
 echo "🔗 Configurando permalinks..."
 wp rewrite structure '/%postname%/' --allow-root --path=/var/www/html
+wp rewrite flush --allow-root --path=/var/www/html
+echo "✅ Permalinks configurados"
+
+# Corregir permisos de WordPress para actualizaciones
+echo "🔧 Corrigiendo permisos de WordPress..."
+chown -R www-data:www-data /var/www/html/wp-content/
+chmod -R 755 /var/www/html/wp-content/
+chmod -R 775 /var/www/html/wp-content/uploads/
+chmod -R 775 /var/www/html/wp-content/upgrade/
+echo "✅ Permisos de WordPress corregidos"
 
 # Configurar opciones de desarrollo
 echo "⚙️  Configurando opciones de desarrollo..."
