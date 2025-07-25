@@ -18,8 +18,25 @@ const sidebars: SidebarsConfig = {
     'intro',
     {
       type: 'category',
-      label: 'Configuration',
+      label: '🚀 Getting Started',
       items: [
+        'getting-started/introduction',
+        'getting-started/installation',
+        'getting-started/first-steps',
+      ],
+    },
+    {
+      type: 'category',
+      label: '🏗️ Architecture',
+      items: [
+        'architecture/mvc-pattern',
+      ],
+    },
+    {
+      type: 'category',
+      label: '⚙️ Configuration',
+      items: [
+        'configuration/overview',
         'configuration/config-overview',
         'configuration/plugin-menu',
         'configuration/custom-post-types',
@@ -30,22 +47,37 @@ const sidebars: SidebarsConfig = {
     },
     {
       type: 'category',
-      label: 'Antonella Framework Guide',
+      label: '📖 Guides',
       items: [
-        'tutorial-basics/create-a-document',
-        'tutorial-basics/create-a-blog-post',
-        'tutorial-basics/create-a-page',
-        'tutorial-basics/advanced-features',
+        'guides/creating-controllers',
       ],
     },
     {
       type: 'category',
-      label: 'Tutorial Extras',
+      label: '🔌 Examples',
       items: [
-        'tutorial-extras/manage-docs-versions',
-        'tutorial-extras/translate-your-site',
+        'examples/simple-crud-example',
+        'examples/api-integration-example',
       ],
     },
+    {
+      type: 'category',
+      label: 'Legal',
+      items: [
+        'legal/aviso-legal', 
+        'legal/politica-cookies', 
+        'legal/politica-privacidad',
+      ],
+    },
+    {
+      type: 'category',
+      label: '🚀 Advanced',
+      items: [
+        'advanced/testing',
+        'advanced/deployment',
+      ],
+    },
+    'changelog',
   ],
 };
 

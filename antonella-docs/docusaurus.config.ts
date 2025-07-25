@@ -5,8 +5,8 @@ import type * as Preset from '@docusaurus/preset-classic';
 // This runs in Node.js - Don't use client-side code here (browser APIs, JSX...)
 
 const config: Config = {
-  title: 'Antonella Framework',
-  tagline: 'A powerful WordPress framework for developers',
+  title: 'Antonella Framework v1.9',
+  tagline: 'A powerful WordPress framework for developers - Version 1.9',
   favicon: 'img/favicon.ico',
 
   // Future flags, see https://docusaurus.io/docs/api/docusaurus-config#future
@@ -33,15 +33,8 @@ const config: Config = {
   // may want to replace "en" with "zh-Hans".
   i18n: {
     defaultLocale: 'es',
-    locales: ['en', 'es'],
+    locales: ['es'],
     localeConfigs: {
-      en: {
-        label: 'English',
-        direction: 'ltr',
-        htmlLang: 'en-US',
-        calendar: 'gregory',
-        path: 'en',
-      },
       es: {
         label: 'Español',
         direction: 'ltr',
@@ -88,6 +81,11 @@ const config: Config = {
   themeConfig: {
     // Replace with your project's social card
     image: 'img/docusaurus-social-card.jpg',
+    colorMode: {
+      defaultMode: 'light',
+      disableSwitch: false,
+      respectPrefersColorScheme: false,
+    },
     navbar: {
       title: 'Antonella Framework',
       logo: {
@@ -114,7 +112,7 @@ const config: Config = {
       ],
     },
     footer: {
-      style: 'dark',
+      style: 'light',
       links: [
         {
           title: 'Documentation',
@@ -124,8 +122,12 @@ const config: Config = {
               to: '/docs/intro',
             },
             {
-              label: 'Advanced Features',
-              to: '/docs/tutorial-basics/advanced-features',
+              label: 'Architecture',
+              to: '/docs/architecture/mvc-pattern',
+            },
+            {
+              label: 'Examples',
+              to: '/docs/examples/simple-crud-example',
             },
           ],
         },
@@ -140,10 +142,14 @@ const config: Config = {
               label: 'Support',
               href: 'https://github.com/cehojac/antonella-framework-for-wp/issues',
             },
+            {
+              label: 'Discussions',
+              href: 'https://github.com/cehojac/antonella-framework-for-wp/discussions',
+            },
           ],
         },
         {
-          title: 'More',
+          title: 'Resources',
           items: [
             {
               label: 'Blog',
@@ -153,10 +159,36 @@ const config: Config = {
               label: 'GitHub',
               href: 'https://github.com/cehojac/antonella-framework-for-wp',
             },
+            {
+              label: 'Releases',
+              href: 'https://github.com/cehojac/antonella-framework-for-wp/releases',
+            },
+          ],
+        },
+        {
+          title: 'Legal',
+          items: [
+            {
+              label: 'Aviso Legal',
+              to: '/docs/legal/aviso-legal',
+            },
+            {
+              label: 'Política de Cookies',
+              to: '/docs/legal/politica-cookies',
+            },
+            {
+              label: 'Política de Privacidad',
+              to: '/docs/legal/politica-privacidad',
+            },
           ],
         },
       ],
-      copyright: `Copyright © ${new Date().getFullYear()} Antonella Framework. Built with Docusaurus.`,
+      copyright: `
+        <div>
+          <div>Copyright © ${new Date().getFullYear()} Antonella Framework. Todos los derechos reservados.</div>
+          <div class="footer__creator">Creado por <a href="https://carlos-herrera.com" target="_blank" rel="noopener noreferrer">Carlos Herrera</a></div>
+        </div>
+      `,
     },
     prism: {
       theme: prismThemes.github,

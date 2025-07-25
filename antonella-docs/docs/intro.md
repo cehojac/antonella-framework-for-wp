@@ -4,7 +4,12 @@ sidebar_position: 1
 
 # Antonella Framework
 
-Welcome to **Antonella Framework**! A powerful framework for developing WordPress plugins in a clean and organized way.
+![Version](https://img.shields.io/badge/version-1.9-yellow.svg)
+![PHP](https://img.shields.io/badge/PHP-8.0+-blue.svg)
+![WordPress](https://img.shields.io/badge/WordPress-5.0+-blue.svg)
+![License](https://img.shields.io/badge/license-GPL--2.0-green.svg)
+
+Welcome to **Antonella Framework v1.9**! A powerful framework for developing WordPress plugins in a clean and organized way.
 
 ## What is Antonella Framework?
 
