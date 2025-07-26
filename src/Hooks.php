@@ -80,6 +80,9 @@ class Hooks
         // Core initialization
         \add_action('init', array(__NAMESPACE__ . '\Init','index'), 0);
         
+        // Translations and internationalization
+        \add_action('plugins_loaded', array(__NAMESPACE__ . '\Language','init_translations'), 10);
+        
         // API and REST endpoints
         \add_action('rest_api_init', array(__NAMESPACE__ . '\Api','index'), 1);
         

@@ -12,7 +12,7 @@ Framework for develop WordPress plugins based on Model View Controller
 You can read the full documentation in https://antonellaframework.com/documentacion
 
 ## Requeriments
-* php (minimun 5.6) 
+* php (minimun 8.0) 
 * composer
 * git
 

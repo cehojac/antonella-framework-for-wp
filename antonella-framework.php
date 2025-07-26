@@ -14,7 +14,6 @@ namespace CH;
  * Requires at least: 5.0
  * Tested up to: 6.4
  * Requires PHP: 8.0
- * Network: false
  */
 
 defined('ABSPATH') or die(exit());

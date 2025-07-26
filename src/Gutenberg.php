@@ -24,14 +24,14 @@ class Gutenberg
                 $block,
                 \plugin_dir_url(__DIR__) . 'assets/js/' . $block . '.js',
                 ['wp-blocks', 'wp-i18n', 'wp-element', 'wp-components', 'wp-editor' ],
-                null,
+                '1.0.0',
                 true
             );
             \wp_enqueue_style(
                 $block . '-css',
                 \plugin_dir_url(__DIR__) . 'assets/css/' . $block . '.css',
                 [ 'wp-edit-blocks' ],
-                null,
+                '1.0.0',
                 true
             );
         }

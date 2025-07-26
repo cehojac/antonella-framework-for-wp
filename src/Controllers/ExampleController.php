@@ -46,7 +46,7 @@ class ExampleController
             <form method="post" action="">
                 <?php
                 // Create nonce field
-                echo Security::create_nonce_field('example_action', 'example_nonce');
+                echo wp_kses(Security::create_nonce_field('example_action', 'example_nonce'), array('input' => array('type' => array(), 'name' => array(), 'value' => array(), 'id' => array())));
                 ?>
 
                 <table class="form-table">
@@ -114,7 +114,7 @@ class ExampleController
     {
         // Check nonce
         if (!wp_verify_nonce($_POST['nonce'], 'example_ajax_nonce')) {
-            wp_die(__('Security check failed', 'antonella-framework'));
+            wp_die(esc_html(__('Security check failed', 'antonella-framework')));
         }
 
         // Check capabilities

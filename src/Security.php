@@ -12,7 +12,7 @@ class Security
     public static function check_user_capability($capability)
     {
         if (!current_user_can($capability)) {
-            wp_die(__('You do not have sufficient permissions to access this page.', 'antonella-framework'));
+            wp_die(esc_html(__('You do not have sufficient permissions to access this page.', 'antonella-framework')));
         }
         return true;
     }
@@ -36,8 +36,11 @@ class Security
      */
     public static function verify_nonce($nonce_name, $action)
     {
-        if (!isset($_POST[$nonce_name]) || !wp_verify_nonce($_POST[$nonce_name], $action)) {
-            wp_die(__('Security check failed. Please try again.', 'antonella-framework'));
+        // Sanitize and unslash POST data before verification
+        $nonce_value = isset($_POST[$nonce_name]) ? sanitize_text_field(wp_unslash($_POST[$nonce_name])) : '';
+        
+        if (empty($nonce_value) || !wp_verify_nonce($nonce_value, $action)) {
+            wp_die(esc_html(__('Security check failed. Please try again.', 'antonella-framework')));
         }
         return true;
     }
