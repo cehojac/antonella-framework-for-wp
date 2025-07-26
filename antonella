@@ -13,6 +13,7 @@ class Antonella
         'composer.lock',
         'package-lock.json',
         'antonella',
+        'antonella2',
         'readme.md',
         'bitbucket-pipelines.yml',
         'CHANGELOG.md',
@@ -45,10 +46,12 @@ class Antonella
         'vendor'.DIRECTORY_SEPARATOR.'phar-io',
         'vendor'.DIRECTORY_SEPARATOR.'myclabs',
         'vendor'.DIRECTORY_SEPARATOR.'test',
+        'vendor'.DIRECTORY_SEPARATOR.'antonella-framework',
         'docker',
         'node_modules',
         'wordpress',
-        'antonella-docs'
+        'docs',
+        'test'
         
     ];
     protected $dirs_to_exclude_linux=[
@@ -64,10 +67,12 @@ class Antonella
         'vendor'.DIRECTORY_SEPARATOR.'phar-io',
         'vendor'.DIRECTORY_SEPARATOR.'myclabs',
         'vendor'.DIRECTORY_SEPARATOR.'test',
+        'vendor'.DIRECTORY_SEPARATOR.'antonella-framework',
         'docker',
         'node_modules',
         'wordpress',
-        'antonella-docs'
+        'docs',
+        'test'
     ];
     protected $testdir='wp-test';
     protected $understant="Antonella no understand you. please read the manual in https://antonellaframework.com";
