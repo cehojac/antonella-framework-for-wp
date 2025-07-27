@@ -9,22 +9,21 @@
     "packages-dev": [
         {
             "name": "antonella-framework/antonella",
-            "version": "dev-main",
+            "version": "1.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/antonella-framework/antonella.git",
-                "reference": "7e98d19252fc6a9f031cb253a66ed77667fc9bd4"
+                "reference": "6b1c565194c903d0a60532d0c33c21e9618f1660"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/antonella-framework/antonella/zipball/7e98d19252fc6a9f031cb253a66ed77667fc9bd4",
-                "reference": "7e98d19252fc6a9f031cb253a66ed77667fc9bd4",
+                "url": "https://api.github.com/repos/antonella-framework/antonella/zipball/6b1c565194c903d0a60532d0c33c21e9618f1660",
+                "reference": "6b1c565194c903d0a60532d0c33c21e9618f1660",
                 "shasum": ""
             },
             "require": {
                 "symfony/console": "^4.0"
             },
-            "default-branch": true,
             "type": "module",
             "autoload": {
                 "psr-4": {
@@ -44,9 +43,9 @@
             "description": "Core files for Antonella Framework",
             "support": {
                 "issues": "https://github.com/antonella-framework/antonella/issues",
-                "source": "https://github.com/antonella-framework/antonella/tree/main"
+                "source": "https://github.com/antonella-framework/antonella/tree/1.0.0"
             },
-            "time": "2025-07-19T14:28:50+00:00"
+            "time": "2025-07-27T21:28:13+00:00"
         },
         {
             "name": "psr/container",
