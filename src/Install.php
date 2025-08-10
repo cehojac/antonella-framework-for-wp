@@ -173,12 +173,14 @@ class Install
     private function add_column_if_not_exists($table_name, $column)
     {
         // Check if column already exists
-        $safe_table_name = esc_sql($table_name);
-        $safe_column_name = esc_sql($column['name']);
-        
-        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.PreparedSQL.NotPrepared -- Direct query needed to check column existence, identifiers escaped manually for DDL operation
-        $column_exists = self::$wpdb->get_results(
-            "SHOW COLUMNS FROM `" . $safe_table_name . "` LIKE '" . $safe_column_name . "'"
+        // Use information_schema for better prepared statement compatibility
+        global $wpdb;
+        $column_exists = $wpdb->get_results(
+            $wpdb->prepare(
+                "SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = %s AND COLUMN_NAME = %s",
+                $table_name,
+                $column['name']
+            )
         );
         
         if (!empty($column_exists)) {
@@ -208,11 +210,13 @@ class Install
      */
     private function table_exists($table_name)
     {
-        $safe_table_name = esc_sql($table_name);
-        
-        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.PreparedSQL.NotPrepared -- Direct query needed to check table existence, table name escaped manually
-        $table_exists = self::$wpdb->get_var(
-            "SHOW TABLES LIKE '" . $safe_table_name . "'"
+        // Use information_schema for better prepared statement compatibility
+        global $wpdb;
+        $table_exists = $wpdb->get_var(
+            $wpdb->prepare(
+                "SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = %s",
+                $table_name
+            )
         );
         
         return $table_exists === $table_name;

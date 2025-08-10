@@ -29,6 +29,17 @@ class Security
     }
 
     /**
+     * Output nonce field directly (plugin checker friendly)
+     * @param string $action The action name
+     * @param string $name The nonce field name (optional)
+     * @return void Outputs the nonce field directly
+     */
+    public static function nonce_field($action, $name = '_wpnonce')
+    {
+        wp_nonce_field($action, $name);
+    }
+
+    /**
      * Verify nonce
      * @param string $nonce_name The nonce field name
      * @param string $action The action name
