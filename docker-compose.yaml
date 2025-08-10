@@ -66,8 +66,8 @@ services:
       # Configuración adicional de WordPress
       WORDPRESS_CONFIG_EXTRA: |
         // Configuración del sitio
-        define('WP_HOME', 'http://antonella.test:8080');
-        define('WP_SITEURL', 'http://antonella.test:8080');
+        define('WP_HOME', 'http://localhost:8080');
+        define('WP_SITEURL', 'http://localhost:8080');
         define('DOMAIN_CURRENT_SITE', 'antonella.test');
         
         // Configuración de desarrollo

@@ -43,16 +43,9 @@
         }
     },
     "scripts":{
-        "phpcs-check": "phpcs --colors -s",
-        "phpcs-fix": "phpcbf --colors -s",
-        "phpcs-auto-check": "@phpcs-check --standard=.phpcs.xml",
-        "phpcs-auto-fix": "@phpcs-fix --standard=.phpcs.xml",
-        "phpcs-auto-check-summary": "phpcs --report=summary -p",
-        "phpcs-auto-fix-summary": "phpcbf --report=summary -p",
         "post-create-project-cmd": [
             "php antonella namespace",
-            "php antonella updateproject",
-            "php -r \"copy('.env-example', '.env');\""
+            "php antonella updateproject"
         ]
     }
 }

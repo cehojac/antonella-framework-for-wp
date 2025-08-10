@@ -37,7 +37,7 @@ else
     
     # Instalar WordPress
     wp core install \
-        --url="http://antonella.test:8080" \
+        --url="http://localhost:8080" \
         --title="Antonella Framework Test" \
         --admin_user="test" \
         --admin_password="test" \
@@ -52,6 +52,12 @@ else
     wp core update --allow-root --path=/var/www/html
     echo "✅ WordPress actualizado a la última versión"
 fi
+
+# Desinstalar plugins por defecto de WordPress
+echo "🗑️  Desinstalando plugins por defecto..."
+wp plugin delete hello-dolly --allow-root --path=/var/www/html || echo "⚠️  Hello Dolly ya no está instalado"
+wp plugin delete akismet --allow-root --path=/var/www/html || echo "⚠️  Akismet ya no está instalado"
+echo "✅ Plugins por defecto eliminados"
 
 # Activar el framework Antonella
 echo "🔌 Activando Antonella Framework..."
@@ -106,8 +112,8 @@ wp post create --post_type=page --post_title="Página de Prueba Antonella" --pos
 wp post create --post_title="Post de Prueba Antonella" --post_content="Este es un post de prueba para demostrar las funcionalidades del framework Antonella." --post_status=publish --allow-root --path=/var/www/html
 
 echo "🎉 ¡Configuración completada!"
-echo "📍 Accede a tu sitio en: http://antonella.test:8080"
-echo "🔐 Admin: http://antonella.test:8080/wp-admin"
+echo "📍 Accede a tu sitio en: http://localhost:8080"
+echo "🔐 Admin: http://localhost:8080/wp-admin"
 echo "👤 Usuario: test"
 echo "🔑 Contraseña: test"
 echo "🗄️  phpMyAdmin: http://localhost:9000"
