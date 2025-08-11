@@ -5,6 +5,7 @@
 /node_modules/
 vendor/*
 composer.lock
+package.lock
 .env
 wp-test/*
 wp-cli.phar
@@ -14,3 +15,8 @@ wordpress
 antonella.backup
 test
 antonella2
+.claude
+.vscode
+.idea
+*.log
+*.swp   
