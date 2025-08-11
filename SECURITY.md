@@ -248,15 +248,4 @@ function admin_function() {
 echo '<div>' . Security::escape_output($user_input) . '</div>';
 ```
 
-## Security Checklist
 
-- [ ] User capability checks in place
-- [ ] Nonce verification for forms
-- [ ] Input sanitization
-- [ ] Output escaping
-- [ ] HTTPS in production
-- [ ] Regular security audits
-- [ ] Keep WordPress and plugins updated
-- [ ] Use strong passwords
-- [ ] Limit login attempts
-- [ ] Regular backups
