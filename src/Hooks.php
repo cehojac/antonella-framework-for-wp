@@ -1,8 +1,8 @@
 <?php
 
 /**
-* No modify this file !!!
-*/
+ * No modify this file !!!
+ */
 
 namespace CH;
 
@@ -20,7 +20,7 @@ class Hooks
         $this->filter($config->add_filter);
         $this->action($config->add_action);
     }
-    
+
     /**
      * Register plugin lifecycle hooks (activation, deactivation, uninstall)
      * @see Documentation: docs/configuration/hooks-filters.md for details
@@ -28,8 +28,8 @@ class Hooks
     public function registrer()
     {
         $plugin_file = dirname(__DIR__) . '/antonella-framework.php';
-        register_activation_hook($plugin_file, array(__NAMESPACE__ . '\Install','index'));
-        register_deactivation_hook($plugin_file, array(__NAMESPACE__ . '\Desactivate','index'));
+        register_activation_hook($plugin_file, array(__NAMESPACE__ . '\Install', 'index'));
+        register_deactivation_hook($plugin_file, array(__NAMESPACE__ . '\Desactivate', 'index'));
         register_uninstall_hook($plugin_file, __NAMESPACE__ . '\Uninstall::index');
     }
     /**
@@ -62,39 +62,38 @@ class Hooks
     {
         // Register framework core actions
         $this->register_core_actions();
-        
+
         // Register dynamic actions from configuration
         $this->register_dynamic_actions($action);
     }
-    
+
     /**
      * Register core framework actions
      */
     private function register_core_actions()
     {
         // Admin functionality
-        \add_action('admin_menu', array(__NAMESPACE__ . '\Admin\Admin','menu'));
-        \add_action('admin_init', array(__NAMESPACE__ . '\Admin\PageAdmin','index'));
-        \add_action('wp_dashboard_setup', array(__NAMESPACE__ . '\Admin\Dashboard','index'));
-        
+        \add_action('admin_menu', array(__NAMESPACE__ . '\Admin\Admin', 'menu'));
+        \add_action('wp_dashboard_setup', array(__NAMESPACE__ . '\Admin\Dashboard', 'index'));
+
         // Core initialization
-        \add_action('init', array(__NAMESPACE__ . '\Init','index'), 0);
-        
+        \add_action('init', array(__NAMESPACE__ . '\Init', 'index'), 0);
+
         // Translations and internationalization
-        \add_action('plugins_loaded', array(__NAMESPACE__ . '\Language','init_translations'), 10);
-        
+        \add_action('plugins_loaded', array(__NAMESPACE__ . '\Language', 'init_translations'), 10);
+
         // API and REST endpoints
-        \add_action('rest_api_init', array(__NAMESPACE__ . '\Api','index'), 1);
-        
+        \add_action('rest_api_init', array(__NAMESPACE__ . '\Api', 'index'), 1);
+
         // Content types and features
-        \add_action('init', array(__NAMESPACE__ . '\Shortcodes','index'), 1);
-        \add_action('init', array(__NAMESPACE__ . '\PostTypes','index'), 1);
-        \add_action('widgets_init', array(__NAMESPACE__ . '\Widgets','index'), 1);
-        
+        \add_action('init', array(__NAMESPACE__ . '\Shortcodes', 'index'), 1);
+        \add_action('init', array(__NAMESPACE__ . '\PostTypes', 'index'), 1);
+        \add_action('widgets_init', array(__NAMESPACE__ . '\Widgets', 'index'), 1);
+
         // Gutenberg blocks
-        \add_action('enqueue_block_editor_assets', array(__NAMESPACE__ . '\Gutenberg','blocks'), 1, 10);
+        \add_action('enqueue_block_editor_assets', array(__NAMESPACE__ . '\Gutenberg', 'blocks'), 1, 10);
     }
-    
+
     /**
      * Register dynamic actions from configuration
      * @param array $action Array of action configurations

@@ -5,51 +5,52 @@ namespace CH;
 class Config
 {
     /*
-    * Plugins option
-    * storage in database the option value
-    * Array ('option_name'=>'default value')
-    * @example ["example_data" => 'foo',]
-    * @return void
-    */
+     * Plugins option
+     * storage in database the option value
+     * Array ('option_name'=>'default value')
+     * @example ["example_data" => 'foo',]
+     * @return void
+     */
     public $plugin_options = [];
     /**
-    * Language Option
-    * define a unique word for translate call
-    */
+     * Language Option
+     * define a unique word for translate call
+     */
     public $language_name = 'antonella';
     /**
-    * Plugin text prefix
-    * define a unique word for this plugin
-    */
+     * Plugin text prefix
+     * define a unique word for this plugin
+     */
     public $plugin_prefix = 'ch_nella';
     /**
-    * POST data process
-    * get the post data and execute the function
-    * @example ['post_data'=>'CH::function']
-    */
+     * POST data process
+     * get the post data and execute the function
+     * @example ['post_data'=>'CH::function']
+     */
     public $post = [
+        'submit_antonella_config' => __NAMESPACE__ . '\Controllers\ExampleController::process_form',
     ];
     /**
-    * GET data process
-    * get the get data and execute the function
-    * @example ['get_data'=>'CH::function']
-    */
+     * GET data process
+     * get the get data and execute the function
+     * @example ['get_data'=>'CH::function']
+     */
     public $get = [
     ];
     /**
-    * add_filter data functions
-    * @input array
-    * @example ['body_class','CH::function',10,2]
-    * @example ['body_class',[__NAMESPACE__.'\ExampleController,'function'],10,2]
-    */
+     * add_filter data functions
+     * @input array
+     * @example ['body_class','CH::function',10,2]
+     * @example ['body_class',[__NAMESPACE__.'\ExampleController,'function'],10,2]
+     */
     public $add_filter = [
     ];
     /**
-    * add_action data functions
-    * @input array
-    * @example ['body_class','CH::function',10,2]
-    * @example ['body_class',[__NAMESPACE__.'\ExampleController','function'],10,2]
-    */
+     * add_action data functions
+     * @input array
+     * @example ['body_class','CH::function',10,2]
+     * @example ['body_class',[__NAMESPACE__.'\ExampleController','function'],10,2]
+     */
     public $add_action = [
     ];
     /**
@@ -87,17 +88,17 @@ class Config
     */
     public $dashboard = [
         [
-        'slug'      => '',
-        'name'      => '',
-        'function'  => '', // example: __NAMESPACE__.'\Admin\PageAdmin::DashboardExample',
-        'callback'  => '',
-        'args'      => '',
+            'slug' => '',
+            'name' => '',
+            'function' => '', // example: __NAMESPACE__.'\Admin\PageAdmin::DashboardExample',
+            'callback' => '',
+            'args' => '',
         ]
 
     ];
     /**
-    * Files for use in Dashboard
-    */
+     * Files for use in Dashboard
+     */
     public $files_dashboard = [];
 
     /**
@@ -106,6 +107,14 @@ class Config
      * @see Documentation: docs/configuration/plugin-menu.md for examples
      */
     public $plugin_menu = [
+        [
+            'path' => ['page'],
+            'name' => 'Hello World',
+            'function' => __NAMESPACE__ . "\Controllers\ExampleController::adminPage",
+            'icon' => 'antonella-icon.png',
+            'slug' => 'antonella-example',
+        ]
+
         // Add your custom admin pages here
     ];
 
@@ -117,7 +126,7 @@ class Config
     public $post_types = [
         // Add your custom post types here
     ];
-    
+
     /**
      * Taxonomies
      * For creating custom taxonomies for your post types
@@ -126,7 +135,7 @@ class Config
     public $taxonomies = [
         // Add your custom taxonomies here
     ];
-    
+
     /**
      * Widget
      * For register a Widget please:

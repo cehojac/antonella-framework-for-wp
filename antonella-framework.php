@@ -18,9 +18,14 @@ namespace CH;
 
 defined('ABSPATH') or die(exit());
 
-$loader = require __DIR__ . '/vendor/autoload.php';
-$class = __NAMESPACE__ . '\Start';
-$antonella = new $class;
-$antonella = new Start;
+if (file_exists(__DIR__ . '/vendor/autoload.php')) {
+    $loader = require __DIR__ . '/vendor/autoload.php';
+    $antonella = new Start;
+} else {
+    add_action('admin_notices', function() {
+        echo '<div class="notice notice-error"><p><strong>Antonella Framework:</strong> Dependencies missing. Please run <code>composer install</code> in the plugin directory.</p></div>';
+    });
+    return;
+}
 
 

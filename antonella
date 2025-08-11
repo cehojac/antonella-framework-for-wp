@@ -15,7 +15,9 @@ class Antonella
         'composer.lock',
         'package-lock.json',
         'antonella',
+        'SECURITY.md',
         'antonella2',
+        'antonella.backup',
         'readme.md',
         'README.md',
         'readme.txt',
@@ -35,6 +37,8 @@ class Antonella
     protected $base_dirs_to_exclude = [
         '.git',
         '.github',
+        '.claude',
+        '.vscode',
         'wp-test',
         'docker',
         'node_modules',
@@ -47,11 +51,11 @@ class Antonella
         'vlucas',
         'squizlabs',
         'phpunit',
-        'sebastian',
         'theseer',
         'nikic',
         'phar-io',
         'myclabs',
+        'symfony/console',
         'antonella-framework'
     ];
 
@@ -139,6 +143,8 @@ class Antonella
 
         // Add vendor directories with proper separator
         foreach ($this->vendor_dirs_to_exclude as $vendor) {
+            // Replace forward slashes with OS-specific directory separator
+            $vendor = str_replace('/', DIRECTORY_SEPARATOR, $vendor);
             $excluded[] = 'vendor' . DIRECTORY_SEPARATOR . $vendor;
         }
 
@@ -230,7 +236,7 @@ class Antonella
 
         $dirName = rtrim($dirName, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
         $dirStack = [$dirName];
-        $cutFrom = strlen($this->dir) + 1;
+        $cutFrom = strlen($dirName);
 
         while (!empty($dirStack)) {
             $currentDir = array_pop($dirStack);
@@ -238,14 +244,31 @@ class Antonella
 
             $dir = dir($currentDir);
             while (false !== ($node = $dir->read())) {
-                if (
-                    in_array($node, $this->files_to_exclude) ||
-                    in_array($node, $excludedDirs)
-                ) {
+                if ($node === '.' || $node === '..' || in_array($node, $this->files_to_exclude)) {
                     continue;
                 }
 
                 $fullPath = $currentDir . $node;
+                $relativePath = substr($fullPath, $cutFrom);
+                
+                // Normalize path separators for comparison
+                $relativePath = str_replace(DIRECTORY_SEPARATOR, '/', $relativePath);
+                
+                // Check if this path should be excluded based on relative path
+                $shouldExclude = false;
+                foreach ($excludedDirs as $excludeDir) {
+                    // Normalize exclude dir separators too
+                    $normalizedExcludeDir = str_replace(DIRECTORY_SEPARATOR, '/', $excludeDir);
+                    if (strpos($relativePath, $normalizedExcludeDir) === 0) {
+                        $shouldExclude = true;
+                        break;
+                    }
+                }
+                
+                if ($shouldExclude) {
+                    continue;
+                }
+
                 if (is_dir($fullPath)) {
                     array_push($dirStack, $fullPath . DIRECTORY_SEPARATOR);
                 } elseif (is_file($fullPath)) {
@@ -255,12 +278,18 @@ class Antonella
             $dir->close();
 
             $localDir = substr($currentDir, $cutFrom);
-            if (!empty($localDir)) {
+            // Normalize directory separators for ZIP format (always use forward slashes)
+            $localDir = str_replace(DIRECTORY_SEPARATOR, '/', $localDir);
+
+            if (!empty($localDir) && $localDir !== '/') {
                 $zip->addEmptyDir($localDir);
             }
 
             foreach ($filesToAdd as $file) {
-                $zip->addFile($currentDir . $file, $localDir . $file);
+                $localFile = $localDir . $file;
+                // Ensure consistent path separators in ZIP
+                $localFile = str_replace(DIRECTORY_SEPARATOR, '/', $localFile);
+                $zip->addFile($currentDir . $file, $localFile);
             }
         }
     }

@@ -17,9 +17,9 @@ class Admin
         $this->plugin_menu = $config->plugin_menu;
     }
     /*
-    * Admin Menu Page
-    *
-    */
+     * Admin Menu Page
+     *
+     */
     public static function menu()
     {
         $admin = new Admin();
@@ -27,10 +27,10 @@ class Admin
     }
 
     /**
-    * Backend Menu Generator
-    * @params Config::config_menu
-    * @ver 1.0
-    */
+     * Backend Menu Generator
+     * @param array Config::config_menu
+     * @ver 1.0
+     */
     public function menu_generator($params)
     {
         foreach ($params as $param) {
@@ -68,7 +68,7 @@ class Admin
     {
         // Check user capabilities
         Security::check_user_capability('manage_options');
-        
-        return('Hello World !!');
+
+        return ('Hello World !!');
     }
 }
