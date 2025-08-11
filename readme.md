@@ -42,8 +42,18 @@
 ## 🚀 Quick Installation
 
 ### 1. Create Your Plugin Project
+Via Antonella installer
+
 ```bash
-composer create-project --prefer-dist cehojac/antonella-framework-for-wp:dev-master my-awesome-plugin
+composer global require cehojac/antonella-installer
+antonella new my-awesome-plugin
+cd my-awesome-plugin
+```
+
+or via composer CLI
+
+```bash
+composer create-project --prefer-dist cehojac/antonella-framework-for-wp my-awesome-plugin
 cd my-awesome-plugin
 ```
 
