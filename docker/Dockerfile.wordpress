@@ -1,0 +1,27 @@
+FROM wordpress:latest
+
+# Instalar dependencias necesarias
+RUN apt-get update && apt-get install -y \
+    curl \
+    less \
+    default-mysql-client \
+    && rm -rf /var/lib/apt/lists/*
+
+# Instalar WP-CLI
+RUN curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar \
+    && chmod +x wp-cli.phar \
+    && mv wp-cli.phar /usr/local/bin/wp
+
+# Crear directorio para scripts
+RUN mkdir -p /docker-scripts
+
+# Copiar script de inicialización
+COPY docker/init-wordpress.sh /docker-scripts/
+RUN chmod +x /docker-scripts/init-wordpress.sh
+
+# Configurar entrypoint personalizado
+COPY docker/entrypoint.sh /docker-scripts/
+RUN chmod +x /docker-scripts/entrypoint.sh
+
+ENTRYPOINT ["/docker-scripts/entrypoint.sh"]
+CMD ["apache2-foreground"]

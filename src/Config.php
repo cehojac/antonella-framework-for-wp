@@ -5,78 +5,81 @@ namespace CH;
 class Config
 {
     /*
-    * Plugins option
-    * storage in database the option value
-    * Array ('option_name'=>'default value')
-    * @example ["example_data" => 'foo',]
-    * @return void
-    */
+     * Plugins option
+     * storage in database the option value
+     * Array ('option_name'=>'default value')
+     * @example ["example_data" => 'foo',]
+     * @return void
+     */
     public $plugin_options = [];
     /**
-    * Language Option
-    * define a unique word for translate call
-    */
+     * Language Option
+     * define a unique word for translate call
+     */
     public $language_name = 'antonella';
     /**
-    * Plugin text prefix
-    * define a unique word for this plugin
-    */
+     * Plugin text prefix
+     * define a unique word for this plugin
+     */
     public $plugin_prefix = 'ch_nella';
     /**
-    * POST data process
-    * get the post data and execute the function
-    * @example ['post_data'=>'CH::function']
-    */
+     * POST data process
+     * get the post data and execute the function
+     * @example ['post_data'=>'CH::function']
+     */
     public $post = [
+        'submit_antonella_config' => __NAMESPACE__ . '\Controllers\ExampleController::process_form',
     ];
     /**
-    * GET data process
-    * get the get data and execute the function
-    * @example ['get_data'=>'CH::function']
-    */
+     * GET data process
+     * get the get data and execute the function
+     * @example ['get_data'=>'CH::function']
+     */
     public $get = [
     ];
     /**
-    * add_filter data functions
-    * @input array
-    * @example ['body_class','CH::function',10,2]
-    * @example ['body_class',[__NAMESPACE__.'\ExampleController,'function'],10,2]
-    */
+     * add_filter data functions
+     * @input array
+     * @example ['body_class','CH::function',10,2]
+     * @example ['body_class',[__NAMESPACE__.'\ExampleController,'function'],10,2]
+     */
     public $add_filter = [
     ];
     /**
-    * add_action data functions
-    * @input array
-    * @example ['body_class','CH::function',10,2]
-    * @example ['body_class',[__NAMESPACE__.'\ExampleController','function'],10,2]
-    */
+     * add_action data functions
+     * @input array
+     * @example ['body_class','CH::function',10,2]
+     * @example ['body_class',[__NAMESPACE__.'\ExampleController','function'],10,2]
+     */
     public $add_action = [
     ];
     /**
-    * add custom shortcodes
-    * @input array
-    * @example [['example','__NAMESPACE__.\ExampleController::example_shortcode']]
-    */
+     * Custom shortcodes
+     * Add custom shortcodes for your plugin
+     * @example [['example', __NAMESPACE__.\ExampleController::example_shortcode']]
+     */
     public $shortcodes = [
-       // ['example',__NAMESPACE__'.\ExampleController::example_shortcode']
+        // Add your custom shortcodes here
     ];
 
     /**
-     * add APIs Endpoints
-     * @param array
-     * @example [['name','GET',__NAMESPACE__.'\apiController::index']]
-     * @example route: /wp-json/my-plugin-endpoint/v1/name
+     * REST API Endpoints
+     * Add custom REST API endpoints for your plugin
+     * @example [['name', 'GET', __NAMESPACE__.\ApiController::index']]
+     * @example Route: /wp-json/my-plugin-endpoint/v1/name
      */
     public $api_endpoint_name = 'my-plugin-endpoint';
     public $api_endpoint_version = 1;
     public $api_endpoints_functions = [
-     //    ['name','GET',__NAMESPACE__.'\ExampleController::example_api']
+        // Add your custom API endpoints here
     ];
 
     /**
-     * add Gutenberg's blocks
+     * Gutenberg Blocks
+     * Add custom Gutenberg blocks for your plugin
      */
     public $gutenberg_blocks = [
+        // Add your custom Gutenberg blocks here
     ];
     /**
     * Dashboard
@@ -85,138 +88,54 @@ class Config
     */
     public $dashboard = [
         [
-        'slug'      => '',
-        'name'      => '',
-        'function'  => '', // example: __NAMESPACE__.'\Admin\PageAdmin::DashboardExample',
-        'callback'  => '',
-        'args'      => '',
+            'slug' => '',
+            'name' => '',
+            'function' => '', // example: __NAMESPACE__.'\Admin\PageAdmin::DashboardExample',
+            'callback' => '',
+            'args' => '',
         ]
 
     ];
     /**
-    * Files for use in Dashboard
-    */
+     * Files for use in Dashboard
+     */
     public $files_dashboard = [];
 
-    /*
-    * Plugin menu
-    * set your menu option here
-    */
+    /**
+     * Plugin menu
+     * Set your menu option here
+     * @see Documentation: docs/configuration/plugin-menu.md for examples
+     */
     public $plugin_menu = [
-    /*
         [
-            "path"      => ["page"],
-            "name"      => "My Custom Page",
-            "function"  => __NAMESPACE__."\Admin\PageAdmin::index",
-            "icon"      => "antonella-icon.png",
-            "slug"      => "my-custom-page",
+            'path' => ['page'],
+            'name' => 'Hello World',
+            'function' => __NAMESPACE__ . "\Controllers\ExampleController::adminPage",
+            'icon' => 'antonella-icon.png',
+            'slug' => 'antonella-example',
         ]
 
-            [
-                "path"      => ["page"],
-                "name"      => "My Custom Page",
-                "function"  => __NAMESPACE__."\Admin::option_page",
-               // "icon"      => "antonella-icon.png",
-                "slug"      => "my-custom-page",
-                "subpages"  =>
-                [
-                    [
-                        "name"      => "My Custom sub Page",
-                        "slug"      => "my-top-sub-level-slug",
-                        "function"  => __NAMESPACE__."\Admin::option_page",
-                    ],
-                    [
-                        "name"      => "My  Sencond Custom sub Page",
-                        "slug"      => "my-second-sub-level-slug",
-                        "function"  => __NAMESPACE__."\Admin::option_page",
-                    ],
-                ]
-            ],
-            [
-                "path"      => ["page"],
-                "name"      => "My SECOND Custom Page",
-                "function"  => __NAMESPACE__."\Admin::option_page",
-                "icon"      => "antonella-icon.png",
-                "slug"      => "my-SECOND-custom-page",
-                "subpages"  =>
-                [
-                    [
-                        "name"      => "My Custom sub Page",
-                        "slug"      => "my-top-sub-level-slug-2",
-                        "function"  => __NAMESPACE__."\Admin::option_page",
-                    ],
-                    [
-                        "name"      => "My  Sencond Custom sub Page",
-                        "slug"      => "my-second-sub-level-slug-2",
-                        "function"  => __NAMESPACE__."\Admin::option_page",
-                    ],
-                ]
-            ],
-            [
-                "path"      => ["subpage","tools.php"],
-                "name"      => "sub page in tools",
-                "slug"      => "sub-tools",
-                "function"  => __NAMESPACE__."\Admin::option_page",
-            ],
-            [
-                "path"      => ["option"],
-                "name"      => "sub page in option",
-                "slug"      => "sub-option",
-                "function"  => __NAMESPACE__."\Admin::option_page",
-            ]
-        */
-        ];
+        // Add your custom admin pages here
+    ];
 
     /**
      * Custom Post Type
-     * for make simple Custom PostType
-     * for simple add fill the 7 frist elements
-     * for avanced fill
-     * https://codex.wordpress.org/Function_Reference/register_post_type
+     * For creating custom post types in WordPress
+     * @see Documentation: docs/configuration/custom-post-types.md for examples
      */
-
     public $post_types = [
-        [
-            'singular'      => '',
-            'plural'        => '',
-            'slug'          => '',
-            'position'      => 12,
-            'taxonomy'      => [], //['category','category2','category3'],
-            'image'         => 'antonella-icon.png',
-            'gutemberg'     => true,
-            //advanced
-            /*
-            'labels'        => [],
-            'args'          => [],
-            'rewrite'       => []
-            */
-        ],
+        // Add your custom post types here
     ];
-    
+
     /**
      * Taxonomies
-     * for make taxonomies
-     * for easy add only fill the 5 first elements
-     * for avanced methods
-     * https://codex.wordpress.org/Function_Reference/register_taxonomy
+     * For creating custom taxonomies for your post types
+     * @see Documentation: docs/configuration/taxonomies.md for examples
      */
     public $taxonomies = [
-        [
-            'post_type'     => '',
-            'singular'      => '',
-            'plural'        => '',
-            'slug'          => '',
-            'gutemberg'     => true,
-            //advanced
-            /*
-            "labels"        =>[],
-            "args"          =>[],
-            "rewrite"       =>[],
-            "capabilities"  =>[]
-            */
-        ]
+        // Add your custom taxonomies here
     ];
-    
+
     /**
      * Widget
      * For register a Widget please:

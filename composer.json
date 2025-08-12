@@ -1,6 +1,6 @@
 {
     "name":"cehojac/antonella-framework-for-wp",
-    "version":"1.8.0",
+    "version":"1.9.0",
     "keywords": ["framework", "wordpress", "plugins"],
     "prefer-stable": true,
     "minimum-stability": "dev",
@@ -25,10 +25,10 @@
         }
     ],
     "license": "MIT",
-    "require": {
+    "require":{
+        "php": ">=8.0.0"
     },
     "require-dev":{
-        "vlucas/phpdotenv":"^3.5"
     },
     "autoload": {
         "psr-4": {"CH\\": "src/"},
@@ -44,8 +44,7 @@
     "scripts":{
         "post-create-project-cmd": [
             "php antonella namespace",
-            "php -r \"copy('.env-example', '.env');\"",
-            "php antonella add blade"
+            "php antonella updateproject"
         ]
     }
 }

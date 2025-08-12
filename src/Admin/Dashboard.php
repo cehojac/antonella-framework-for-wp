@@ -36,7 +36,7 @@ class Dashboard
         $datas=$this->files_dashboard;
         foreach($datas as $data)
         {
-             wp_enqueue_style( 'dashboard-widget-styles', plugins_url( '', __FILE__ ) . $data );
+             wp_enqueue_style( 'dashboard-widget-styles', plugins_url( '', __FILE__ ) . $data, array(), '1.0.0' );
         }
 	   
     }

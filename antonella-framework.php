@@ -1,31 +1,31 @@
 <?php
 namespace CH;
-/*
-Plugin Name: Antonella Framework
-Plugin URI:
-Description:Another plugin developed on Antonella Framework for WP
-Version: 1.8
-Author: Carlos Herrera
-Author URI:
-Framework: Antonella Framework for WP
-Framework URI: http://antonellaframework.com
-License: GPL2+
-Text Domain: Carlos Herrera
-Domain Path: /languages
-*/
+/**
+ * Plugin Name: Antonella Framework
+ * Plugin URI: https://antonellaframework.com
+ * Description: Framework for developing WordPress plugins based on Model View Controller.
+ * Version: 1.9.0
+ * Author: Carlos Herrera
+ * Author URI: https://carlos-herrera.com
+ * License: GPL2+
+ * License URI: https://www.gnu.org/licenses/gpl-2.0.html
+ * Text Domain: antonella-framework
+ * Domain Path: /languages
+ * Requires at least: 5.0
+ * Tested up to: 6.4
+ * Requires PHP: 8.0
+ */
 
-defined( 'ABSPATH' ) or die( __('Lo siento por aqui no puedes pasar :)') );
+defined('ABSPATH') or die(exit());
 
-/*
-* Class Caller.
-* cuando una clase es llamada hace un include
-* al archivo con su mismo nombre
-* se respeta mayusculas y minusculas
-*
-* @return null
-*/
-$loader = require __DIR__ . '/vendor/autoload.php';
-$antonella= new Start;
+if (file_exists(__DIR__ . '/vendor/autoload.php')) {
+    $loader = require __DIR__ . '/vendor/autoload.php';
+    $antonella = new Start;
+} else {
+    add_action('admin_notices', function() {
+        echo '<div class="notice notice-error"><p><strong>Antonella Framework:</strong> Dependencies missing. Please run <code>composer install</code> in the plugin directory.</p></div>';
+    });
+    return;
+}
 
 
-?>

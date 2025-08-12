@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<ruleset name="PHP Coding Standards" namespace="Pleets\CS\Standard">
+
+    <file>./src</file>
+    
+    <rule ref="PSR2"/>
+    <rule ref="PSR12"/>
+    <rule ref="PSR1.Methods.CamelCapsMethodName.NotCamelCaps">
+        <exclude-pattern>./src</exclude-pattern>
+    </rule>
+
+    <rule ref="Squiz.Strings.DoubleQuoteUsage.NotRequired" />
+
+    <rule ref="Zend">
+        <exclude name="Zend.NamingConventions.ValidVariableName.PrivateNoUnderscore" />
+        <exclude-pattern>./src</exclude-pattern>
+    </rule>
+
+    <rule ref="Generic.Files.LineLength">
+        <properties>
+            <property name="lineLimit" value="120"/>
+        </properties>
+    </rule>
+
+</ruleset>

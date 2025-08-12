@@ -1,57 +1,128 @@
-version: '3.1'
-
 services:
-    
-  php:
-    image: php:8.1-fpm
+  # Base de datos MySQL
+  mysql:
+    container_name: mysql-antonella
+    image: mysql:8.0
+    restart: unless-stopped
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: wordpress
+      MYSQL_DATABASE: wordpress
+      MYSQL_USER: wordpress
+      MYSQL_PASSWORD: wordpress
+    volumes:
+      - mysql_data:/var/lib/mysql
+    command: --default-authentication-plugin=mysql_native_password
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      timeout: 20s
+      retries: 10
 
+  # phpMyAdmin para gestión de base de datos
   phpmyadmin:
-    image: phpmyadmin/phpmyadmin
+    image: phpmyadmin/phpmyadmin:latest
+    container_name: phpmyadmin-antonella
     restart: unless-stopped
     environment:
       PMA_HOST: mysql
+      PMA_USER: wordpress
+      PMA_PASSWORD: wordpress
+      UPLOAD_LIMIT: 1G
     depends_on:
-      - mysql
+      mysql:
+        condition: service_healthy
     ports:
       - "9000:80"
 
-  mysql:
-    container_name: mysql
-    image: mysql:5.7
-    restart: always
-    ports:
-      - 8081:3306
-    environment:
-      MYSQL_USER: wordpress
-      MYSQL_ROOT_PASSWORD: wordpress
-      MYSQL_DATABASE: wordpress
-      MYSQL_PASSWORD: wordpress
-  web:
-    image: php:8
-
+  # WordPress con configuración automática
   wordpress:
-    hostname: antonella.test
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.wordpress
     container_name: wp-antonella
-    depends_on:
-      - mysql
-      - php
-    image: wordpress
+    hostname: antonella.test
+    restart: unless-stopped
     ports:
-      - 8080:80
-   # restart: always
+      - "8080:80"
+    depends_on:
+      mysql:
+        condition: service_healthy
     volumes:
+      # Montar el framework como plugin
       - ./:/var/www/html/wp-content/plugins/antonella-framework
+      # Persistir uploads y contenido
+      - wordpress_data:/var/www/html
+      # Logs de WordPress
+      - ./storage/logs:/var/www/html/wp-content/debug.log
     environment:
+      # Configuración de base de datos
       WORDPRESS_DB_HOST: mysql:3306
       WORDPRESS_DB_USER: wordpress
       WORDPRESS_DB_PASSWORD: wordpress
       WORDPRESS_DB_NAME: wordpress
       WORDPRESS_TABLE_PREFIX: anto_
-      WORDPRESS_CONFIG_EXTRA: |
-         define('DOMAIN_CURRENT_SITE', 'antonella.test');
-         define('WP_DEBUG', true);
-         define('WP_DEBUG_LOG', true);
-         define('WP_DEBUG_DISPLAY', false);
-
-         
       
+      # Configuración adicional de WordPress
+      WORDPRESS_CONFIG_EXTRA: |
+        // Configuración del sitio
+        define('WP_HOME', 'http://localhost:8080');
+        define('WP_SITEURL', 'http://localhost:8080');
+        define('DOMAIN_CURRENT_SITE', 'antonella.test');
+        
+        // Configuración de desarrollo
+        define('WP_DEBUG', true);
+        define('WP_DEBUG_LOG', true);
+        define('WP_DEBUG_DISPLAY', false);
+        define('SCRIPT_DEBUG', true);
+        define('SAVEQUERIES', true);
+        
+        // Configuración de memoria y tiempo
+        define('WP_MEMORY_LIMIT', '512M');
+        ini_set('max_execution_time', 300);
+        
+        // Configuración de archivos
+        define('AUTOMATIC_UPDATER_DISABLED', true);
+        define('WP_AUTO_UPDATE_CORE', false);
+        define('DISALLOW_FILE_EDIT', false);
+        define('DISALLOW_FILE_MODS', false);
+        
+        // Configuración de cache (deshabilitado en desarrollo)
+        define('WP_CACHE', false);
+        
+        // Configuración de revisiones
+        define('WP_POST_REVISIONS', 5);
+        
+        // Configuración de papelera
+        define('EMPTY_TRASH_DAYS', 7);
+
+  # Servicio para ejecutar WP-CLI commands
+  wpcli:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.wordpress
+    container_name: wpcli-antonella
+    volumes:
+      - ./:/var/www/html/wp-content/plugins/antonella-framework
+      - wordpress_data:/var/www/html
+    depends_on:
+      wordpress:
+        condition: service_started
+    environment:
+      WORDPRESS_DB_HOST: mysql:3306
+      WORDPRESS_DB_USER: wordpress
+      WORDPRESS_DB_PASSWORD: wordpress
+      WORDPRESS_DB_NAME: wordpress
+    command: tail -f /dev/null  # Mantener el contenedor activo
+
+# Volúmenes persistentes
+volumes:
+  mysql_data:
+    driver: local
+  wordpress_data:
+    driver: local
+
+# Red personalizada
+networks:
+  default:
+    name: antonella-network

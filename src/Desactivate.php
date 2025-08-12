@@ -7,7 +7,7 @@ class Desactivate
     /*
     *
     */
-    public function index()
+    public static function index()
     {
     }
 }
