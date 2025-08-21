@@ -2,6 +2,8 @@
 
 ![Antonella Framework](https://antonellaframework.com/wp-content/uploads/2018/06/anonella-repositorio.png)
 
+[![DeepWiki](https://img.shields.io/badge/DeepWiki-Antonella_Framework-blue?logo=wikipedia)](https://deepwiki.com/cehojac/antonella-framework-for-wp)
+
 [![Total Downloads](https://poser.pugx.org/cehojac/antonella-framework-for-wp/downloads)](https://packagist.org/packages/cehojac/antonella-framework-for-wp)
 [![Latest Version](https://poser.pugx.org/cehojac/antonella-framework-for-wp/v/stable)](https://packagist.org/packages/cehojac/antonella-framework-for-wp)
 [![License](https://poser.pugx.org/cehojac/antonella-framework-for-wp/license)](https://packagist.org/packages/cehojac/antonella-framework-for-wp)
