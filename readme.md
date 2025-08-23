@@ -11,7 +11,7 @@
 
 **Framework for developing WordPress plugins based on Model View Controller with enterprise-level security**
 
-📖 **Full Documentation**: [https://antonellaframework.com/documentacion](https://antonellaframework.com/documentacion)  
+📖 **Full Documentation**: [https://antonellaframework.com](https://antonellaframework.com)  
 🎥 **Video Tutorial**: [https://tipeos.com/anto](https://tipeos.com/anto)
 
 ---
