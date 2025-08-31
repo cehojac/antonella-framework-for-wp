@@ -1,6 +1,6 @@
 # 🚀 Antonella Framework for WordPress
 
-![Antonella Framework](https://antonellaframework.com/wp-content/uploads/2018/06/anonella-repositorio.png)
+![Antonella Framework](https://legacy.antonellaframework.com/wp-content/uploads/2018/06/anonella-repositorio.png)
 
 [![DeepWiki](https://img.shields.io/badge/DeepWiki-Antonella_Framework-blue?logo=wikipedia)](https://deepwiki.com/cehojac/antonella-framework-for-wp)
 
