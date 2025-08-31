@@ -12,8 +12,7 @@ class Shortcodes
 
     public static function index()
     {
-        $config = new Config();
-        $filter = $config->shortcodes;
+        $filter = Config::get('shortcodes', []);
         // add_shortcode('example', array('Shortcodes','example_function'));
         if ($filter) {
             foreach ($filter as $data) {

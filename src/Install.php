@@ -56,25 +56,27 @@ class Install
     public static function index()
     {
         try {
-            $config = new Config();
             $install = new Install();
             
             // Log installation start
     
             
             // Create/update database tables
-            if (isset($config->database_tables) && !empty($config->database_tables)) {
-                $install->create_tables($config->database_tables);
+            $database_tables = Config::get('app.database_tables', []);
+            if (!empty($database_tables)) {
+                $install->create_tables($database_tables);
             }
             
             // Add new columns to existing tables
-            if (isset($config->table_updates) && !empty($config->table_updates)) {
-                $install->update_table_columns($config->table_updates);
+            $table_updates = Config::get('app.table_updates', []);
+            if (!empty($table_updates)) {
+                $install->update_table_columns($table_updates);
             }
             
             // Setup plugin options
-            if (isset($config->plugin_options) && !empty($config->plugin_options)) {
-                $install->setup_plugin_options($config->plugin_options);
+            $plugin_options = Config::get('app.plugin_options', []);
+            if (!empty($plugin_options)) {
+                $install->setup_plugin_options($plugin_options);
             }
             
             // Update plugin version
@@ -188,10 +190,11 @@ class Install
         }
         
         // Add the column with manual escaping for identifiers
+        $safe_table_name = esc_sql($table_name);
         $safe_column_name = esc_sql($column['name']);
         $safe_definition = esc_sql($column['definition']);
         
-        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.PreparedSQL.NotPrepared -- Direct query needed for table structure modification, identifiers escaped manually for DDL operation
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery.NoCaching,WordPress.DB.PreparedSQL.NotPrepared -- Direct query needed for table structure modification, identifiers escaped manually for DDL operation
         $result = self::$wpdb->query("ALTER TABLE `" . $safe_table_name . "` ADD COLUMN `" . $safe_column_name . "` " . $safe_definition);
         
         if ($result === false) {

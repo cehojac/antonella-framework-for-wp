@@ -19,9 +19,11 @@ class Request
      */
     public function __construct()
     {
-        $config = new Config();
-        $this->process($config->post);
-        $this->process($config->get);
+        // Load POST/GET mappings from configuration (with legacy fallback)
+        $postMap = Config::get('hooks.post', []);
+        $getMap  = Config::get('hooks.get', []);
+        $this->process($postMap);
+        $this->process($getMap);
     }
 
     /**

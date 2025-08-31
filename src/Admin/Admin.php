@@ -12,9 +12,9 @@ class Admin
 
     public function __construct()
     {
-        $config = new Config();
-        $this->plugin_prefix = $config->plugin_prefix;
-        $this->plugin_menu = $config->plugin_menu;
+        // Load from new config repository (with legacy fallback)
+        $this->plugin_prefix = Config::get('app.plugin_prefix', 'antonella');
+        $this->plugin_menu   = Config::get('admin.menu', []);
     }
     /*
      * Admin Menu Page

@@ -16,11 +16,9 @@ class Api
      */
     public static function index()
     {
-        $config = new Config();
-        $endpoints = $config->api_endpoints_functions;
-        
+        $endpoints = Config::get('api.routes', []);
         if (!empty($endpoints)) {
-            self::register_endpoints($config, $endpoints);
+            self::register_endpoints($endpoints);
         }
     }
     
@@ -29,9 +27,11 @@ class Api
      * @param Config $config Framework configuration
      * @param array $endpoints Array of endpoint configurations
      */
-    private static function register_endpoints($config, $endpoints)
+    private static function register_endpoints($endpoints)
     {
-        $namespace = $config->api_endpoint_name . '/v' . $config->api_endpoint_version;
+        $endpoint_name = Config::get('api.endpoint_name', 'my-plugin-endpoint');
+        $version = Config::get('api.version', 1);
+        $namespace = $endpoint_name . '/v' . $version;
         
         foreach ($endpoints as $endpoint) {
             if (self::is_valid_endpoint($endpoint)) {

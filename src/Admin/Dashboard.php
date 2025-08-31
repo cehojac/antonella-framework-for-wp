@@ -9,9 +9,8 @@ class Dashboard
     var $files_dashboard;
     public function __construct()
     {
-        $config= new Config();
-        $this->array_dashboard= $config->dashboard;
-        $this->files_dashboard= $config->files_dashboard;
+        $this->array_dashboard = Config::get('admin.dashboard', []);
+        $this->files_dashboard = Config::get('admin.files_dashboard', []);
     }
 
     public static function index()

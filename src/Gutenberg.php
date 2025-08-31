@@ -16,8 +16,8 @@ class Gutenberg
 
     public static function blocks()
     {
-        $config = new Config();
-        $blocks = $config->gutenberg_blocks;
+        // Load Gutenberg blocks from configuration (with legacy fallback)
+        $blocks = Config::get('gutenberg.blocks', []);
         
         foreach ($blocks as $block) {
             \wp_register_script(
@@ -34,7 +34,8 @@ class Gutenberg
                 '1.0.0',
                 true
             );
+            // Enqueue the block script after registering
+            \wp_enqueue_script($block);
         }
-        \wp_enqueue_script($blocks);
     }
 }

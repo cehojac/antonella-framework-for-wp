@@ -4,7 +4,7 @@ namespace CH;
  * Plugin Name: Antonella Framework
  * Plugin URI: https://antonellaframework.com
  * Description: Framework for developing WordPress plugins based on Model View Controller.
- * Version: 1.9.0
+ * Version: 2.0.0
  * Author: Carlos Herrera
  * Author URI: https://carlos-herrera.com
  * License: GPL2+

@@ -15,10 +15,12 @@ class Hooks
      */
     public function __construct()
     {
-        $config = new Config();
         $this->registrer();
-        $this->filter($config->add_filter);
-        $this->action($config->add_action);
+        // Load filters and actions from new config repository (with legacy fallback)
+        $filters = Config::get('hooks.add_filter', []);
+        $actions = Config::get('hooks.add_action', []);
+        $this->filter($filters);
+        $this->action($actions);
     }
 
     /**

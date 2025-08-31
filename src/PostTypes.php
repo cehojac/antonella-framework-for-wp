@@ -8,10 +8,10 @@ class PostTypes
 {
     public static function index()
     {
-        $config           = new Config();
         $post_type        = new PostTypes();
-        $post_type_array  = $config->post_types;
-        $taxonomy_array   = $config->taxonomies;
+        $post_type_array  = Config::get('post_types', []);
+        $taxonomy_array   = Config::get('taxonomies', []);
+
         if (is_array($post_type_array)) {
             foreach ($post_type_array as $pt) {
                 if ($pt['singular']) {
@@ -27,6 +27,7 @@ class PostTypes
             }
         }
     }
+
   /**
   * Easy add new post_type and taxonomies
   * Add variables for create a new Post-Type
@@ -36,15 +37,15 @@ class PostTypes
   */
     public function register_post_type($pt)
     {
-      $config = new Config();
       $img = explode('.', $pt['image']);
       $image = (isset($img[1]) && strlen($img[1]) <= 4) ? plugins_url('assets/img/' . $pt['image'], dirname(__FILE__)) : $pt['image'];
-      $translate = $config->language_name;
+      $translate = Config::get('app.language_name', 'antonella');
+
       $singular = $pt['singular'];
       $plural = $pt['plural'];
       $slug = $pt['slug'];
       $taxonomy = $pt['taxonomy'];
-  
+
       // Definición de variables de traducción
       $name = $pt['labels']['name'] ?? $plural;
       $singular_name = $pt['labels']['singular_name'] ?? $singular;
@@ -66,7 +67,7 @@ class PostTypes
       $not_found = sprintf(esc_html__('%s not found', 'antonella-framework'), $singular);
       // translators: %s is the singular name of the post type
       $not_found_in_trash = sprintf(esc_html__('%s not found in trash', 'antonella-framework'), $singular);
-  
+
       $labels = [
           'name' => $name,
           'singular_name' => $singular_name,
@@ -81,17 +82,17 @@ class PostTypes
           'not_found' => $not_found,
           'not_found_in_trash' => $not_found_in_trash,
       ];
-  
+
       $rewrite = [
           'slug' => $slug,
           'with_front' => $pt['rewrite']['with_front'] ?? true,
           'pages' => $pt['rewrite']['pages'] ?? true,
           'feeds' => $pt['rewrite']['feeds'] ?? false,
       ];
-  
+
       // translators: %s is the singular name of the post type
       $description = sprintf(esc_html__('Info about %s', 'antonella-framework'), $singular);
-  
+
       $args = [
           'label' => $pt['args']['label'] ?? $plural,
           'labels' => $labels,
@@ -116,9 +117,9 @@ class PostTypes
           'menu_position' => $pt['args']['position'] ?? ($pt['position'] ?? 4),
           'menu_icon' => $image,
       ];
-  
+
       register_post_type($slug, $args);
-  
+
       // Registrar taxonomías
       if (is_array($taxonomy) && count($taxonomy) > 0) {
           foreach ($taxonomy as $tx) {
@@ -136,7 +137,6 @@ class PostTypes
           }
       }
   }
-  
 
     /**
     * Add taxonomies
@@ -148,7 +148,6 @@ class PostTypes
     
     public function add_taxonomy($tx)
     {
-        $config       = new Config();
         $labels       = [];
         $args         = [];
         $capabilities = [];
@@ -157,7 +156,7 @@ class PostTypes
         $singular     = $tx['singular'];
         $plural       = $tx['plural'];
         $slug         = $tx['slug'];
-        $translate    = $config->language_name;
+        $translate    = Config::get('app.language_name', 'antonella');
 
       // Definición de variables de traducción
         $name = $tx['labels']['name'] ?? $plural;
