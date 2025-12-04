@@ -835,10 +835,21 @@ class $className extends \\WP_Widget
         
         $this->showInfo("Starting development environment...");
 
-        $envVars = "WORDPRESS_PORT=$wpPort MYSQL_PORT=$mysqlPort PHPMYADMIN_PORT=$pmaPort";
+        // Cross-platform environment variable handling
+        $isWindows = PHP_OS_FAMILY === 'Windows';
         $dockerCommand = 'docker-compose up' . (isset($data[2]) && $data[2] === '-d' ? ' -d' : '');
         
-        $command = "$envVars $dockerCommand";
+        if ($isWindows) {
+            // Windows: Set environment variables before running command
+            putenv("WORDPRESS_PORT=$wpPort");
+            putenv("MYSQL_PORT=$mysqlPort");
+            putenv("PHPMYADMIN_PORT=$pmaPort");
+            $command = $dockerCommand;
+        } else {
+            // Unix/Linux: Use inline environment variables
+            $envVars = "WORDPRESS_PORT=$wpPort MYSQL_PORT=$mysqlPort PHPMYADMIN_PORT=$pmaPort";
+            $command = "$envVars $dockerCommand";
+        }
         
         system($command);
 
