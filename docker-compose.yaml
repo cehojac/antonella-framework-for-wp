@@ -1,5 +1,24 @@
+# =============================================================================
+# Antonella Framework for WordPress - Docker Compose Configuration
+# 
+# Entorno de desarrollo completo con:
+# - MySQL 8.0 con healthchecks
+# - WordPress con framework preconfigurado
+# - phpMyAdmin para gestión de BD
+# - WP-CLI para automatización
+#
+# Requisitos:
+# - Docker Desktop 4.53.0+ (compatibilidad ARM64/Windows)
+# - Docker Compose v2+
+#
+# Uso: docker compose up -d
+# =============================================================================
+
 services:
-  # Base de datos MySQL
+  # =============================================================================
+  # Base de datos MySQL 8.0
+  # Configurada con healthchecks para dependencias seguras
+  # =============================================================================
   mysql:
     container_name: mysql-antonella
     image: mysql:8.0
@@ -21,7 +40,10 @@ services:
       retries: 20
       start_period: 30s
 
-  # phpMyAdmin para gestión de base de datos
+  # =============================================================================
+  # phpMyAdmin - Gestión visual de base de datos
+  # Acceso: http://localhost:9000 (cambiar puerto si está ocupado)
+  # =============================================================================
   phpmyadmin:
     image: phpmyadmin/phpmyadmin:latest
     container_name: phpmyadmin-antonella
@@ -37,7 +59,12 @@ services:
     ports:
       - "9000:80"
 
-  # WordPress con configuración automática
+  # =============================================================================
+  # WordPress con Antonella Framework
+  # Configuración automática de desarrollo con inicialización completa
+  # Acceso: http://localhost:8080
+  # Admin: http://localhost:8080/wp-admin (test/test)
+  # =============================================================================
   wordpress:
     build:
       context: .
@@ -98,7 +125,10 @@ services:
         // Configuración de papelera
         define('EMPTY_TRASH_DAYS', 7);
 
-  # Servicio para ejecutar WP-CLI commands
+  # =============================================================================
+  # WP-CLI Container - Automatización y comandos WordPress
+  # Uso: docker compose exec wpcli wp <comando>
+  # =============================================================================
   wpcli:
     build:
       context: .
@@ -117,14 +147,22 @@ services:
       WORDPRESS_DB_NAME: wordpress
     command: tail -f /dev/null  # Mantener el contenedor activo
 
+# =============================================================================
 # Volúmenes persistentes
+# Mantienen datos entre reinicios de contenedores
+# =============================================================================
 volumes:
   mysql_data:
     driver: local
+    # Datos de MySQL (base de datos, configuraciones)
   wordpress_data:
     driver: local
+    # Instalación completa de WordPress (core, themes, uploads)
 
+# =============================================================================
 # Red personalizada
+# Permite comunicación entre servicios con nombres de host
+# =============================================================================
 networks:
   default:
     name: antonella-network
