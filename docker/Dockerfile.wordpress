@@ -6,7 +6,7 @@
 # - Custom initialization scripts
 # - Development tools and dependencies
 #
-# Compatible with: linux/amd64, linux/arm64
+# Compatible with: linux/amd64, linux/arm64, windows
 # =============================================================================
 
 FROM wordpress:latest
