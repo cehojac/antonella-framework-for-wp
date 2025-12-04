@@ -37,7 +37,7 @@ else
     
     # Instalar WordPress
     wp core install \
-        --url="http://localhost:8080" \
+        --url="http://localhost:${WORDPRESS_PORT:-8080}" \
         --title="Antonella Framework Test" \
         --admin_user="test" \
         --admin_password="test" \
@@ -112,8 +112,8 @@ wp post create --post_type=page --post_title="Página de Prueba Antonella" --pos
 wp post create --post_title="Post de Prueba Antonella" --post_content="Este es un post de prueba para demostrar las funcionalidades del framework Antonella." --post_status=publish --allow-root --path=/var/www/html
 
 echo "🎉 ¡Configuración completada!"
-echo "📍 Accede a tu sitio en: http://localhost:8080"
-echo "🔐 Admin: http://localhost:8080/wp-admin"
+echo "📍 Accede a tu sitio en: http://localhost:${WORDPRESS_PORT:-8080}"
+echo "🔐 Admin: http://localhost:${WORDPRESS_PORT:-8080}/wp-admin"
 echo "👤 Usuario: test"
 echo "🔑 Contraseña: test"
-echo "🗄️  phpMyAdmin: http://localhost:9000"
+echo "🗄️  phpMyAdmin: http://localhost:${PHPMYADMIN_PORT:-9000}"
