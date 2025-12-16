@@ -250,10 +250,10 @@ class Antonella
 
                 $fullPath = $currentDir . $node;
                 $relativePath = substr($fullPath, $cutFrom);
-                
+
                 // Normalize path separators for comparison
                 $relativePath = str_replace(DIRECTORY_SEPARATOR, '/', $relativePath);
-                
+
                 // Check if this path should be excluded based on relative path
                 $shouldExclude = false;
                 foreach ($excludedDirs as $excludeDir) {
@@ -264,7 +264,7 @@ class Antonella
                         break;
                     }
                 }
-                
+
                 if ($shouldExclude) {
                     continue;
                 }
@@ -636,6 +636,20 @@ class $className extends \\WP_Widget
         $this->showSuccess("Blade removed successfully!");
     }
 
+    private function removeDD()
+    {
+        $this->showInfo("Removing Symfony Var-Dumper...");
+        exec('composer remove symfony/var-dumper --dev');
+        $this->showSuccess("Symfony Var-Dumper removed successfully!");
+    }
+
+    private function removeModel()
+    {
+        $this->showInfo("Removing WordPress Eloquent Models...");
+        exec('composer remove antonella-framework/wordpress-eloquent-models');
+        $this->showSuccess("WordPress Eloquent Models removed successfully!");
+    }
+
     private function addBlade()
     {
         echo "Add Blade template engine? Type 'yes' or 'y' to continue: ";
@@ -816,9 +830,12 @@ class $className extends \\WP_Widget
                 break;
             }
 
-            if ($wpBusy) $this->showInfo("  -> Port $wpPort (WordPress) is in use.");
-            if ($mysqlBusy) $this->showInfo("  -> Port $mysqlPort (MySQL) is in use.");
-            if ($pmaBusy) $this->showInfo("  -> Port $pmaPort (phpMyAdmin) is in use.");
+            if ($wpBusy)
+                $this->showInfo("  -> Port $wpPort (WordPress) is in use.");
+            if ($mysqlBusy)
+                $this->showInfo("  -> Port $mysqlPort (MySQL) is in use.");
+            if ($pmaBusy)
+                $this->showInfo("  -> Port $pmaPort (phpMyAdmin) is in use.");
         }
 
         if (!$foundFreePortSet) {
@@ -832,13 +849,13 @@ class $className extends \\WP_Widget
         $this->showInfo("  - WordPress: http://localhost:$wpPort");
         $this->showInfo("  - MySQL (Host): $mysqlPort");
         $this->showInfo("  - phpMyAdmin: http://localhost:$pmaPort");
-        
+
         $this->showInfo("Starting development environment...");
 
         // Cross-platform environment variable handling
         $isWindows = PHP_OS_FAMILY === 'Windows';
         $dockerCommand = 'docker-compose up' . (isset($data[2]) && $data[2] === '-d' ? ' -d' : '');
-        
+
         if ($isWindows) {
             // Windows: Set environment variables before running command
             putenv("WORDPRESS_PORT=$wpPort");
@@ -850,7 +867,7 @@ class $className extends \\WP_Widget
             $envVars = "WORDPRESS_PORT=$wpPort MYSQL_PORT=$mysqlPort PHPMYADMIN_PORT=$pmaPort";
             $command = "$envVars $dockerCommand";
         }
-        
+
         system($command);
 
         $this->showSuccess("Development environment is ready!");
