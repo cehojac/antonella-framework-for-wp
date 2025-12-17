@@ -34,10 +34,19 @@
 ---
 
 ## 📋 Requirements
+
+### **Core Requirements**
 - **PHP**: 8.0 or higher
 - **Composer**: Latest version
 - **Git**: For version control
 - **WordPress**: 5.0 or higher
+
+### **Docker Development Environment**
+- **Docker Desktop**: 4.53.0+ (⚠️ **Required for ARM64/Windows compatibility**)
+- **Docker Compose**: v2.0+ 
+- **Available Ports**: 8080 (WordPress), 3306 (MySQL), 9000 (phpMyAdmin)
+
+> **💡 Note**: For optimal ARM64 compatibility on Windows/Mac, ensure Docker Desktop is updated to version 4.53.0 or higher. Earlier versions may experience container startup issues.
 
 ---
 
@@ -66,7 +75,37 @@ php antonella updateproject
 ```
 
 ### 3. Start Development
+
+#### **Option A: Traditional WordPress Development**
 Your plugin is now ready! Upload to WordPress and start developing.
+
+#### **Option B: Docker Development Environment**
+For a complete development setup with database and admin interface:
+
+```bash
+# Start the development environment
+php antonella serve
+# or manually with Docker Compose
+docker compose up -d
+
+# Access your development site
+# WordPress: http://localhost:8080
+# Admin Panel: http://localhost:8080/wp-admin (test/test)
+# phpMyAdmin: http://localhost:9000
+```
+
+**🐳 Docker Environment Includes:**
+- WordPress with automatic framework activation
+- MySQL 8.0 with persistent data
+- phpMyAdmin for database management
+- WP-CLI for command automation
+- Development plugins (Query Monitor, Debug Bar)
+
+**📋 Default Credentials:**
+- **WordPress Admin**: `test` / `test`
+- **MySQL**: `wordpress` / `wordpress`
+
+> **🔧 Troubleshooting**: If containers fail to start, ensure Docker Desktop is updated to 4.53.0+ and required ports (8080, 3306, 9000) are available.
 
 ---
 
