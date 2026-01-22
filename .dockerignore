@@ -1,0 +1,58 @@
+# =============================================================================
+# Docker Build Context Optimization
+# Excluye archivos innecesarios para mejorar el rendimiento del build
+# =============================================================================
+
+# Control de versiones
+.git/
+.gitignore
+.gitattributes
+.gitmodules
+
+# Archivos de desarrollo y configuración
+.env*
+.vscode/
+.idea/
+.claude/
+*.log
+
+# Dependencias y builds
+node_modules/
+bower_components/
+vendor/
+composer.lock
+package-lock.json
+
+# Archivos temporales y cache
+storage/cache/
+storage/logs/
+tmp/
+*.tmp
+*.swp
+*.swo
+*~
+
+# Archivos de backup y tests
+*.backup
+test/
+wp-test/
+db_data/
+wordpress/
+
+# Archivos comprimidos y releases
+*.zip
+*.tar.gz
+*.rar
+antonella-framework-for-wp.zip
+
+# Archivos del sistema
+.DS_Store
+Thumbs.db
+
+# Documentación de desarrollo (mantener solo esenciales)
+PROBLEMAS_DE_INSTALACION.md
+
+# CLI tools
+wp-cli.phar
+antonella
+antonella2
