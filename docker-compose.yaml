@@ -1,6 +1,6 @@
 # =============================================================================
 # Antonella Framework for WordPress - Docker Compose Configuration
-# 
+#
 # Entorno de desarrollo completo con:
 # - MySQL 8.0 con healthchecks
 # - WordPress con framework preconfigurado
@@ -34,7 +34,7 @@ services:
       - mysql_data:/var/lib/mysql
     command: --default-authentication-plugin=mysql_native_password
     healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "wordpress", "-pwordpress"]
+      test: [ "CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "wordpress", "-pwordpress" ]
       interval: 5s
       timeout: 10s
       retries: 20
@@ -148,6 +148,7 @@ services:
       WORDPRESS_DB_PASSWORD: wordpress
       WORDPRESS_DB_NAME: wordpress
       WORDPRESS_PORT: ${WORDPRESS_PORT:-8080}
+      WP_CLI_MODE: "true"
     command: tail -f /dev/null
 
 # =============================================================================
@@ -162,10 +163,10 @@ volumes:
     driver: local
     # Instalación completa de WordPress (core, themes, uploads)
 
-# =============================================================================
-# Red personalizada
-# Permite comunicación entre servicios con nombres de host
-# =============================================================================
+    # =============================================================================
+    # Red personalizada
+    # Permite comunicación entre servicios con nombres de host
+    # =============================================================================
 networks:
   default:
     name: antonella-network

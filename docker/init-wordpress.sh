@@ -35,31 +35,44 @@ if [ "$MYSQL_READY" = false ]; then
     exit 1
 fi
 
-# Esperar a que WordPress esté disponible con timeout
-echo "⏳ Esperando a que WordPress esté disponible..."
-WP_TIMEOUT=60  # 1 minuto
-WP_COUNTER=0
-WP_READY=false
+# Esperar a que WordPress esté disponible con timeout (solo si NO es modo CLI)
+if [ -z "$WP_CLI_MODE" ]; then
+    echo "⏳ Esperando a que WordPress esté disponible..."
+    WP_TIMEOUT=60  # 1 minuto
+    WP_COUNTER=0
+    WP_READY=false
 
-while [ $WP_COUNTER -lt $WP_TIMEOUT ]; do
-    if curl -s http://localhost > /dev/null 2>&1; then
-        WP_READY=true
-        echo "✅ WordPress está disponible (después de ${WP_COUNTER} segundos)"
-        break
-    fi
-    
-    if [ $((WP_COUNTER % 10)) -eq 0 ]; then
-        echo "   ⏱️  Esperando WordPress... (${WP_COUNTER}/${WP_TIMEOUT}s)"
-    fi
-    
-    sleep 2
-    WP_COUNTER=$((WP_COUNTER + 2))
-done
+    while [ $WP_COUNTER -lt $WP_TIMEOUT ]; do
+        if curl -s http://localhost > /dev/null 2>&1; then
+            WP_READY=true
+            echo "✅ WordPress está disponible (después de ${WP_COUNTER} segundos)"
+            break
+        fi
+        
+        if [ $((WP_COUNTER % 10)) -eq 0 ]; then
+            echo "   ⏱️  Esperando WordPress... (${WP_COUNTER}/${WP_TIMEOUT}s)"
+        fi
+        
+        sleep 2
+        WP_COUNTER=$((WP_COUNTER + 2))
+    done
 
-if [ "$WP_READY" = false ]; then
-    echo "❌ ERROR: WordPress no está disponible después de ${WP_TIMEOUT} segundos"
-    echo "❌ Verifica que Apache esté corriendo correctamente"
-    exit 1
+    if [ "$WP_READY" = false ]; then
+        echo "❌ ERROR: WordPress no está disponible después de ${WP_TIMEOUT} segundos"
+        echo "❌ Verifica que Apache esté corriendo correctamente"
+        exit 1
+    fi
+else
+    echo "ℹ️  Modo WP-CLI: Saltando verificación de servidor web local."
+fi
+
+# =============================================================================
+# Lógica de instalación (Solo si NO es modo WP-CLI)
+# =============================================================================
+if [ -n "$WP_CLI_MODE" ]; then
+    echo "ℹ️  Modo WP-CLI: Saltando instalación y configuración."
+    echo "✅ Contenedor listo para ejecutar comandos."
+    exit 0
 fi
 
 # Verificar si WordPress ya está instalado
