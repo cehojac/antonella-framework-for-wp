@@ -423,8 +423,10 @@ class Antonella
 
     private function getControllerTemplate($className, $namespace)
     {
-        return "<?php
-namespace $namespace;
+        return <<<PHP
+<?php
+namespace $namespace\Controllers;
+
 
 class $className
 {
@@ -432,8 +434,18 @@ class $className
     {
         // Constructor logic here
     }
+
+    public function index()
+    {
+        /*
+        * Example of using Blade
+        * return view('index', ['data' => 'Hello World']);
+        */
+        return \\view('index');
+    }
 }
-// Made with Antonella Framework";
+// Made with Antonella Framework
+PHP;
     }
 
     private function getHelperTemplate($functionName)
@@ -664,7 +676,7 @@ class $className extends \\WP_Widget
 
         if (in_array(strtolower($response), ['yes', 'y'])) {
             $this->showInfo("Adding Blade template engine...");
-            exec('composer require jenssegers/blade');
+            exec('composer require jenssegers/blade "illuminate/view:^9.0" "illuminate/events:^9.0" "illuminate/filesystem:^9.0" "illuminate/support:^9.0"');
             $this->showSuccess("Blade added successfully!");
         } else {
             $this->showInfo("Operation cancelled");
