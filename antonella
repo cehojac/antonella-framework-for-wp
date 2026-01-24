@@ -392,13 +392,18 @@ class Antonella
         }
 
         $iterator = new RecursiveIteratorIterator(
-            new RecursiveDirectoryIterator($dirPath)
+            new RecursiveDirectoryIterator($dirPath, RecursiveDirectoryIterator::SKIP_DOTS)
         );
 
+        $filesToUpdate = [];
         foreach ($iterator as $file) {
             if ($file->isFile() && $file->getExtension() === 'php') {
-                $this->updateFileContent($file->getPathname(), $oldNamespace, $newNamespace);
+                $filesToUpdate[] = $file->getPathname();
             }
+        }
+
+        foreach ($filesToUpdate as $filePath) {
+            $this->updateFileContent($filePath, $oldNamespace, $newNamespace);
         }
     }
 
