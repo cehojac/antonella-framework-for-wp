@@ -435,13 +435,13 @@ class $className
         // Constructor logic here
     }
 
-    public function index()
+    public static function index()
     {
         /*
         * Example of using Blade
-        * return view('index', ['data' => 'Hello World']);
+        * echo view('index', ['data' => 'Hello World']);
         */
-        return \\view('index');
+        echo \\view('index');
     }
 }
 // Made with Antonella Framework
