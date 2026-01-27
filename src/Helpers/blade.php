@@ -1,9 +1,10 @@
 <?php
 
 if (class_exists('Jenssegers\Blade\Blade') && !function_exists('view')) {
-    function view($BladePage, $Attributes)
+    function view($BladePage, $Attributes = [])
     {
-        $blade = new Jenssegers\Blade\Blade(plugin_dir_path(dirname(dirname(__FILE__))) . 'resources/views', plugin_dir_path(dirname(dirname(__FILE__))) . 'storage/cache');
+        $path = dirname(__DIR__, 2);
+        $blade = new Jenssegers\Blade\Blade($path . '/resources/views', $path . '/storage/cache');
         return $blade->render($BladePage, $Attributes);
     }
 }
