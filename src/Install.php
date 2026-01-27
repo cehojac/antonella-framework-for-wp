@@ -14,7 +14,7 @@ use CH\Config;
  * - Error handling and logging
  * 
  * @package Antonella Framework
- * @version 1.9.0
+ * @version 1.9.2
  * @since 1.0.0
  */
 class Install
@@ -248,7 +248,7 @@ class Install
     private function update_plugin_version()
     {
         $current_version = get_option('antonella_framework_version', '0.0.0');
-        $new_version = '1.9.0'; // Should match plugin header
+        $new_version = '1.9.2'; // Should match plugin header
         
         if (version_compare($current_version, $new_version, '<')) {
             update_option('antonella_framework_version', $new_version);
