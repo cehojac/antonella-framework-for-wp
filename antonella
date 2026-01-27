@@ -392,13 +392,18 @@ class Antonella
         }
 
         $iterator = new RecursiveIteratorIterator(
-            new RecursiveDirectoryIterator($dirPath)
+            new RecursiveDirectoryIterator($dirPath, RecursiveDirectoryIterator::SKIP_DOTS)
         );
 
+        $filesToUpdate = [];
         foreach ($iterator as $file) {
             if ($file->isFile() && $file->getExtension() === 'php') {
-                $this->updateFileContent($file->getPathname(), $oldNamespace, $newNamespace);
+                $filesToUpdate[] = $file->getPathname();
             }
+        }
+
+        foreach ($filesToUpdate as $filePath) {
+            $this->updateFileContent($filePath, $oldNamespace, $newNamespace);
         }
     }
 
@@ -418,8 +423,10 @@ class Antonella
 
     private function getControllerTemplate($className, $namespace)
     {
-        return "<?php
-namespace $namespace;
+        return <<<PHP
+<?php
+namespace $namespace\Controllers;
+
 
 class $className
 {
@@ -427,8 +434,18 @@ class $className
     {
         // Constructor logic here
     }
+
+    public static function index()
+    {
+        /*
+        * Example of using Blade
+        * echo view('index', ['data' => 'Hello World']);
+        */
+        echo \\view('index');
+    }
 }
-// Made with Antonella Framework";
+// Made with Antonella Framework
+PHP;
     }
 
     private function getHelperTemplate($functionName)
@@ -659,7 +676,7 @@ class $className extends \\WP_Widget
 
         if (in_array(strtolower($response), ['yes', 'y'])) {
             $this->showInfo("Adding Blade template engine...");
-            exec('composer require jenssegers/blade');
+            exec('composer require jenssegers/blade "illuminate/view:^9.0" "illuminate/events:^9.0" "illuminate/filesystem:^9.0" "illuminate/support:^9.0"');
             $this->showSuccess("Blade added successfully!");
         } else {
             $this->showInfo("Operation cancelled");
@@ -854,7 +871,7 @@ class $className extends \\WP_Widget
 
         // Cross-platform environment variable handling
         $isWindows = PHP_OS_FAMILY === 'Windows';
-        $dockerCommand = 'docker-compose up' . (isset($data[2]) && $data[2] === '-d' ? ' -d' : '');
+        $dockerCommand = 'docker-compose up --build' . (isset($data[2]) && $data[2] === '-d' ? ' -d' : '');
 
         if ($isWindows) {
             // Windows: Set environment variables before running command

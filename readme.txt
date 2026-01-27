@@ -5,7 +5,7 @@ Tags: framework, mvc, development, plugin-development, wordpress-framework
 Requires at least: 5.0
 Tested up to: 6.8
 Requires PHP: 8.0
-Stable tag: 1.9.0
+Stable tag: 1.9.2
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -102,6 +102,13 @@ Yes, Antonella Framework is regularly updated to ensure compatibility with the l
 5. Gutenberg block integration
 
 == Changelog ==
+
+= 1.9.2 =
+* Fixed Docker command to include --build flag
+* fix minor changes in antonella file
+* fix minor changes in docker-compose.yml
+* fix minor changes in dockerfile
+* fix issue #22 #23 and #24
 
 = 1.9.0 =
 * Complete refactoring of database management system
