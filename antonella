@@ -13,7 +13,9 @@ class Antonella
         '.travis.yml',
         'composer.json',
         'composer.lock',
+        'package.json',
         'package-lock.json',
+        'vite.config.js',
         'antonella',
         'SECURITY.md',
         'antonella2',
@@ -606,8 +608,10 @@ class $className extends \\WP_Widget
                 return $this->removeDD();
             case 'model':
                 return $this->removeModel();
+            case 'react':
+                return $this->removeReact();
             default:
-                $this->showError("Module '$module' not supported for removal. Available: blade, dd, model");
+                $this->showError("Module '$module' not supported for removal. Available: blade, dd, model, react");
         }
     }
 
@@ -624,8 +628,10 @@ class $className extends \\WP_Widget
                 return $this->addModel();
             case 'action':
                 return $this->showActions($data);
+            case 'react':
+                return $this->addReact();
             default:
-                $this->showError("Module '$module' not supported. Available: blade, dd, model, action");
+                $this->showError("Module '$module' not supported. Available: blade, dd, model, action, react");
         }
     }
 
@@ -634,6 +640,113 @@ class $className extends \\WP_Widget
         $this->showInfo("Removing Blade template engine...");
         exec('composer remove jenssegers/blade');
         $this->showSuccess("Blade removed successfully!");
+    }
+
+    /**
+     * Remove React integration files
+     * Only removes scaffolding files, does NOT touch Config.php or controllers
+     */
+    private function removeReact()
+    {
+        $this->showInfo("⚛️  React Integration Removal");
+        echo "\n";
+
+        $reactConfigPath = $this->dir . DIRECTORY_SEPARATOR . 'Config' . DIRECTORY_SEPARATOR . 'React.php';
+
+        if (!file_exists($reactConfigPath)) {
+            $this->showError("React integration not detected (Config/React.php not found)");
+            return;
+        }
+
+        $this->showInfo("⚠️  This will remove the following files:");
+        $this->showInfo("   - Config/React.php");
+        $this->showInfo("   - src/Core/React.php");
+        $this->showInfo("   - src/Helpers/react.php");
+        $this->showInfo("   - resources/js/ (entire directory)");
+        $this->showInfo("   - vite.config.js");
+        $this->showInfo("   - package.json");
+        $this->showInfo("   - package-lock.json");
+        $this->showInfo("   - assets/dist/ (build output)");
+        $this->showInfo("   - node_modules/ (if exists)");
+        echo "\n";
+        $this->showInfo("ℹ️  Config.php and controllers will NOT be modified.");
+        echo "\n";
+
+        echo "Are you sure you want to remove React? Type 'yes' or 'y': ";
+        $handle = fopen("php://stdin", "r");
+        $response = trim(fgets($handle));
+        fclose($handle);
+
+        if (!in_array(strtolower($response), ['yes', 'y'])) {
+            $this->showInfo("Removal cancelled by user");
+            return;
+        }
+
+        echo "\n";
+
+        // Files to remove
+        $filesToRemove = [
+            'Config' . DIRECTORY_SEPARATOR . 'React.php',
+            'src' . DIRECTORY_SEPARATOR . 'Core' . DIRECTORY_SEPARATOR . 'React.php',
+            'src' . DIRECTORY_SEPARATOR . 'Helpers' . DIRECTORY_SEPARATOR . 'react.php',
+            'vite.config.js',
+            'package.json',
+            'package-lock.json',
+        ];
+
+        foreach ($filesToRemove as $file) {
+            $fullPath = $this->dir . DIRECTORY_SEPARATOR . $file;
+            if (file_exists($fullPath)) {
+                unlink($fullPath);
+                $this->showSuccess("  Removed: $file");
+            }
+        }
+
+        // Directories to remove recursively
+        $dirsToRemove = [
+            'resources' . DIRECTORY_SEPARATOR . 'js',
+            'assets' . DIRECTORY_SEPARATOR . 'dist',
+            'node_modules',
+        ];
+
+        foreach ($dirsToRemove as $dir) {
+            $fullPath = $this->dir . DIRECTORY_SEPARATOR . $dir;
+            if (is_dir($fullPath)) {
+                $this->removeDirectoryRecursive($fullPath);
+                $this->showSuccess("  Removed: $dir/");
+            }
+        }
+
+        echo "\n";
+        $this->showSuccess("⚛️  React integration removed successfully!");
+        echo "\n";
+        $this->showInfo("ℹ️  Note: Config.php was not modified.");
+        $this->showInfo("   You may want to manually remove the React menu item and shortcode from Config.php");
+    }
+
+    /**
+     * Recursively remove a directory and its contents
+     */
+    private function removeDirectoryRecursive($dir)
+    {
+        if (!is_dir($dir)) {
+            return;
+        }
+
+        $items = new \RecursiveIteratorIterator(
+            new \RecursiveDirectoryIterator($dir, \RecursiveDirectoryIterator::SKIP_DOTS),
+            \RecursiveIteratorIterator::CHILD_FIRST
+        );
+
+        foreach ($items as $item) {
+            if ($item->isDir()) {
+                rmdir($item->getRealPath());
+            } else {
+                unlink($item->getRealPath());
+            }
+        }
+
+        rmdir($dir);
     }
 
     private function addBlade()
@@ -752,6 +865,485 @@ class $className extends \\WP_Widget
             $config = new $configClass;
             print_r($config->add_action);
         }
+    }
+
+    /**
+     * Add React integration to the project
+     */
+    private function addReact()
+    {
+        $this->showInfo("⚛️  React Integration Setup");
+        echo "\n";
+
+        $reactConfigPath = $this->dir . DIRECTORY_SEPARATOR . 'Config' . DIRECTORY_SEPARATOR . 'React.php';
+        $packageJsonPath = $this->dir . DIRECTORY_SEPARATOR . "package.json";
+        $reactConfigExists = file_exists($reactConfigPath);
+        $packageExists = file_exists($packageJsonPath);
+
+        if ($reactConfigExists) {
+            $this->showInfo("⚠️  React integration already detected (Config/React.php exists)");
+            $this->showInfo("Running this command again will overwrite existing files.");
+            echo "Do you want to continue anyway? Type 'yes' or 'y': ";
+            $handle = fopen("php://stdin", "r");
+            $response = trim(fgets($handle));
+            fclose($handle);
+
+            if (!in_array(strtolower($response), ['yes', 'y'])) {
+                $this->showInfo(" Installation cancelled by user");
+                return;
+            }
+
+            if ($packageExists) {
+                echo "\n";
+                $this->showInfo("⚠️  package.json also exists and will be modified.");
+                echo "Are you sure you want to continue? Type 'yes' or 'y': ";
+                $handle = fopen("php://stdin", "r");
+                $response = trim(fgets($handle));
+                fclose($handle);
+
+                if (!in_array(strtolower($response), ['yes', 'y'])) {
+                    $this->showInfo(" Installation cancelled by user");
+                    return;
+                }
+            }
+        } else {
+            echo "Add React to your WordPress plugin? Type 'yes' or 'y' to continue: ";
+            $handle = fopen("php://stdin", "r");
+            $response = trim(fgets($handle));
+            fclose($handle);
+
+            if (!in_array(strtolower($response), ['yes', 'y'])) {
+                $this->showInfo(" Installation cancelled by user");
+                return;
+            }
+        }
+
+        echo "\n";
+
+        if ($packageExists) {
+            $this->showInfo(" package.json found, updating dependencies...");
+            $this->updatePackageJson($packageJsonPath);
+        } else {
+            $this->showInfo(" Creating package.json...");
+            $this->createPackageJson($packageJsonPath);
+        }
+
+        $this->showInfo(" Creating React directory structure...");
+        $this->createReactDirectories();
+
+        $this->showInfo(" Generating React configuration files...");
+        $this->createViteConfig();
+        $this->createReactApp();
+        $this->createExampleComponent();
+        $this->createReactConfigFile();
+        
+        $this->showInfo(" Creating React Core class...");
+        $this->createReactCoreClass();
+        
+        $this->showInfo(" Creating React helper functions...");
+        $this->createReactHelper();
+        
+        $this->showInfo(" Creating example controller and component...");
+        $this->createExampleReactController();
+        $this->createHelloWorldComponent();
+        $this->addReactMenuToConfig();
+
+        echo "\n";
+        $this->showSuccess(" React integration setup completed!");
+        echo "\n";
+        $this->showInfo(" Next steps:");
+        $this->showInfo("   1. Run: npm install");
+        $this->showInfo("   2. Run: npm run dev (for development)");
+        $this->showInfo("   3. Run: npm run build (for production)");
+        $this->showInfo("   4. Visit WordPress admin to see 'Hello World with React'");
+        echo "\n";
+        $this->showInfo(" Your React files are in: resources/js/");
+        $this->showInfo(" Entry point: resources/js/app.jsx");
+        $this->showInfo(" Configuration: Config/React.php");
+        $this->showInfo(" Example: src/Controllers/ExampleReactController.php");
+    }
+
+    /**
+     * Create package.json from scratch
+     */
+    private function createPackageJson($path)
+    {
+        $projectName = basename($this->dir);
+        $packageJson = [
+            "name" => $projectName,
+            "version" => "1.0.0",
+            "description" => "WordPress plugin with React integration",
+            "type" => "module",
+            "scripts" => [
+                "dev" => "vite",
+                "build" => "vite build",
+                "preview" => "vite preview"
+            ],
+            "dependencies" => [
+                "react" => "^19.2.4",
+                "react-dom" => "^19.2.4"
+            ],
+            "devDependencies" => [
+                "@vitejs/plugin-react" => "^5.1.3",
+                "vite" => "^7.3.1"
+            ]
+        ];
+
+        file_put_contents($path, json_encode($packageJson, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
+        $this->showSuccess("package.json created successfully!");
+    }
+
+    /**
+     * Update existing package.json with React dependencies
+     */
+    private function updatePackageJson($path)
+    {
+        $packageJson = json_decode(file_get_contents($path), true);
+
+        if (!isset($packageJson['dependencies'])) {
+            $packageJson['dependencies'] = [];
+        }
+        if (!isset($packageJson['devDependencies'])) {
+            $packageJson['devDependencies'] = [];
+        }
+        if (!isset($packageJson['scripts'])) {
+            $packageJson['scripts'] = [];
+        }
+
+        $packageJson['type'] = 'module';
+        $packageJson['dependencies']['react'] = '^19.2.4';
+        $packageJson['dependencies']['react-dom'] = '^19.2.4';
+        $packageJson['devDependencies']['@vitejs/plugin-react'] = '^5.1.3';
+        $packageJson['devDependencies']['vite'] = '^7.3.1';
+        $packageJson['scripts']['dev'] = 'vite';
+        $packageJson['scripts']['build'] = 'vite build';
+        $packageJson['scripts']['preview'] = 'vite preview';
+
+        file_put_contents($path, json_encode($packageJson, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
+        $this->showSuccess("package.json updated with React dependencies!");
+    }
+
+    /**
+     * Create React directory structure
+     */
+    private function createReactDirectories()
+    {
+        $dirs = [
+            $this->dir . DIRECTORY_SEPARATOR . 'resources' . DIRECTORY_SEPARATOR . 'js',
+            $this->dir . DIRECTORY_SEPARATOR . 'resources' . DIRECTORY_SEPARATOR . 'js' . DIRECTORY_SEPARATOR . 'Pages'
+        ];
+
+        foreach ($dirs as $dir) {
+            $this->createDirectoryIfNotExists($dir);
+        }
+
+        $this->showSuccess("React directories created!");
+    }
+
+    /**
+     * Create Vite configuration file
+     */
+    private function createViteConfig()
+    {
+        $viteConfig = "import { defineConfig } from 'vite';
+import react from '@vitejs/plugin-react';
+import path from 'path';
+
+export default defineConfig({
+  plugins: [react()],
+  build: {
+    outDir: 'assets/dist',
+    rollupOptions: {
+      input: {
+        app: path.resolve(__dirname, 'resources/js/app.jsx')
+      },
+      output: {
+        entryFileNames: 'js/[hash].js',
+        chunkFileNames: 'js/[hash].js',
+        assetFileNames: (assetInfo) => {
+          if (assetInfo.name.endsWith('.css')) {
+            return 'css/[hash][extname]';
+          }
+          return 'assets/[hash][extname]';
+        }
+      }
+    },
+    manifest: true,
+    emptyOutDir: true
+  },
+  server: {
+    port: 3000,
+    strictPort: true,
+    hmr: {
+      host: 'localhost'
+    }
+  }
+});";
+
+        $configPath = $this->dir . DIRECTORY_SEPARATOR . 'vite.config.js';
+        file_put_contents($configPath, $viteConfig);
+        $this->showSuccess("vite.config.js created!");
+    }
+
+    /**
+     * Create main React app file
+     */
+    private function createReactApp()
+    {
+        $appContent = "import React from 'react';
+import { createRoot } from 'react-dom/client';
+
+// Import all components
+import ExampleComponent from './Pages/ExampleComponent';
+import HelloWorld from './Pages/HelloWorld';
+
+// Component registry
+const components = {
+  ExampleComponent,
+  HelloWorld,
+};
+
+// Main App Component
+function App({ component, props }) {
+  const Component = components[component];
+  
+  if (!Component) {
+    throw new Error(`Component not found: ${component}`);
+  }
+  
+  return <Component {...props} />;
+}
+
+// Mount React app
+// Get container ID from meta tag
+const containerId = document.querySelector('meta[name=\"antonella-react-container\"]')?.content;
+
+if (!containerId) {
+  console.error('React container ID not found in meta tags');
+} else {
+  const container = document.getElementById(containerId);
+  
+  if (!container) {
+    console.error(`React container with ID \"${containerId}\" not found in DOM`);
+  } else {
+    // Get page data from data attribute
+    const pageDataAttr = container.getAttribute('data-page');
+  
+    if (pageDataAttr) {
+      try {
+        const pageData = JSON.parse(pageDataAttr);
+        const root = createRoot(container);
+        root.render(<App component={pageData.component} props={pageData.props} />);
+      } catch (error) {
+        console.error('Failed to parse page data:', error);
+        console.error('Page data attribute:', pageDataAttr);
+        const root = createRoot(container);
+        root.render(
+          <div style={{ padding: '20px', color: 'red' }}>
+            <h1>Error loading React component</h1>
+            <p>{error.message}</p>
+            <pre style={{ background: '#f5f5f5', padding: '10px', overflow: 'auto' }}>
+              {pageDataAttr}
+            </pre>
+          </div>
+        );
+      }
+    } else {
+      console.warn('Container found but no data-page attribute');
+      const root = createRoot(container);
+      root.render(
+        <div className=\"antonella-react-app\">
+          <h1>Welcome to Antonella Framework + React</h1>
+          <ExampleComponent />
+        </div>
+      );
+    }
+  }
+}";
+
+        $appPath = $this->dir . DIRECTORY_SEPARATOR . 'resources' . DIRECTORY_SEPARATOR . 'js' . DIRECTORY_SEPARATOR . 'app.jsx';
+        file_put_contents($appPath, $appContent);
+        $this->showSuccess("app.jsx created!");
+    }
+
+    /**
+     * Create example React component
+     */
+    private function createExampleComponent()
+    {
+        $componentContent = "import React, { useState } from 'react';
+
+function ExampleComponent({name, site, user}) {
+  const [count, setCount] = useState(0);
+
+  return (
+    <div className=\"example-component\">
+      <h2>Example React Component</h2>
+      <p>This is a sample component created by Antonella Framework</p>
+      <div>
+        <p>Name: {name}</p>
+        <p>Site: {site?.url}</p>
+        <p>User: {user?.name}</p>
+        <button onClick={() => setCount(count + 1)}>
+          Count: {count}
+        </button>
+      </div>
+      <style>{`
+        .example-component {
+          padding: 20px;
+          border: 2px solid #61dafb;
+          border-radius: 8px;
+          margin: 20px 0;
+        }
+        .example-component button {
+          background: #61dafb;
+          color: #000;
+          border: none;
+          padding: 10px 20px;
+          border-radius: 4px;
+          cursor: pointer;
+          font-size: 16px;
+        }
+        .example-component button:hover {
+          background: #4fa8c5;
+        }
+      `}</style>
+    </div>
+  );
+}
+
+export default ExampleComponent;";
+
+        $componentPath = $this->dir . DIRECTORY_SEPARATOR . 'resources' . DIRECTORY_SEPARATOR . 'js' . DIRECTORY_SEPARATOR . 'Pages' . DIRECTORY_SEPARATOR . 'ExampleComponent.jsx';
+        file_put_contents($componentPath, $componentContent);
+        $this->showSuccess("ExampleComponent.jsx created in Pages/!");
+    }
+
+    /**
+     * Generate a unique UUID v4
+     */
+    private function generateUUID()
+    {
+        $data = random_bytes(16);
+        $data[6] = chr(ord($data[6]) & 0x0f | 0x40);
+        $data[8] = chr(ord($data[8]) & 0x3f | 0x80);
+        return vsprintf('%s%s-%s-%s-%s-%s%s%s', str_split(bin2hex($data), 4));
+    }
+
+    /**
+     * Create or update React configuration file
+     */
+    private function createReactConfigFile()
+    {
+        $configDir = $this->dir . DIRECTORY_SEPARATOR . 'Config';
+        $this->createDirectoryIfNotExists($configDir);
+
+        $configPath = $configDir . DIRECTORY_SEPARATOR . 'React.php';
+        $namespace = $this->readNamespace();
+
+        if (file_exists($configPath)) {
+            $this->showInfo("React.php already exists, updating configuration...");
+            $this->updateReactConfig($configPath);
+        } else {
+            $this->showInfo("Creating React.php configuration file...");
+            $uuid = $this->generateUUID();
+            $configContent = $this->getReactConfigTemplate($namespace, $uuid);
+            file_put_contents($configPath, $configContent);
+            $this->showSuccess("React.php created in Config/");
+        }
+    }
+
+    /**
+     * Update existing React configuration file
+     */
+    private function updateReactConfig($configPath)
+    {
+        $content = file_get_contents($configPath);
+        
+        // Check if it's the old class format and needs conversion
+        if (strpos($content, 'class React') !== false) {
+            $this->showInfo("Converting old class format to array format...");
+            $uuid = $this->generateUUID();
+            $namespace = $this->readNamespace();
+            $configContent = $this->getReactConfigTemplate($namespace, $uuid);
+            file_put_contents($configPath, $configContent);
+            $this->showSuccess("React configuration converted to array format!");
+        } elseif (strpos($content, "'container_id'") === false && strpos($content, '"container_id"') === false) {
+            // If it's already an array but missing container_id, regenerate
+            $this->showInfo("Updating React configuration...");
+            $uuid = $this->generateUUID();
+            $namespace = $this->readNamespace();
+            $configContent = $this->getReactConfigTemplate($namespace, $uuid);
+            file_put_contents($configPath, $configContent);
+            $this->showSuccess("React configuration updated!");
+        } else {
+            $this->showInfo("React configuration is up to date.");
+        }
+    }
+
+    /**
+     * Get React configuration template
+     */
+    private function getReactConfigTemplate($namespace, $uuid)
+    {
+        return "<?php
+/**
+ * React Configuration
+ * 
+ * This file contains configuration for React integration in your WordPress plugin.
+ * 
+ * @package $namespace
+ */
+
+return [
+    /**
+     * Unique container ID for React root element
+     * WARNING: If you change this, make sure it's unique across your entire WordPress installation
+     * This ID is used in the DOM to mount the React application
+     */
+    'container_id' => '$uuid',
+
+    /**
+     * Application environment
+     * 'develop' - Loads React from Vite dev server (HMR enabled)
+     * 'production' - Loads from built assets
+     */
+    'app_env' => 'develop',
+
+    /**
+     * Vite development server URL
+     * Used when app_env is 'develop'
+     */
+    'vite_server' => 'http://localhost:3000',
+
+    /**
+     * Build output directory (relative to plugin root)
+     * Used when app_env is 'production'
+     */
+    'build_path' => 'assets/dist',
+
+    /**
+     * React entry point file
+     */
+    'entry_point' => 'resources/js/app.jsx',
+
+    /**
+     * Enqueue React scripts in admin area
+     */
+    'load_in_admin' => true,
+
+    /**
+     * Enqueue React scripts in frontend
+     */
+    'load_in_frontend' => true,
+
+    /**
+     * Script version (for cache busting)
+     * Set to null to use plugin version or filemtime
+     */
+    'version' => null,
+];
+";
     }
 
     /**
@@ -979,6 +1571,1147 @@ wp.blocks.registerBlockType('antonella/$blockName', {
 
         echo "\033[37mDocumentation: \033[33mhttps://antonellaframework.com\033[0m\n";
         echo "\033[37mVideo Tutorial: \033[33mhttps://tipeos.com/anto\033[0m\n";
+    }
+
+    /**
+     * Create React Core class in src/Core/React.php
+     */
+    private function createReactCoreClass()
+    {
+        $coreDir = $this->dir . DIRECTORY_SEPARATOR . 'src' . DIRECTORY_SEPARATOR . 'Core';
+        $this->createDirectoryIfNotExists($coreDir);
+        
+        $namespace = $this->readNamespace();
+        $reactClassPath = $coreDir . DIRECTORY_SEPARATOR . 'React.php';
+        
+        $reactClassContent = <<<'REACTCLASS'
+<?php
+
+namespace __NAMESPACE__\Core;
+
+use Closure;
+
+/**
+ * React Component Renderer
+ * 
+ * Inspired by Inertia.js WordPress adapter architecture
+ * Provides a clean API to render React components from WordPress templates
+ * 
+ * @package __NAMESPACE__\Core
+ */
+class React
+{
+    /**
+     * React configuration
+     * 
+     * @var array|null
+     */
+    protected static $config = null;
+
+    /**
+     * Current component name
+     * 
+     * @var string|null
+     */
+    protected static $component = null;
+
+    /**
+     * Component props
+     * 
+     * @var array
+     */
+    protected static $props = [];
+
+    /**
+     * Shared props (available to all components)
+     * 
+     * @var array
+     */
+    protected static $sharedProps = [];
+
+    /**
+     * Root template file
+     * 
+     * @var string
+     */
+    protected static $rootView = 'app.php';
+
+    /**
+     * Asset version for cache busting
+     * 
+     * @var string|null
+     */
+    protected static $version = null;
+
+    /**
+     * Page data to be injected
+     * 
+     * @var array|null
+     */
+    protected static $pageData = null;
+
+    /**
+     * Cached manifest data
+     * 
+     * @var array|null
+     */
+    protected static $manifest = null;
+
+    /**
+     * Flag to prevent duplicate asset loading
+     * 
+     * @var bool
+     */
+    protected static $assetsEnqueued = false;
+
+    /**
+     * Track which controllers have already been booted
+     * 
+     * @var array
+     */
+    protected static $bootedControllers = [];
+
+    /**
+     * Render a React component
+     * 
+     * Returns the HTML string so it works in both contexts:
+     * - Admin pages: echo React::render('Component', $props);
+     * - Shortcodes: return React::render('Component', $props);
+     * 
+     * @param string $component Component name (e.g., 'Posts/Index')
+     * @param array $props Component props
+     * @return string HTML output
+     */
+    public static function render(string $component, array $props = [])
+    {
+        self::loadConfig();
+        self::bootController();
+        self::setComponent($component);
+        self::setProps($props);
+        
+        self::$pageData = [
+            'component' => self::$component,
+            'props' => self::$props,
+            'version' => self::$version,
+            'url' => self::getCurrentUrl(),
+        ];
+
+        // Enqueue React scripts (dev or production based on config)
+        self::enqueueScripts();
+
+        // Capture output and return as string
+        ob_start();
+        self::renderDefaultTemplate();
+        return ob_get_clean();
+    }
+
+    /**
+     * Auto-detect the calling controller and run its boot() method once
+     * 
+     * @return void
+     */
+    protected static function bootController()
+    {
+        $trace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 3);
+
+        foreach ($trace as $frame) {
+            if (!isset($frame['class']) || $frame['class'] === __CLASS__) {
+                continue;
+            }
+
+            $controllerClass = $frame['class'];
+
+            if (in_array($controllerClass, self::$bootedControllers, true)) {
+                return;
+            }
+
+            if (method_exists($controllerClass, 'boot')) {
+                self::$bootedControllers[] = $controllerClass;
+                $controllerClass::boot();
+            }
+
+            return;
+        }
+    }
+
+    /**
+     * Set the root view template
+     * 
+     * @param string $name Template filename
+     * @return void
+     */
+    public static function setRootView(string $name)
+    {
+        self::$rootView = $name;
+    }
+
+    /**
+     * Set asset version for cache busting
+     * 
+     * @param string $version Version string
+     * @return void
+     */
+    public static function version(string $version)
+    {
+        self::$version = $version;
+    }
+
+    /**
+     * Share data with all components
+     * 
+     * @param string|array $key Key or array of key-value pairs
+     * @param mixed $value Value (if key is string)
+     * @return void
+     */
+    public static function share($key, $value = null)
+    {
+        if (is_array($key)) {
+            self::$sharedProps = array_merge(self::$sharedProps, $key);
+        } else {
+            self::$sharedProps[$key] = $value;
+        }
+    }
+
+    /**
+     * Create a lazy prop (evaluated only when needed)
+     * 
+     * @param callable $callback Callback to execute
+     * @return LazyProp
+     */
+    public static function lazy(callable $callback)
+    {
+        return new LazyProp($callback);
+    }
+
+    /**
+     * Inject React app into template
+     * 
+     * @return void
+     */
+    public static function inject()
+    {
+        if (self::$pageData === null) {
+            return;
+        }
+
+        $containerId = self::getConfig('container_id', 'antonella-react-root');
+        $dataJson = htmlspecialchars(json_encode(self::$pageData), ENT_QUOTES, 'UTF-8');
+        
+        echo sprintf(
+            '<div id="%s" data-page="%s"></div>',
+            esc_attr($containerId),
+            $dataJson
+        );
+    }
+
+    /**
+     * Enqueue React scripts
+     * 
+     * @return void
+     */
+    public static function enqueueScripts()
+    {
+        // Prevent duplicate loading
+        if (self::$assetsEnqueued) {
+            return;
+        }
+
+        self::loadConfig();
+        
+        $isDev = self::getConfig('app_env', 'production') === 'develop';
+        
+        if ($isDev) {
+            self::enqueueDevScripts();
+        } else {
+            if (!self::validateProductionAssets()) {
+                self::showAssetsError();
+                return;
+            }
+            self::enqueueProductionScripts();
+        }
+
+        // Add module type for ES modules
+        add_filter('script_loader_tag', [__CLASS__, 'addModuleType'], 10, 2);
+
+        self::$assetsEnqueued = true;
+    }
+
+    /**
+     * Get configuration value
+     * 
+     * @param string $key Configuration key
+     * @param mixed $default Default value
+     * @return mixed
+     */
+    public static function getConfig(string $key, $default = null)
+    {
+        self::loadConfig();
+        return self::$config[$key] ?? $default;
+    }
+
+    /**
+     * Load configuration from Config/React.php
+     * 
+     * @return void
+     */
+    protected static function loadConfig()
+    {
+        if (self::$config !== null) {
+            return;
+        }
+
+        $configPath = dirname(dirname(__DIR__)) . DIRECTORY_SEPARATOR . 'Config' . DIRECTORY_SEPARATOR . 'React.php';
+        
+        if (file_exists($configPath)) {
+            self::$config = require $configPath;
+        } else {
+            self::$config = self::getDefaultConfig();
+        }
+    }
+
+    /**
+     * Get default configuration
+     * 
+     * @return array
+     */
+    protected static function getDefaultConfig()
+    {
+        return [
+            'container_id' => 'antonella-react-root',
+            'app_env' => 'production',
+            'vite_server' => 'http://localhost:3000',
+            'build_path' => 'assets/dist',
+            'entry_point' => 'resources/js/app.jsx',
+            'load_in_admin' => true,
+            'load_in_frontend' => true,
+            'version' => null,
+        ];
+    }
+
+    /**
+     * Set component name
+     * 
+     * @param string $component Component name
+     * @return void
+     */
+    protected static function setComponent(string $component)
+    {
+        self::$component = $component;
+    }
+
+    /**
+     * Set and merge props
+     * 
+     * @param array $props Component props
+     * @return void
+     */
+    protected static function setProps(array $props)
+    {
+        $props = array_merge($props, self::$sharedProps);
+        
+        // Evaluate lazy props and closures
+        array_walk_recursive($props, function (&$prop) {
+            if ($prop instanceof LazyProp) {
+                $prop = $prop();
+            }
+            
+            if ($prop instanceof Closure) {
+                $prop = $prop();
+            }
+        });
+        
+        self::$props = $props;
+    }
+
+    /**
+     * Get current URL
+     * 
+     * @return string
+     */
+    protected static function getCurrentUrl()
+    {
+        return isset($_SERVER['REQUEST_URI']) ? $_SERVER['REQUEST_URI'] : '/';
+    }
+
+    /**
+     * Enqueue development scripts (Vite HMR)
+     * 
+     * @return void
+     */
+    protected static function enqueueDevScripts()
+    {
+        $viteServer = self::getConfig('vite_server', 'http://localhost:3000');
+        $entryPoint = self::getConfig('entry_point', 'resources/js/app.jsx');
+        
+        // Vite client for HMR
+        wp_enqueue_script(
+            'antonella-react-vite-client',
+            $viteServer . '/@vite/client',
+            [],
+            null,
+            false
+        );
+        
+        // React Refresh preamble for HMR
+        $refreshScript = "
+            import { injectIntoGlobalHook } from '{$viteServer}/@react-refresh';
+            injectIntoGlobalHook(window);
+            window.\$RefreshReg$ = () => {};
+            window.\$RefreshSig$ = () => (type) => type;
+        ";
+        
+        wp_add_inline_script(
+            'antonella-react-vite-client',
+            $refreshScript,
+            'before'
+        );
+        
+        // Main application entry point
+        wp_enqueue_script(
+            'antonella-react-app',
+            $viteServer . '/' . $entryPoint,
+            [],
+            null,
+            true
+        );
+        
+        // Localize script data
+        self::localizeScriptData('antonella-react-app');
+    }
+
+    /**
+     * Enqueue production scripts (built assets)
+     * 
+     * @return void
+     */
+    protected static function enqueueProductionScripts()
+    {
+        $manifest = self::getManifest();
+        
+        if (!$manifest) {
+            return;
+        }
+
+        $buildPath = self::getConfig('build_path', 'assets/dist');
+        $pluginUrl = plugin_dir_url(dirname(__DIR__));
+        $baseUrl = $pluginUrl . $buildPath . '/';
+        $entryPoint = self::getConfig('entry_point', 'resources/js/app.jsx');
+        $version = self::$version ?? self::getConfig('version', null);
+        
+        if (!isset($manifest[$entryPoint])) {
+            return;
+        }
+
+        // Enqueue vendor chunks first (if they exist)
+        if (isset($manifest[$entryPoint]['imports'])) {
+            foreach ($manifest[$entryPoint]['imports'] as $index => $import) {
+                if (isset($manifest[$import]['file'])) {
+                    wp_enqueue_script(
+                        'antonella-react-vendor-' . $index,
+                        $baseUrl . $manifest[$import]['file'],
+                        [],
+                        $version,
+                        true
+                    );
+                }
+            }
+        }
+
+        // Enqueue main CSS
+        if (isset($manifest[$entryPoint]['css'])) {
+            foreach ($manifest[$entryPoint]['css'] as $index => $cssFile) {
+                wp_enqueue_style(
+                    'antonella-react-style-' . $index,
+                    $baseUrl . $cssFile,
+                    [],
+                    $version
+                );
+            }
+        }
+
+        // Enqueue main JS
+        if (isset($manifest[$entryPoint]['file'])) {
+            wp_enqueue_script(
+                'antonella-react-app',
+                $baseUrl . $manifest[$entryPoint]['file'],
+                [],
+                $version,
+                true
+            );
+            
+            // Localize script data
+            self::localizeScriptData('antonella-react-app');
+        }
+    }
+
+    /**
+     * Render default template if custom root view doesn't exist
+     * 
+     * @return void
+     */
+    protected static function renderDefaultTemplate()
+    {
+        $containerId = self::getConfig('container_id', 'antonella-react-root');
+        $isDev = self::getConfig('app_env', 'production') === 'develop';
+        $viteServer = self::getConfig('vite_server', 'http://localhost:3000');
+        ?>
+        <script>
+            // Inject container meta tag dynamically
+            if (!document.querySelector('meta[name="antonella-react-container"]')) {
+                const meta = document.createElement('meta');
+                meta.name = 'antonella-react-container';
+                meta.content = '<?php echo esc_js($containerId); ?>';
+                document.head.appendChild(meta);
+            }
+
+            <?php if ($isDev): ?>
+            // Detect if Vite dev server is running
+            (function() {
+                const containerId = '<?php echo esc_js($containerId); ?>';
+                const viteServer = '<?php echo esc_js($viteServer); ?>';
+                const timeout = setTimeout(function() {
+                    const container = document.getElementById(containerId);
+                    if (container && container.innerHTML.trim() === '') {
+                        container.innerHTML = `
+                            <div style="
+                                max-width: 600px;
+                                margin: 40px auto;
+                                padding: 30px;
+                                background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+                                border-radius: 12px;
+                                border-left: 4px solid #e74c3c;
+                                color: #ecf0f1;
+                                font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+                                box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+                            ">
+                                <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 16px;">
+                                    <span style="font-size: 28px;">⚡</span>
+                                    <h2 style="margin: 0; font-size: 20px; color: #e74c3c;">Vite Dev Server Not Running</h2>
+                                </div>
+                                <p style="margin: 0 0 16px; color: #bdc3c7; line-height: 1.6;">
+                                    The React development server is not available at <code style="background: #2c3e50; padding: 2px 8px; border-radius: 4px; color: #3498db;"><?php echo esc_js($viteServer); ?></code>
+                                </p>
+                                <div style="background: #2c3e50; border-radius: 8px; padding: 16px; margin-bottom: 16px;">
+                                    <p style="margin: 0 0 8px; color: #95a5a6; font-size: 13px;">Run this command in your terminal:</p>
+                                    <code style="
+                                        display: block;
+                                        color: #2ecc71;
+                                        font-size: 15px;
+                                        font-family: 'Fira Code', 'Consolas', monospace;
+                                        letter-spacing: 0.5px;
+                                    ">$ npm run dev</code>
+                                </div>
+                                <p style="margin: 0; color: #7f8c8d; font-size: 12px;">
+                                    💡 This message only appears in develop mode. Set <code style="background: #2c3e50; padding: 1px 6px; border-radius: 3px;">app_env => 'production'</code> in <code style="background: #2c3e50; padding: 1px 6px; border-radius: 3px;">Config/React.php</code> to use built assets.
+                                </p>
+                            </div>
+                        `;
+                    }
+                }, 3000);
+
+                // Cancel fallback if Vite loads successfully
+                window.addEventListener('vite:ws-connect', function() {
+                    clearTimeout(timeout);
+                });
+            })();
+            <?php else: ?>
+            // Detect if production assets loaded
+            (function() {
+                const containerId = '<?php echo esc_js($containerId); ?>';
+                setTimeout(function() {
+                    const container = document.getElementById(containerId);
+                    if (container && container.innerHTML.trim() === '') {
+                        container.innerHTML = `
+                            <div style="
+                                max-width: 600px;
+                                margin: 40px auto;
+                                padding: 30px;
+                                background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+                                border-radius: 12px;
+                                border-left: 4px solid #e67e22;
+                                color: #ecf0f1;
+                                font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+                                box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+                            ">
+                                <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 16px;">
+                                    <span style="font-size: 28px;">📦</span>
+                                    <h2 style="margin: 0; font-size: 20px; color: #e67e22;">Production Assets Not Found</h2>
+                                </div>
+                                <p style="margin: 0 0 16px; color: #bdc3c7; line-height: 1.6;">
+                                    The compiled React assets were not found in <code style="background: #2c3e50; padding: 2px 8px; border-radius: 4px; color: #3498db;"><?php echo esc_js(self::getConfig('build_path', 'assets/dist')); ?></code>
+                                </p>
+                                <div style="background: #2c3e50; border-radius: 8px; padding: 16px; margin-bottom: 16px;">
+                                    <p style="margin: 0 0 8px; color: #95a5a6; font-size: 13px;">Run this command to build your assets:</p>
+                                    <code style="
+                                        display: block;
+                                        color: #2ecc71;
+                                        font-size: 15px;
+                                        font-family: 'Fira Code', 'Consolas', monospace;
+                                        letter-spacing: 0.5px;
+                                    ">$ npm run build</code>
+                                </div>
+                                <p style="margin: 0; color: #7f8c8d; font-size: 12px;">
+                                    💡 If you are developing, set <code style="background: #2c3e50; padding: 1px 6px; border-radius: 3px;">app_env => 'develop'</code> in <code style="background: #2c3e50; padding: 1px 6px; border-radius: 3px;">Config/React.php</code> to use Vite dev server with HMR.
+                                </p>
+                            </div>
+                        `;
+                    }
+                }, 2000);
+            })();
+            <?php endif; ?>
+        </script>
+        <?php self::inject(); ?>
+        <?php
+    }
+
+    /**
+     * Initialize React integration
+     * 
+     * @return void
+     */
+    public static function init()
+    {
+        self::loadConfig();
+        
+        $loadInAdmin = self::getConfig('load_in_admin', true);
+        $loadInFrontend = self::getConfig('load_in_frontend', true);
+
+        if (is_admin() && $loadInAdmin) {
+            add_action('admin_enqueue_scripts', [__CLASS__, 'enqueueScripts']);
+            add_action('admin_head', [__CLASS__, 'injectContainerMeta']);
+        }
+
+        if (!is_admin() && $loadInFrontend) {
+            add_action('wp_enqueue_scripts', [__CLASS__, 'enqueueScripts']);
+            add_action('wp_head', [__CLASS__, 'injectContainerMeta']);
+        }
+    }
+
+    /**
+     * Inject container ID as meta tag in head
+     * 
+     * @return void
+     */
+    public static function injectContainerMeta()
+    {
+        $containerId = self::getConfig('container_id', 'antonella-react-root');
+        echo sprintf(
+            '<meta name="antonella-react-container" content="%s">' . "\n",
+            esc_attr($containerId)
+        );
+    }
+
+    /**
+     * Validate production assets exist
+     * 
+     * @return bool
+     */
+    protected static function validateProductionAssets()
+    {
+        $buildPath = self::getConfig('build_path', 'assets/dist');
+        $manifestPath = dirname(dirname(__DIR__)) . DIRECTORY_SEPARATOR . $buildPath . DIRECTORY_SEPARATOR . '.vite' . DIRECTORY_SEPARATOR . 'manifest.json';
+        
+        return file_exists($manifestPath);
+    }
+
+    /**
+     * Show error when assets are missing
+     * 
+     * @return void
+     */
+    protected static function showAssetsError()
+    {
+        add_action('admin_notices', function() {
+            $buildPath = self::getConfig('build_path', 'assets/dist');
+            $manifestPath = dirname(dirname(__DIR__)) . DIRECTORY_SEPARATOR . $buildPath . DIRECTORY_SEPARATOR . '.vite' . DIRECTORY_SEPARATOR . 'manifest.json';
+            
+            echo '<div class="notice notice-error"><p>';
+            echo '<strong>Antonella React:</strong> ';
+            echo sprintf(
+                'Build manifest not found. Expected file: <code>%s</code>. Please run <code>npm run build</code>.',
+                esc_html($manifestPath)
+            );
+            echo '</p></div>';
+        });
+    }
+
+    /**
+     * Get cached manifest data
+     * 
+     * @return array|null
+     */
+    protected static function getManifest()
+    {
+        if (self::$manifest !== null) {
+            return self::$manifest;
+        }
+
+        $buildPath = self::getConfig('build_path', 'assets/dist');
+        $manifestPath = dirname(dirname(__DIR__)) . DIRECTORY_SEPARATOR . $buildPath . DIRECTORY_SEPARATOR . '.vite' . DIRECTORY_SEPARATOR . 'manifest.json';
+        
+        if (!file_exists($manifestPath)) {
+            return null;
+        }
+
+        $manifestContent = file_get_contents($manifestPath);
+        self::$manifest = json_decode($manifestContent, true);
+
+        return self::$manifest;
+    }
+
+    /**
+     * Add module type to script tags
+     * 
+     * @param string $tag Script tag HTML
+     * @param string $handle Script handle
+     * @return string Modified script tag
+     */
+    public static function addModuleType($tag, $handle)
+    {
+        if (strpos($handle, 'antonella-react') !== false) {
+            return str_replace('<script ', '<script type="module" ', $tag);
+        }
+        return $tag;
+    }
+
+    /**
+     * Localize script data for React application
+     * 
+     * @param string $handle Script handle
+     * @return void
+     */
+    protected static function localizeScriptData($handle)
+    {
+        $currentUser = wp_get_current_user();
+        
+        wp_localize_script(
+            $handle,
+            'antonellaReactData',
+            [
+                'ajaxUrl' => admin_url('admin-ajax.php'),
+                'nonce' => wp_create_nonce('antonella_react_nonce'),
+                'siteUrl' => get_site_url(),
+                'siteName' => get_bloginfo('name'),
+                'currentUser' => [
+                    'id' => $currentUser->ID,
+                    'name' => $currentUser->display_name,
+                    'email' => $currentUser->user_email,
+                ],
+                'isAdmin' => is_admin(),
+                'pageData' => self::$pageData,
+            ]
+        );
+    }
+}
+
+/**
+ * LazyProp class for deferred prop evaluation
+ */
+class LazyProp
+{
+    protected $callback;
+
+    public function __construct(callable $callback)
+    {
+        $this->callback = $callback;
+    }
+
+    public function __invoke()
+    {
+        return call_user_func($this->callback);
+    }
+}
+REACTCLASS;
+
+        $reactClassContent = str_replace('__NAMESPACE__', $namespace, $reactClassContent);
+        
+        file_put_contents($reactClassPath, $reactClassContent);
+        $this->showSuccess("React.php created in src/Core/");
+    }
+
+    /**
+     * Create React helper functions
+     */
+    private function createReactHelper()
+    {
+        $helperDir = $this->dir . DIRECTORY_SEPARATOR . 'src' . DIRECTORY_SEPARATOR . 'Helpers';
+        $this->createDirectoryIfNotExists($helperDir);
+        
+        $helperPath = $helperDir . DIRECTORY_SEPARATOR . 'react.php';
+        $namespace = $this->readNamespace();
+        $helperContent = "<?php
+
+use $namespace\\Core\\React;
+
+/**
+ * React Helper Functions
+ * 
+ * Global helper functions for React integration
+ */
+
+if (!function_exists('react')) {
+    /**
+     * Render a React component
+     * 
+     * @param string \$component Component name (e.g., 'Posts/Index')
+     * @param array \$props Component props
+     * @return string HTML output
+     */
+    function react(string \$component, array \$props = [])
+    {
+        return React::render(\$component, \$props);
+    }
+}
+
+if (!function_exists('react_share')) {
+    /**
+     * Share data with all React components
+     * 
+     * @param string|array \$key Key or array of key-value pairs
+     * @param mixed \$value Value (if key is string)
+     * @return void
+     */
+    function react_share(\$key, \$value = null)
+    {
+        React::share(\$key, \$value);
+    }
+}
+
+if (!function_exists('react_lazy')) {
+    /**
+     * Create a lazy prop (evaluated only when needed)
+     * 
+     * @param callable \$callback Callback to execute
+     * @return \\$namespace\\Core\\LazyProp
+     */
+    function react_lazy(callable \$callback)
+    {
+        return React::lazy(\$callback);
+    }
+}
+";
+        
+        file_put_contents($helperPath, $helperContent);
+        $this->showSuccess("react.php helper created!");
+    }
+
+    /**
+     * Create ExampleReactController
+     */
+    private function createExampleReactController()
+    {
+        $controllerPath = $this->dir . DIRECTORY_SEPARATOR . 'src' . DIRECTORY_SEPARATOR . 'Controllers' . DIRECTORY_SEPARATOR . 'ExampleReactController.php';
+        
+        if (file_exists($controllerPath)) {
+            $this->showInfo("ExampleReactController.php already exists");
+            return;
+        }
+        
+        $namespace = $this->readNamespace();
+        $controllerContent = "<?php
+
+namespace $namespace\\Controllers;
+
+use $namespace\\Core\\React;
+
+/**
+ * Example React Controller
+ * 
+ * Demonstrates how to use React integration in WordPress admin pages
+ */
+class ExampleReactController
+{
+    /**
+     * Boot method - runs automatically before any React::render() call
+     * Shares global data with all React components in this controller
+     */
+    public static function boot()
+    {
+        React::share([
+            'user' => [
+                'name' => wp_get_current_user()->display_name,
+                'email' => wp_get_current_user()->user_email,
+            ],
+            'site' => [
+                'name' => get_bloginfo('name'),
+                'url' => get_site_url(),
+            ],
+        ]);
+    }
+
+    public static function helloWorldPage()
+    {
+        // Prepare data for the component
+        \$pageData = [
+            'title' => 'Hello World with React',
+            'message' => 'Welcome to Antonella Framework React Integration!',
+            'timestamp' => current_time('mysql'),
+            'posts_count' => wp_count_posts()->publish,
+        ];
+        
+        // Render React component (echo for admin page callbacks)
+        echo React::render('HelloWorld', \$pageData);
+    }
+
+    /**
+     * Render Shortcode Example Component with React
+     * 
+     */
+    public static function helloWorld()
+    {
+        return React::render('ExampleComponent', ['name' => 'Antonella']);
+    }
+}
+";
+        
+        file_put_contents($controllerPath, $controllerContent);
+        $this->showSuccess("ExampleReactController.php created!");
+    }
+
+    /**
+     * Create HelloWorld React component
+     */
+    private function createHelloWorldComponent()
+    {
+        $componentPath = $this->dir . DIRECTORY_SEPARATOR . 'resources' . DIRECTORY_SEPARATOR . 'js' . DIRECTORY_SEPARATOR . 'Pages' . DIRECTORY_SEPARATOR . 'HelloWorld.jsx';
+        
+        if (file_exists($componentPath)) {
+            $this->showInfo("HelloWorld.jsx already exists");
+            return;
+        }
+        
+        $componentContent = "import React, { useState, useEffect } from 'react';
+
+/**
+ * HelloWorld Component
+ * 
+ * Example component demonstrating React integration with WordPress
+ */
+export default function HelloWorld({ title, message, timestamp, posts_count, user, site }) {
+    const [count, setCount] = useState(0);
+    const [currentTime, setCurrentTime] = useState(new Date().toLocaleTimeString());
+
+    useEffect(() => {
+        const timer = setInterval(() => {
+            setCurrentTime(new Date().toLocaleTimeString());
+        }, 1000);
+
+        return () => clearInterval(timer);
+    }, []);
+
+    return (
+        <div style={styles.container}>
+            <div style={styles.card}>
+                <h1 style={styles.title}>⚛️ {title}</h1>
+                <p style={styles.message}>{message}</p>
+                
+                <div style={styles.infoGrid}>
+                    <div style={styles.infoCard}>
+                        <h3>👤 User Info</h3>
+                        <p><strong>Name:</strong> {user?.name || 'Guest'}</p>
+                        <p><strong>Email:</strong> {user?.email || 'N/A'}</p>
+                    </div>
+                    
+                    <div style={styles.infoCard}>
+                        <h3>🌐 Site Info</h3>
+                        <p><strong>Name:</strong> {site?.name}</p>
+                        <p><strong>URL:</strong> {site?.url}</p>
+                    </div>
+                    
+                    <div style={styles.infoCard}>
+                        <h3>📊 Stats</h3>
+                        <p><strong>Published Posts:</strong> {posts_count}</p>
+                        <p><strong>Page Loaded:</strong> {timestamp}</p>
+                    </div>
+                    
+                    <div style={styles.infoCard}>
+                        <h3>⏰ Live Clock</h3>
+                        <p style={styles.clock}>{currentTime}</p>
+                    </div>
+                </div>
+
+                <div style={styles.interactive}>
+                    <h3>🎮 Interactive Counter</h3>
+                    <button 
+                        onClick={() => setCount(count + 1)}
+                        style={styles.button}
+                    >
+                        Clicked {count} times
+                    </button>
+                    <button 
+                        onClick={() => setCount(0)}
+                        style={{...styles.button, ...styles.resetButton}}
+                    >
+                        Reset
+                    </button>
+                </div>
+
+                <div style={styles.footer}>
+                    <p>✨ Made with Antonella Framework + React + Vite</p>
+                    <p style={styles.hint}>
+                        💡 Edit this component in: <code>resources/js/Pages/HelloWorld.jsx</code>
+                    </p>
+                </div>
+            </div>
+        </div>
+    );
+}
+
+const styles = {
+    container: {
+        padding: '20px',
+        backgroundColor: '#f0f0f1',
+        minHeight: '100vh',
+    },
+    card: {
+        maxWidth: '1200px',
+        margin: '0 auto',
+        backgroundColor: 'white',
+        borderRadius: '8px',
+        padding: '40px',
+        boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
+    },
+    title: {
+        color: '#1e293b',
+        marginBottom: '10px',
+        fontSize: '2.5rem',
+    },
+    message: {
+        color: '#64748b',
+        fontSize: '1.2rem',
+        marginBottom: '30px',
+    },
+    infoGrid: {
+        display: 'grid',
+        gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
+        gap: '20px',
+        marginBottom: '30px',
+    },
+    infoCard: {
+        padding: '20px',
+        backgroundColor: '#f8fafc',
+        borderRadius: '8px',
+        border: '1px solid #e2e8f0',
+    },
+    clock: {
+        fontSize: '1.5rem',
+        fontWeight: 'bold',
+        color: '#3b82f6',
+        fontFamily: 'monospace',
+    },
+    interactive: {
+        textAlign: 'center',
+        padding: '30px',
+        backgroundColor: '#eff6ff',
+        borderRadius: '8px',
+        marginBottom: '30px',
+    },
+    button: {
+        backgroundColor: '#3b82f6',
+        color: 'white',
+        border: 'none',
+        padding: '12px 24px',
+        borderRadius: '6px',
+        fontSize: '16px',
+        cursor: 'pointer',
+        margin: '0 10px',
+        transition: 'background-color 0.3s',
+    },
+    resetButton: {
+        backgroundColor: '#64748b',
+    },
+    footer: {
+        textAlign: 'center',
+        paddingTop: '20px',
+        borderTop: '1px solid #e2e8f0',
+        color: '#64748b',
+    },
+    hint: {
+        fontSize: '0.9rem',
+        marginTop: '10px',
+    },
+};
+";
+        
+        file_put_contents($componentPath, $componentContent);
+        $this->showSuccess("HelloWorld.jsx component created!");
+    }
+
+    /**
+     * Add React menu and shortcode entries to Config.php
+     */
+    private function addReactMenuToConfig()
+    {
+        $configPath = $this->dir . DIRECTORY_SEPARATOR . 'src' . DIRECTORY_SEPARATOR . 'Config.php';
+        
+        if (!file_exists($configPath)) {
+            $this->showInfo("Config.php not found, skipping menu addition");
+            return;
+        }
+        
+        $content = file_get_contents($configPath);
+        $changed = false;
+        
+        // Add menu entry if not already present
+        if (strpos($content, 'ExampleReactController::helloWorldPage') === false) {
+            $reactMenuEntry = ",["
+                . "\n            'path' => ['page'],\n"
+                . "            'name' => 'Hello World with React',\n"
+                . "            'function' => __NAMESPACE__ . \"\\Controllers\\ExampleReactController::helloWorldPage\",\n"
+                . "            'icon' => 'antonella-icon.png',\n"
+                . "            'slug' => 'antonella-react-hello',\n"
+                . "        ],\n";
+
+            // Insert before the "Add your custom admin pages here" comment
+            $menuMarker = "// Add your custom admin pages here";
+            if (strpos($content, $menuMarker) !== false) {
+                $content = str_replace($menuMarker, $reactMenuEntry . "\n        " . $menuMarker, $content);
+                $changed = true;
+                $this->showSuccess("React menu added to Config.php!");
+            } else {
+                $this->showInfo("Could not find menu insertion point in Config.php");
+                $this->showInfo("Please add the React menu entry manually");
+            }
+        } else {
+            $this->showInfo("React menu already exists in Config.php");
+        }
+
+        // Add shortcode entry if not already present
+        if (strpos($content, 'ExampleReactController::helloWorld') !== false 
+            && strpos($content, 'ExampleReactController::helloWorldPage') !== false
+            && substr_count($content, 'ExampleReactController::helloWorld') > 1) {
+            // Shortcode already exists (helloWorld appears more than once counting helloWorldPage)
+            $this->showInfo("React shortcode already exists in Config.php");
+        } elseif (strpos($content, "ExampleReactController::helloWorld'") === false
+                  && strpos($content, 'ExampleReactController::helloWorld"') === false) {
+            $shortcodeEntry = "['hello_world', __NAMESPACE__ . '\\Controllers\\ExampleReactController::helloWorld']";
+
+            // Find the shortcodes array and insert
+            $shortcodePattern = '/(\$shortcodes\s*=\s*\[)\s*\]/';
+            if (preg_match($shortcodePattern, $content)) {
+                // Empty shortcodes array — insert inside
+                $content = preg_replace($shortcodePattern, "$1\n        $shortcodeEntry\n    ]", $content);
+                $changed = true;
+                $this->showSuccess("React shortcode added to Config.php!");
+            } else {
+                // Non-empty shortcodes array — insert before closing bracket
+                $shortcodePatternNonEmpty = '/(\$shortcodes\s*=\s*\[)([\s\S]*?)(\n\s*\];)/';
+                if (preg_match($shortcodePatternNonEmpty, $content)) {
+                    $content = preg_replace($shortcodePatternNonEmpty, "$1$2\n        $shortcodeEntry$3", $content, 1);
+                    $changed = true;
+                    $this->showSuccess("React shortcode added to Config.php!");
+                } else {
+                    $this->showInfo("Could not find shortcodes insertion point in Config.php");
+                    $this->showInfo("Please add the shortcode manually");
+                }
+            }
+        } else {
+            $this->showInfo("React shortcode already exists in Config.php");
+        }
+
+        if ($changed) {
+            file_put_contents($configPath, $content);
+        }
     }
 
     private function displayLogo()

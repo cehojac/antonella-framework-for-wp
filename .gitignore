@@ -20,3 +20,5 @@ antonella2
 .idea
 *.log
 *.swp   
+.agents
+assets/dist
