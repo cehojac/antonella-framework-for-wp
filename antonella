@@ -143,6 +143,65 @@ class Antonella
     }
 
     /**
+     * Switch React config to production mode
+     * Returns true if config was changed, false otherwise
+     */
+    private function switchReactToProduction()
+    {
+        $configPath = $this->dir . DIRECTORY_SEPARATOR . 'Config' . DIRECTORY_SEPARATOR . 'React.php';
+        
+        if (!file_exists($configPath)) {
+            return false;
+        }
+
+        $content = file_get_contents($configPath);
+        
+        // Check if already in production mode
+        if (strpos($content, "'app_env' => 'production'") !== false) {
+            return false;
+        }
+        
+        // Replace develop with production
+        $newContent = preg_replace(
+            "/'app_env'\s*=>\s*'develop'/",
+            "'app_env' => 'production'",
+            $content
+        );
+        
+        if ($newContent !== $content) {
+            file_put_contents($configPath, $newContent);
+            return true;
+        }
+        
+        return false;
+    }
+
+    /**
+     * Restore React config to develop mode
+     */
+    private function restoreReactConfig()
+    {
+        $configPath = $this->dir . DIRECTORY_SEPARATOR . 'Config' . DIRECTORY_SEPARATOR . 'React.php';
+        
+        if (!file_exists($configPath)) {
+            return;
+        }
+
+        $content = file_get_contents($configPath);
+        
+        // Replace production with develop
+        $newContent = preg_replace(
+            "/'app_env'\s*=>\s*'production'/",
+            "'app_env' => 'develop'",
+            $content
+        );
+        
+        if ($newContent !== $content) {
+            file_put_contents($configPath, $newContent);
+        }
+    }
+
+    /**
      * Parse --react flag from command arguments
      * Returns null if flag not present, empty string if flag without value, or component name if --react=ComponentName
      */
@@ -228,6 +287,15 @@ class Antonella
     {
         $this->showInfo("Antonella is packing the plugin...");
 
+        // Switch React to production mode if integrated
+        $reactConfigChanged = false;
+        if ($this->isReactIntegrated()) {
+            $reactConfigChanged = $this->switchReactToProduction();
+            if ($reactConfigChanged) {
+                $this->showInfo("⚛️  Switched React to production mode for packaging");
+            }
+        }
+
         $zipName = basename($this->dir) . '.zip';
         $zipPath = $this->dir . DIRECTORY_SEPARATOR . $zipName;
 
@@ -238,6 +306,10 @@ class Antonella
 
         $zip = new ZipArchive();
         if ($zip->open($zipName, ZipArchive::CREATE) !== TRUE) {
+            // Restore React config if it was changed
+            if ($reactConfigChanged) {
+                $this->restoreReactConfig();
+            }
             $this->showError("Cannot create zip file: $zipName");
         }
 
@@ -249,6 +321,13 @@ class Antonella
         }
 
         $zip->close();
+        
+        // Restore React config to develop mode
+        if ($reactConfigChanged) {
+            $this->restoreReactConfig();
+            $this->showInfo("⚛️  Restored React to develop mode");
+        }
+        
         $this->showSuccess("Plugin packed successfully: $zipName");
     }
 
