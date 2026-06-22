@@ -1701,6 +1701,21 @@ return [
      * Set to null to use plugin version or filemtime
      */
     'version' => null,
+
+    /**
+     * Enable CSS style isolation for the React container.
+     * When true, a scoped CSS reset is injected to prevent WordPress/theme styles
+     * from bleeding into the React component tree.
+     * Set to false if you use a global CSS library (Tailwind, MUI, etc.)
+     */
+    'style_isolation' => false,
+
+    /**
+     * Style isolation mode.
+     * 'reset'     - Applies `all: revert` + sensible base values. Maximum isolation.
+     * 'normalize' - Applies only box-sizing, margin/padding reset and basic normalizations. Less aggressive.
+     */
+    'style_isolation_mode' => 'reset',
 ];
 ";
     }
@@ -1904,6 +1919,8 @@ class React
             'load_in_admin' => true,
             'load_in_frontend' => true,
             'version' => null,
+            'style_isolation' => false,
+            'style_isolation_mode' => 'reset',
         ];
     }
 
@@ -2090,8 +2107,81 @@ class React
             })();
             <?php endif; ?>
         </script>
+        <?php self::injectIsolationStyles($containerId); ?>
         <?php self::inject(); ?>
         <?php
+    }
+
+    protected static function injectIsolationStyles(string $containerId): void
+    {
+        $enabled = self::getConfig('style_isolation', true);
+        if (!$enabled) {
+            return;
+        }
+
+        $mode = self::getConfig('style_isolation_mode', 'reset');
+        $id = esc_attr($containerId);
+        $sel = '[id="' . $id . '"]';
+
+        if ($mode === 'reset') {
+            $css = "
+{$sel},
+{$sel} *,
+{$sel} *::before,
+{$sel} *::after {
+    all: revert;
+    box-sizing: border-box;
+}
+{$sel} {
+    display: block;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    font-size: 16px;
+    line-height: 1.5;
+    color: #111827;
+}
+{$sel} p,
+{$sel} h1, {$sel} h2, {$sel} h3, {$sel} h4, {$sel} h5, {$sel} h6 {
+    margin: 0;
+    padding: 0;
+    font-size: revert;
+    font-weight: revert;
+    line-height: revert;
+}
+{$sel} a { color: revert; text-decoration: revert; }
+{$sel} button { cursor: pointer; }
+{$sel} ul, {$sel} ol { margin: 0; padding: 0; list-style: none; }
+{$sel} li { margin: 0; padding: 0; }
+{$sel} img { max-width: 100%; height: auto; display: block; border: none; }
+{$sel} input, {$sel} select, {$sel} textarea {
+    margin: 0;
+    padding: 0;
+    border: revert;
+    font-family: inherit;
+    font-size: inherit;
+}
+{$sel} table { border-collapse: collapse; border-spacing: 0; }
+{$sel} th, {$sel} td { padding: 0; text-align: left; vertical-align: top; }";
+        } else {
+            $css = "
+{$sel},
+{$sel} * {
+    box-sizing: border-box;
+}
+{$sel} p,
+{$sel} h1, {$sel} h2, {$sel} h3, {$sel} h4, {$sel} h5, {$sel} h6,
+{$sel} ul, {$sel} ol, {$sel} li,
+{$sel} blockquote, {$sel} figure {
+    margin: 0;
+    padding: 0;
+}
+{$sel} ul, {$sel} ol { list-style: none; }
+{$sel} img { max-width: 100%; height: auto; display: block; }
+{$sel} button { cursor: pointer; }
+{$sel} a { text-decoration: none; }
+{$sel} table { border-collapse: collapse; }";
+        }
+
+        echo '<style id="antonella-isolation-' . esc_attr($containerId) . '">' . $css . "\n</style>\n";
     }
 
     public static function init()
