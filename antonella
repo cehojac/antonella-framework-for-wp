@@ -179,8 +179,9 @@ class Antonella
      */
     public function updateProjectFiles()
     {
+        $projectName = basename($this->dir);
         $oldFile = "antonella-framework.php";
-        $newFile = basename($this->dir) . '.php';
+        $newFile = $projectName . '.php';
 
         if (file_exists($oldFile)) {
             if (rename($oldFile, $newFile)) {
@@ -188,6 +189,37 @@ class Antonella
             } else {
                 $this->showError("Failed to rename $oldFile");
             }
+        }
+
+        $this->updateDockerContainerNames($projectName);
+    }
+
+    private function updateDockerContainerNames($projectName)
+    {
+        $composeFile = $this->dir . DIRECTORY_SEPARATOR . 'docker-compose.yaml';
+        $initScript = $this->dir . DIRECTORY_SEPARATOR . 'docker' . DIRECTORY_SEPARATOR . 'init-wordpress.sh';
+
+        $replacements = [
+            'mysql-antonella'     => 'mysql-' . $projectName,
+            'phpmyadmin-antonella' => 'phpmyadmin-' . $projectName,
+            'wp-antonella'        => 'wp-' . $projectName,
+            'wpcli-antonella'     => 'wpcli-' . $projectName,
+            'antonella-network'   => $projectName . '-network',
+            'antonella-framework' => $projectName,
+        ];
+
+        if (file_exists($composeFile)) {
+            $content = file_get_contents($composeFile);
+            $content = str_replace(array_keys($replacements), array_values($replacements), $content);
+            file_put_contents($composeFile, $content);
+            $this->showSuccess("Updated container names in docker-compose.yaml");
+        }
+
+        if (file_exists($initScript)) {
+            $content = file_get_contents($initScript);
+            $content = str_replace('antonella-framework', $projectName, $content);
+            file_put_contents($initScript, $content);
+            $this->showSuccess("Updated plugin references in docker/init-wordpress.sh");
         }
     }
 
