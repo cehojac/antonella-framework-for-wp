@@ -2547,6 +2547,7 @@ class ExampleReactController
             'posts_count' => wp_count_posts()->publish,
         ];
 
+        // Used as an admin page callback, so we echo the rendered HTML directly.
         echo React::render('HelloWorld', $pageData, [
             'style_isolation' => true,
             'style_isolation_mode' => 'reset',
@@ -2555,7 +2556,11 @@ class ExampleReactController
 
     public static function helloWorld()
     {
-        return React::render('ExampleComponent', ['name' => 'Antonella']);
+        // Used as a shortcode, so we return the rendered HTML instead of echoing it.
+        return React::render('ExampleComponent', ['name' => 'Antonella'], [
+            'style_isolation' => true,
+            'style_isolation_mode' => 'reset',
+        ]);
     }
 }
 CONTROLLER;
