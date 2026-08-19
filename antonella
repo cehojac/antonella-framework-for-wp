@@ -1760,22 +1760,26 @@ class React
     protected static $bootedControllers = [];
     protected static $renderIndex = 0;
     protected static $currentContainerId = null;
-    
+    protected static $renderOptions = [];
+    protected static $disableThemeStylesRequested = false;
+    protected static $styleCleanupRegistered = false;
 
     /**
      * Render a React component
-     * 
+     *
      * @param string $component Component name
      * @param array $props Component props
+     * @param array $options Render options (e.g. style_isolation)
      * @return string HTML output
      */
-    public static function render(string $component, array $props = [])
+    public static function render(string $component, array $props = [], array $options = [])
     {
         self::loadConfig();
         self::bootController();
         self::setComponent($component);
         self::setProps($props);
-        
+        self::setRenderOptions($options);
+
         self::$pageData = [
             'component' => self::$component,
             'props' => self::$props,
@@ -1806,12 +1810,84 @@ class React
                 return;
             }
 
+            self::applyControllerStyleSettings($controllerClass);
+
             if (method_exists($controllerClass, 'boot')) {
                 self::$bootedControllers[] = $controllerClass;
                 $controllerClass::boot();
             }
 
             return;
+        }
+    }
+
+    protected static function applyControllerStyleSettings(string $controllerClass)
+    {
+        if (!class_exists($controllerClass)) {
+            return;
+        }
+
+        $reflection = new \ReflectionClass($controllerClass);
+
+        if ($reflection->hasProperty('disableThemeStyles')) {
+            $property = $reflection->getProperty('disableThemeStyles');
+            $property->setAccessible(true);
+            self::disableThemeStyles((bool) $property->getValue());
+        }
+    }
+
+    public static function disableThemeStyles(bool $disable = true)
+    {
+        self::$disableThemeStylesRequested = $disable;
+
+        if ($disable) {
+            self::registerStyleCleanup();
+        }
+    }
+
+    protected static function registerStyleCleanup()
+    {
+        if (self::$styleCleanupRegistered) {
+            return;
+        }
+
+        self::$styleCleanupRegistered = true;
+
+        $hook = is_admin() ? 'admin_enqueue_scripts' : 'wp_enqueue_scripts';
+
+        if (did_action($hook) || doing_action($hook)) {
+            self::dequeueExternalStyles();
+        } else {
+            add_action($hook, [__CLASS__, 'dequeueExternalStyles'], PHP_INT_MAX);
+        }
+    }
+
+    public static function dequeueExternalStyles()
+    {
+        global $wp_styles;
+
+        if (!$wp_styles instanceof \WP_Styles) {
+            return;
+        }
+
+        if (!self::$disableThemeStylesRequested) {
+            return;
+        }
+
+        $themeUrls = [
+            \get_stylesheet_directory_uri(),
+            \get_template_directory_uri(),
+        ];
+
+        foreach ($wp_styles->registered as $handle => $style) {
+            $src = $style->src ?? '';
+
+            foreach ($themeUrls as $themeUrl) {
+                if (strpos($src, $themeUrl) === 0) {
+                    wp_dequeue_style($handle);
+                    break;
+                }
+            }
         }
     }
 
@@ -1944,6 +2020,19 @@ class React
         });
         
         self::$props = $props;
+    }
+
+    protected static function setRenderOptions(array $options)
+    {
+        self::$renderOptions = array_merge([
+            'style_isolation' => self::getConfig('style_isolation', false),
+            'style_isolation_mode' => self::getConfig('style_isolation_mode', 'reset'),
+        ], $options);
+    }
+
+    public static function getRenderOption(string $key, $default = null)
+    {
+        return self::$renderOptions[$key] ?? $default;
     }
 
     protected static function getCurrentUrl()
@@ -2114,12 +2203,12 @@ class React
 
     protected static function injectIsolationStyles(string $containerId): void
     {
-        $enabled = self::getConfig('style_isolation', true);
+        $enabled = self::getRenderOption('style_isolation', self::getConfig('style_isolation', false));
         if (!$enabled) {
             return;
         }
 
-        $mode = self::getConfig('style_isolation_mode', 'reset');
+        $mode = self::getRenderOption('style_isolation_mode', self::getConfig('style_isolation_mode', 'reset'));
         $id = esc_attr($containerId);
         $sel = '[id="' . $id . '"]';
 
@@ -2285,7 +2374,7 @@ class React
     {
         $currentUser = wp_get_current_user();
         $appKey = self::getAppKey();
-        $objectName = 'antonellaReactData_' . $appKey;
+        $objectName = 'antonella_react_' . str_replace('-', '_', $appKey);
         
         wp_localize_script(
             $handle,
@@ -2378,9 +2467,9 @@ use __NAMESPACE__\Core\React;
  */
 
 if (!function_exists('react')) {
-    function react(string $component, array $props = [])
+    function react(string $component, array $props = [], array $options = [])
     {
-        return React::render($component, $props);
+        return React::render($component, $props, $options);
     }
 }
 
@@ -2424,6 +2513,12 @@ use __NAMESPACE__\Core\React;
 
 class ExampleReactController
 {
+    /**
+     * When true, the framework will dequeue styles registered by the active theme.
+     * Useful for full React pages where the theme CSS conflicts with the app.
+     */
+    protected static bool $disableThemeStyles = false;
+
     public static function boot()
     {
         React::share([
@@ -2451,8 +2546,11 @@ class ExampleReactController
             'timestamp' => current_time('mysql'),
             'posts_count' => wp_count_posts()->publish,
         ];
-        
-        echo React::render('HelloWorld', $pageData);
+
+        echo React::render('HelloWorld', $pageData, [
+            'style_isolation' => true,
+            'style_isolation_mode' => 'reset',
+        ]);
     }
 
     public static function helloWorld()
